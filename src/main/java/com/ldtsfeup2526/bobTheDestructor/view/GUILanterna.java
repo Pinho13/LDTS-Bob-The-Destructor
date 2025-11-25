@@ -13,7 +13,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 public class GUILanterna extends GUI {
-    private Screen screen;
+    private final Screen screen;
 
     public GUILanterna(int width, int height) throws IOException {
         Terminal terminal = createTerminal(width, height);
@@ -41,9 +41,9 @@ public class GUILanterna extends GUI {
         this(200, 60);
     }
 
-    public GUILanterna(Screen screen) {
-        this.screen = screen;
-    }
+    public GUILanterna(Screen screen) {this.screen = screen;}
+
+    public Screen getScreen() {return screen;}
 
     private void draw(Position position, char c, String color) {
         // Draws the character c with given color to the screen in the provided position

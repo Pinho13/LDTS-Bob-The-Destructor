@@ -1,10 +1,13 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
+import com.googlecode.lanterna.screen.Screen;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 
 import java.io.IOException;
 
 public abstract class GUI {
+    public abstract Screen getScreen();
+
     public abstract void drawMiner(Position position);
 
     public abstract void drawElement(Position position);
