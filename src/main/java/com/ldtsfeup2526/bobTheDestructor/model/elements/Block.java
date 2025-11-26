@@ -3,14 +3,14 @@ package com.ldtsfeup2526.bobTheDestructor.model.elements;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 
 public class Block extends Element{
-    public enum TYPE {DIRT, ROCK, COAL, IRON, GOLD, DIAMOND}
+    public enum Type {DIRT, ROCK, COAL, IRON, GOLD, DIAMOND}
 
-    private final TYPE type;
+    private final Type type;
 
-    public Block(Position position, TYPE type) {
+    public Block(Position position, Type type) {
         super(position);
         this.type = type;
     }
 
-    public TYPE getType() {return type;}
+    public Type getType() {return type;}
 }
