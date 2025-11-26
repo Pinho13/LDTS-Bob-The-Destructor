@@ -8,7 +8,7 @@ group = 'com.ldts-feup-25-26.bob-the-destructor'
 version = '1.0-SNAPSHOT'
 
 application {
-    mainClass.set("Application")
+    mainClass.set("Game")
 }
 
 repositories {
