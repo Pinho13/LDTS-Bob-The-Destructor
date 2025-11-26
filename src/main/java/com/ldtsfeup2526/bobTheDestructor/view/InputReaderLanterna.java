@@ -7,7 +7,7 @@ import com.googlecode.lanterna.screen.Screen;
 import javax.swing.*;
 import java.io.IOException;
 
-public class InputReaderLanterna extends InputReader {
+public class InputReaderLanterna implements InputReader {
     private final Screen screen;
 
     public InputReaderLanterna(Screen screen) {
@@ -18,16 +18,14 @@ public class InputReaderLanterna extends InputReader {
         KeyStroke keyStroke = screen.pollInput();
         if (keyStroke == null) return INPUT.NONE;
 
-        if (keyStroke.getKeyType() == KeyType.ArrowUp) return INPUT.UP;
-        if (keyStroke.getKeyType() == KeyType.ArrowRight) return INPUT.RIGHT;
-        if (keyStroke.getKeyType() == KeyType.ArrowDown) return INPUT.DOWN;
-        if (keyStroke.getKeyType() == KeyType.ArrowLeft) return INPUT.LEFT;
-
-        if (keyStroke.getKeyType() == KeyType.EOF) return INPUT.QUIT;
-        if (keyStroke.getKeyType() == KeyType.Character && keyStroke.getCharacter() == 'q') return INPUT.QUIT;
-
-        if (keyStroke.getKeyType() == KeyType.Enter) return INPUT.SELECT;
-
-        return INPUT.NONE;
+        return switch (keyStroke.getKeyType()) {
+            case KeyType.ArrowRight -> INPUT.RIGHT;
+            case KeyType.ArrowUp -> INPUT.UP;
+            case KeyType.ArrowDown -> INPUT.DOWN;
+            case KeyType.ArrowLeft -> INPUT.LEFT;
+            case KeyType.Escape, KeyType.EOF -> INPUT.QUIT;
+            case KeyType.Enter -> INPUT.SELECT;
+            default -> INPUT.NONE;
+        };
     }
 }
