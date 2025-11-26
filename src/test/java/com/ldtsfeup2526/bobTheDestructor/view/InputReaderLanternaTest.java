@@ -25,55 +25,55 @@ class InputReaderLanternaTest {
     @Test
     void readNextInputUp() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.ArrowUp));
-        assertEquals(InputReader.INPUT.UP, inputReader.readNextInput());
+        assertEquals(InputReader.Input.UP, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputDown() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.ArrowDown));
-        assertEquals(InputReader.INPUT.DOWN, inputReader.readNextInput());
+        assertEquals(InputReader.Input.DOWN, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputRight() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.ArrowRight));
-        assertEquals(InputReader.INPUT.RIGHT, inputReader.readNextInput());
+        assertEquals(InputReader.Input.RIGHT, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputLeft() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.ArrowLeft));
-        assertEquals(InputReader.INPUT.LEFT, inputReader.readNextInput());
+        assertEquals(InputReader.Input.LEFT, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputQuitEOF() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.EOF));
-        assertEquals(InputReader.INPUT.QUIT, inputReader.readNextInput());
+        assertEquals(InputReader.Input.QUIT, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputQuitChar() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke('q', false, false));
-        assertEquals(InputReader.INPUT.QUIT, inputReader.readNextInput());
+        assertEquals(InputReader.Input.QUIT, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputSelect() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke(KeyType.Enter));
-        assertEquals(InputReader.INPUT.SELECT, inputReader.readNextInput());
+        assertEquals(InputReader.Input.SELECT, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputNone() throws IOException {
         Mockito.when(screen.pollInput()).thenReturn(null);
-        assertEquals(InputReader.INPUT.NONE, inputReader.readNextInput());
+        assertEquals(InputReader.Input.NONE, inputReader.readNextInput());
     }
 
     @Test
     void readNextInputOther() throws IOException {
         // Example of a key that is not mapped
         Mockito.when(screen.pollInput()).thenReturn(new KeyStroke('a', false, false));
-        assertEquals(InputReader.INPUT.NONE, inputReader.readNextInput());
+        assertEquals(InputReader.Input.NONE, inputReader.readNextInput());
     }
 }
