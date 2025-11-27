@@ -13,6 +13,7 @@ public class InputReaderLanterna implements InputReader {
         this.screen = screen;
     }
 
+    @Override
     public Input readNextInput() throws IOException {
         KeyStroke keyStroke = screen.pollInput();
         if (keyStroke == null) return Input.NONE;
