@@ -6,6 +6,7 @@ import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.view.*;
+import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
 
 import java.io.IOException;
 
@@ -34,11 +35,11 @@ public class Game {
     public void run() throws IOException, InterruptedException {
         int FPS = 30;
         long deltaTime = 1000/FPS;
-        /*
-        Sprite sprite = spriteLoader.get("sprites/player/player1.png");
-        sprite.draw(gui, new Position(50, 20));
+
+        PlayerViewer player = new PlayerViewer(spriteLoader);
+        player.draw(new Position(10, 10), gui);
         gui.refresh();
-        */
+
         while (this.state != null) {
             long startTime = System.currentTimeMillis();
 
