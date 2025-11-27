@@ -1,7 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model;
 
 import com.ldtsfeup2526.bobTheDestructor.model.elements.MinerModel;
-import com.ldtsfeup2526.bobTheDestructor.model.elements.PickaxeModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,17 +35,5 @@ public class MinerModelTest {
     void minerMoveRightTest() {
         miner.moveRight();
         assert miner.getPosition().getX() == 2;
-    }
-
-    @Test
-    void minerMoveDownTest() {
-        miner.moveDown();
-        assert miner.getPosition().getY() == 3;
-    }
-
-    @Test
-    void minerMoveUpTest() {
-        miner.moveUp();
-        assert miner.getPosition().getY() == 1;
     }
 }

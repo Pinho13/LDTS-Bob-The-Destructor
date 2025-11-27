@@ -1,7 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model;
 
 import com.ldtsfeup2526.bobTheDestructor.model.elements.PickaxeModel;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,18 +8,23 @@ public class PickaxeModelTest {
     private PickaxeModel pickaxe;
 
     @BeforeEach
-    void setUp() {
-        pickaxe = new PickaxeModel(1);
+    void setUp() {pickaxe = new PickaxeModel(PickaxeModel.Type.IRON);}
+
+    @Test
+    void pickaxeGetDamageTest() {assert pickaxe.getDamage() == 1;}
+
+    @Test
+    void pickaxeGetDamageAfterSetTypeTest() {
+        pickaxe.setType(PickaxeModel.Type.DIAMOND);
+        assert pickaxe.getDamage() == 3;
     }
 
     @Test
-    void pickaxeGetLevelTest() {
-        assert pickaxe.getLevel() == 1;
-    }
+    void pickaxeGetTypeTest() {assert pickaxe.getType() == PickaxeModel.Type.IRON;}
 
     @Test
-    void pickaxeSetLevelTest() {
-        pickaxe.setLevel(2);
-        assert pickaxe.getLevel() == 2;
+    void pickaxeSetTypeTest() {
+        pickaxe.setType(PickaxeModel.Type.DIAMOND);
+        assert pickaxe.getType() == PickaxeModel.Type.DIAMOND;
     }
 }

@@ -3,7 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.model.elements;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 
 public class BlockModel extends ElementModel {
-    public enum Type {DIRT, ROCK, COAL, IRON, GOLD, DIAMOND}
+    public enum Type {ROCK, COAL, IRON, GOLD, DIAMOND}
 
     private final Type type;
 
@@ -17,7 +17,6 @@ public class BlockModel extends ElementModel {
             case GOLD: durability = 7; break;
             case IRON: durability = 5; break;
             case COAL: durability = 3; break;
-            case ROCK: durability = 2; break;
             default: durability = 1; break;
         }
     }
@@ -28,5 +27,5 @@ public class BlockModel extends ElementModel {
 
     public void setDurability(int durability) {this.durability = durability;}
 
-    public int decreaseDurability(PickaxeModel pickaxe) {return durability - pickaxe.getLevel();}
+    public int decreaseDurability(PickaxeModel pickaxe) {return durability - pickaxe.getDamage();}
 }
