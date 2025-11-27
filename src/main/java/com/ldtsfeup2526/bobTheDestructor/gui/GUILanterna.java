@@ -47,11 +47,9 @@ public class GUILanterna implements GUI {
 
     @Override
     public void drawPixel(Position position, TextColor color) {
-        // Draws the character c with given color to the screen in the provided position
-        // (text graphics should be replaced with sprites later)
         TextGraphics graphics = screen.newTextGraphics();
-        graphics.setForegroundColor(color);
-        graphics.putString(position.getX(), position.getY(), "X");
+        graphics.setBackgroundColor(color);
+        graphics.setCharacter(position.getX(), position.getY(), ' ');
     }
 
     @Override
