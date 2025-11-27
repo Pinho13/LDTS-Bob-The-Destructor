@@ -1,16 +1,18 @@
 package com.ldtsfeup2526.bobTheDestructor;
 
+import com.googlecode.lanterna.TextColor;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
+import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
-import com.ldtsfeup2526.bobTheDestructor.view.InputReader;
-import com.ldtsfeup2526.bobTheDestructor.view.InputReaderLanterna;
+import com.ldtsfeup2526.bobTheDestructor.view.*;
 
 import java.io.IOException;
 
 public class Game {
     private final GUILanterna gui;
     private InputReader inputReader;
+    private final SpriteLoader spriteLoader = new GameSpriteLoader();
     private State<?> state;
 
     public Game() throws IOException {
@@ -32,7 +34,11 @@ public class Game {
     public void run() throws IOException, InterruptedException {
         int FPS = 30;
         long deltaTime = 1000/FPS;
-
+        /*
+        Sprite sprite = spriteLoader.get("sprites/player/player1.png");
+        sprite.draw(gui, new Position(50, 20));
+        gui.refresh();
+        */
         while (this.state != null) {
             long startTime = System.currentTimeMillis();
 
@@ -42,6 +48,6 @@ public class Game {
             if (sleepTime > 0) Thread.sleep(sleepTime);
         }
 
-        gui.close();
+        //gui.close();
     }
 }

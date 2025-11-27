@@ -25,7 +25,7 @@ public class Sprite {
     public void draw(GUI gui, Position position) {
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
-                int ARGB = image.getRGB(position.getX(), position.getY());
+                int ARGB = image.getRGB(x, y);
 
                 if (getAlpha(ARGB) != 0) {
                     Position pixelPosition = new Position(
