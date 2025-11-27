@@ -29,7 +29,7 @@ class GUILanternaTest {
     void drawPixel() {
         gui.drawPixel(new Position(2, 3),new TextColor.RGB(255, 0, 0));
 
-        Mockito.verify(tg, Mockito.times(1)).setForegroundColor(new TextColor.RGB(255, 0, 0));
-        Mockito.verify(tg, Mockito.times(1)).putString(2, 3, "X");
+        Mockito.verify(tg, Mockito.times(1)).setBackgroundColor(new TextColor.RGB(255, 0, 0));
+        Mockito.verify(tg, Mockito.times(1)).setCharacter(2, 3, ' ');
     }
 }
