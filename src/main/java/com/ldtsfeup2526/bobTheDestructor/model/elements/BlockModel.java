@@ -1,6 +1,8 @@
 package com.ldtsfeup2526.bobTheDestructor.model.elements;
 
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockModel extends ElementModel {
     public enum Type {ROCK, COAL, IRON, GOLD, DIAMOND}
@@ -9,8 +11,8 @@ public class BlockModel extends ElementModel {
 
     private int durability;
 
-    public BlockModel(Position position, Type type) {
-        super(position);
+    public BlockModel(Position position, Type type, Map<Position, Boolean> occupancy) {
+        super(position, occupancy);
         this.type = type;
         switch (type) {
             case DIAMOND: durability = 10; break;
