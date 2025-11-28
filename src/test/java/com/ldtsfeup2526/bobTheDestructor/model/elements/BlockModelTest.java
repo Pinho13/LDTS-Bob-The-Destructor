@@ -3,14 +3,20 @@ package com.ldtsfeup2526.bobTheDestructor.model.elements;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedConstruction;
+import org.mockito.Mockito;
+
+import java.util.Map;
 
 public class BlockModelTest {
     private BlockModel block;
     private PickaxeModel pickaxe;
+    private Map<Position, Boolean> occupancy;
 
     @BeforeEach
     void setup() {
-        block = new BlockModel(new Position(1,2), BlockModel.Type.DIAMOND);
+        occupancy = Mockito.mock(Map.class);
+        block = new BlockModel(new Position(1,2), BlockModel.Type.DIAMOND, occupancy);
     }
 
     @Test

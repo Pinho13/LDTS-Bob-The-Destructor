@@ -3,13 +3,16 @@ package com.ldtsfeup2526.bobTheDestructor.model.elements;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class MineralModelTest {
     private MineralModel mineral;
+    private java.util.Map<Position, Boolean> occupancy;
 
     @BeforeEach
     void setUp() {
-        mineral = new MineralModel(new Position(1,2), MineralModel.Type.COAL);
+        occupancy = Mockito.mock(java.util.Map.class);
+        mineral = new MineralModel(new Position(1,2), MineralModel.Type.COAL, occupancy);
     }
 
     @Test
