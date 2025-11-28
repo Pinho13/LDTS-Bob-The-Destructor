@@ -5,7 +5,9 @@ import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
 import com.ldtsfeup2526.bobTheDestructor.gui.Resolution;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
+import com.ldtsfeup2526.bobTheDestructor.states.game.GameState;
 import com.ldtsfeup2526.bobTheDestructor.view.*;
 
 import java.awt.*;
@@ -24,6 +26,8 @@ public class Game {
         System.out.println( "Starting GUI... ");
         gui = new GUILanterna(resolution, PIXEL_SIZE, "Bob, The Destructor");
         inputReader = new InputReaderLanterna(gui.getScreen());
+
+        this.state = new GameState(new Scene(), spriteLoader);
     }
 
     public static void main(String[] args) {
@@ -55,5 +59,9 @@ public class Game {
         }
 
         //gui.close();
+    }
+
+    public void setState(State<?> state) {
+        this.state = state;
     }
 }
