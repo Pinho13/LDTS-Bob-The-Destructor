@@ -1,15 +1,12 @@
 package com.ldtsfeup2526.bobTheDestructor;
 
-import com.googlecode.lanterna.TextColor;
-import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
+import com.ldtsfeup2526.bobTheDestructor.controller.input.InputReader;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
 import com.ldtsfeup2526.bobTheDestructor.gui.Resolution;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.states.game.GameState;
 import com.ldtsfeup2526.bobTheDestructor.view.*;
-import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
 
 import java.awt.*;
 import java.io.IOException;
@@ -25,8 +22,8 @@ public class Game {
 
     public Game() throws IOException, URISyntaxException, FontFormatException {
         System.out.println( "Starting GUI... ");
-        gui = new GUILanterna(resolution, PIXEL_SIZE, "Bob, The Destructor");
-        inputReader = new InputReaderLanterna(gui.getScreen());
+        inputReader = new InputReader();
+        gui = new GUILanterna(resolution, PIXEL_SIZE, "Bob, The Destructor", inputReader);
 
         this.state = new GameState(new Scene(), spriteLoader);
     }

@@ -1,6 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.gui;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.ldtsfeup2526.bobTheDestructor.controller.input.InputReader;
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
 
 import com.googlecode.lanterna.TerminalSize;
@@ -11,6 +12,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -20,20 +22,20 @@ public class GUILanterna implements GUI {
     private final Resolution resolution;
     private Screen screen;
 
-    public GUILanterna(String title) throws IOException, URISyntaxException, FontFormatException {
+    public GUILanterna(String title, KeyListener keyListener) throws IOException, URISyntaxException, FontFormatException {
         this.title = title;
         this.resolution = new Resolution(240, 135);
-        createScreen(6);
+        createScreen(6, keyListener);
     }
 
-    public GUILanterna(Resolution resolution, int fontSize, String title) throws IOException, URISyntaxException, FontFormatException {
+    public GUILanterna(Resolution resolution, int fontSize, String title, KeyListener keyListener) throws IOException, URISyntaxException, FontFormatException {
         this.title = title;
         this.resolution = resolution;
-        createScreen(fontSize);
+        createScreen(fontSize, keyListener);
     }
 
-    private void createScreen(int fontSize) throws IOException, URISyntaxException, FontFormatException {
-        screen = screenCreator.createScreen(resolution, fontSize, title);
+    private void createScreen(int fontSize, KeyListener keyListener) throws IOException, URISyntaxException, FontFormatException {
+        screen = screenCreator.createScreen(resolution, fontSize, title, keyListener);
 
         screen.setCursorPosition(null);
         screen.startScreen();
