@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InputReaderTest {
+public class InputReaderTest {
     private InputReader inputReader;
 
     @BeforeEach
