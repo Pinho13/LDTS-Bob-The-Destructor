@@ -20,7 +20,19 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 - Animation Manager
 - Collectible System
 - Gadget System
-- Upgrade System### Design
+- Upgrade System
+- Shop System
+- Particle System
+- Ore System
+- GUI
+- Top score
+- Tile Visibility System
+
+### Implemented features
+
+### Planned features
+
+### Design
 
 #### THE SCREENS AND GAME LOOP SHOULD BE SWITCHABLE WITHOUT UPDATING IF/SWITCH LOGIC
 
@@ -58,8 +70,8 @@ Liabilities:
 
 **Problem in Context**
 
-As we introduced multiple elements to render like player, tiles and decor, a single monolithic renderer would accumulate `if/switch` chains to handle each type,
-making it harder to add new visuals and violating the Open/Closed Principle.
+As we introduced multiple renderable elements like (player, tiles, decor, etc.), a single monolithic renderer would accumulate `if/switch` chains to handle each type,
+making it hard to add new visuals and violating the Open/Closed Principle.
 
 **The Pattern**
 
@@ -120,9 +132,9 @@ Naive solutions would scatter key-code checks and introduce confusion across con
 
 **The Pattern**
 
-We used the Observer style provided by Java AWT (`KeyListener`) to receive events, and then applied a parsing layer that behaves like a Command/Interpreter for inputs: `ActionParser` translates key codes into domain actions and coordinates one-shot behavior using an `InputReader` buffer.
+We leveraged the Observer style provided by Java AWT (`KeyListener`) to receive events, and applied a small parsing layer that behaves like a Command/Interpreter for inputs: `ActionParser` translates key codes into domain actions and coordinates one-shot behavior using an `InputReader` buffer.
 
-This combination separates event capture from action semantics.
+This combination cleanly separates event capture from action semantics.
 
 **Implementation**
 
@@ -140,18 +152,6 @@ Benefits:
 Liabilities:
 - Requires careful usage of `inputFinished` to avoid starving inputs; controllers must mark single-shot actions appropriately.
 
-- Shop System
-- Particle System
-- Ore System
-- GUI
-- Top score
-- Tile Visibility System
-
-### Implemented features
-
-### Planned features
-
-2
 #### Singletons...
 
 
