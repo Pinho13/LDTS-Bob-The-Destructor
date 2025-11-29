@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -28,11 +29,11 @@ public class GUILanternaTest {
         screen = Mockito.mock(Screen.class);
         tg = Mockito.mock(TextGraphics.class);
 
-        Mockito.when(lscreenCreator.createScreen(any(), anyInt(), any())).thenReturn(screen);
+        Mockito.when(lscreenCreator.createScreen(any(), anyInt(), any(), any())).thenReturn(screen);
         Mockito.when(screen.newTextGraphics()).thenReturn(tg);
 
 
-        gui = new GUILanterna(lscreenCreator, "Bob, The Destructor");
+        gui = new GUILanterna(lscreenCreator, Mockito.mock(KeyListener.class), new Resolution(240, 135), 6, "Test");
     }
 
     @Test
