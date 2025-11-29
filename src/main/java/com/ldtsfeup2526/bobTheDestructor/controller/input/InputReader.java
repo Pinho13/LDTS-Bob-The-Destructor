@@ -4,37 +4,53 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InputReader implements KeyListener {
-    private List<Input> InputDown = new ArrayList<Input>();
-    private List<Input> InputPressed = new ArrayList<>();
-    private List<Input> InputUp = new ArrayList<>();
+    private List<Integer> inputPressed = new ArrayList<>();
+    private List<Integer> inputFinished = new ArrayList<>();
 
-
-    public List<Input> getInputDown() {
-        return InputDown;
+    public List<Integer> getInputPressed() {
+        return inputPressed;
     }
 
-    public List<Input> getInputPressed() {
-        return InputPressed;
+    public List<Integer> getInputFinished() {
+        return inputFinished;
     }
 
-    public List<Input> getInputUp() {
-        return InputUp;
+    public void addInputFinished(Integer integer) {
+        if (!inputFinished.contains(integer)) {
+            inputFinished.add(integer);
+        }
+    }
+
+    public void updateInputPressed() {
+        for (Integer integer : inputFinished) {
+            inputPressed.remove(integer);
+        }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println(e);
+        return;
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e);
+        Integer keyCode = e.getKeyCode();
+
+        if (!inputPressed.contains(keyCode) && !inputFinished.contains(keyCode)) {
+            inputPressed.add(keyCode);
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println(e);
+        Integer keyCode = e.getKeyCode();
+
+        inputPressed.remove(keyCode);
+        inputFinished.remove(keyCode);
     }
+
 }
