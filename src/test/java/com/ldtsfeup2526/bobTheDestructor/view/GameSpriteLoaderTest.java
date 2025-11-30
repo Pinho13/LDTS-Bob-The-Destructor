@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class SpriteLoaderTest {
+public class GameSpriteLoaderTest {
     private GameSpriteLoader loader;
     private String p1;
     private String p2;
