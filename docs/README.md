@@ -7,27 +7,6 @@ The main objective of this game is to go lower and lower in the underground to d
 
 This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2024/25.
 
-### Total features (to be split in the two below)
-
-- **Collision System**
-- **Physics System**
-- **Player Movement**
-- **Sprite Loader**
-- **Terrain Generator**
-- **Destruction System**
-- **Main Menu**
-- Screen Resizer
-- Animation Manager
-- Collectible System
-- Gadget System
-- Upgrade System
-- Shop System
-- Particle System
-- Ore System
-- GUI
-- Top score
-- Tile Visibility System
-
 ### Implemented features
 
 * **Sprite Loader** - A class that parses and renders PNGs onto the GUI's screen.
@@ -37,6 +16,15 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 
 ### Planned features
 
+* **Main Menu** - Menu screen when launching game.
+* **Collision System** - A system that allows objects to collide.
+* **Physics System** - A system that allows objects to have physics applied to them. (gravity, velocity, acceleration, ...)
+* **Player Movement** - A system that allows the player to move.
+* **Scene Generator** - A way to generate the terrain the player will dig.
+* **Destruction System** - A system that allows the player to break things.
+* **Ore System** - A system that allows the player to collect different ores with different value.
+* **Collectible System** - A system that allows the player to collect and spend in-game currency.
+* **Upgrade System** - A system that allows the player to upgrade the pickaxe.
 
 ### Design
 
