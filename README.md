@@ -37,3 +37,6 @@ For a more detailed version of this description, click [here](./docs/README.md).
     <img src="docs/mockups/game_mockup.gif">
 </p>
 
+## General Structure
+
+<img src="docs/intermediateDelivery/uml.png">
