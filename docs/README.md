@@ -180,6 +180,8 @@ Liabilities:
 
 ## Known code smells
 
+So far we haven't found any code smells. Although we would like that this continues, the number of code smells over time may change, as we keep implementing more features.
+
 ## Testing
 
 We focused on unit testing to ensure the reliability of the game's architectural components, specifically the **Model**, **View**, and **State** systems. By isolating these components, we could verify behavior without relying on the complex graphical backend.
