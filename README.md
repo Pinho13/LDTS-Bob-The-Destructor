@@ -13,9 +13,11 @@ For a more detailed version of this description, click [here](./docs/README.md).
 
 ### Main Character Design
 
-<img src="docs/mockups/player.png">
-<img src="docs/mockups/player_walk.gif">
-<img src="docs/mockups/player_swim.gif">
+<div>
+    <img src="docs/mockups/player.png">
+    <img src="docs/mockups/player_walk.gif">
+    <img src="docs/mockups/player_swim.gif">
+</div>
 
 ### Game Mokcup
 
