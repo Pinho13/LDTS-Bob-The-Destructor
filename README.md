@@ -5,7 +5,7 @@
     In this project, our main focus is to develop a 2D mining game inspired by games like Minecraft and Terraria. The main persona is a miner named Bob, as the game’s name suggests. This persona starts his adventure in the upperground area, where the core progression system (upgrades and shop) are located. The main objective of this game is to go lower and lower in the underground to discover the terrain blocks with the most valuable resources, collect them and return to the upperground area to invest them in rewards. The game’s dynamics is strictly on exploration, resource collection and tool upgrades. As the distance from the upperground area increases, the stiffness of the subterranean layers also increases.
 </p>
 
-This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2025.
+>This project was developed by <a href="https://github.com/alexis-ramoss">Aléxis Ramos</a> (up202404977), <a href="https://github.com/T0m2sT">Pedro Tomás Teixeira</a> (up202404987), <a href="https://github.com/Pinho13">Rafael Pinho e Silva</a> (up202406334) for LDTS 2025/26.
 
 For a more detailed version of this description, click [here](./docs/README.md).
 
