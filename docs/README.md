@@ -1,20 +1,19 @@
 # LDTS_T04_G04 - BOB, THE DESTRUCTOR
 
-## com.ldtsfeup2526.bobTheDestructor.controller.Game Description
 
 In this project, our main focus is to develop a 2D mining game inspired by games like Minecraft and Terraria. The main persona is a miner named Bob, as the game’s name suggests. This persona starts his adventure in the upperground area, where the core progression system (upgrades and shop) are located.
 The main objective of this game is to go lower and lower in the underground to discover the terrain blocks with the most valuable resources, collect them and return to the upperground area to invest them in rewards. The game’s dynamics is strictly on exploration, resource collection and tool upgrades. As the distance from the upperground area increases, the stiffness of the subterranean layers also increases.
 
 This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2024/25.
 
-### Implemented features
+## Implemented features
 
 * **Sprite Loader** - A class that parses and renders PNGs onto the GUI's screen.
 * **Input System** - A system that allows the user to use keyboard inputs, multiple inputs per frame are supported.
 * **Action System** - A system that implements the input system into the game by turning any user input into a game action.
 * **State System** - A system that allows the game to know in what state it is, and proceeds accordingly.
 
-### Planned features
+## Planned features
 
 * **Main Menu** - Menu screen when launching game.
 * **Collision System** - A system that allows objects to collide.
@@ -26,7 +25,7 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 * **Collectible System** - A system that allows the player to collect and spend in-game currency.
 * **Upgrade System** - A system that allows the player to upgrade the pickaxe.
 
-### Design
+## Design
 
 #### THE SCREENS AND GAME LOOP SHOULD BE SWITCHABLE WITHOUT UPDATING IF/SWITCH LOGIC
 
