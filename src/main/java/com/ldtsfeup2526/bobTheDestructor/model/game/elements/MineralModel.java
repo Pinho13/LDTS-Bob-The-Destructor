@@ -11,7 +11,7 @@ public class MineralModel extends ElementModel {
 
     private final Type type;
 
-    public MineralModel(Position position, Type type, Map<Position, Boolean> occupancy) {
+    public MineralModel(Position position, Type type, HashMap<Position, Boolean> occupancy) {
         super(position, occupancy);
         this.type = type;
         switch (type) {

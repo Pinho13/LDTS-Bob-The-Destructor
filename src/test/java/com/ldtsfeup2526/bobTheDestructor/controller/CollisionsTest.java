@@ -1,16 +1,16 @@
-package com.ldtsfeup2526.bobTheDestructor.model;
+package com.ldtsfeup2526.bobTheDestructor.controller;
 
+import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CollisionsTest {
     Position p1, p2;
-    Map<Position, Boolean> occupancy;
+    HashMap<Position, Boolean> occupancy;
 
     @BeforeEach
     void setUp() {
