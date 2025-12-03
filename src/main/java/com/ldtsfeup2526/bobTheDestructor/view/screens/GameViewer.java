@@ -21,7 +21,7 @@ public class GameViewer extends ScreenViewer<Scene> {
     public void draw(GUI gui) throws IOException {
         gui.clear();
 
-        playerViewer.draw(new Position(50, 50), gui);
+        playerViewer.draw(getModel().getPlayerModel(), gui);
 
         gui.refresh();
     }
