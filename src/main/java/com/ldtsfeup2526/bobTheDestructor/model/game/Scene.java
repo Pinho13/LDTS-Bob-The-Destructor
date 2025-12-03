@@ -16,6 +16,11 @@ public class Scene {
         occupancy = new HashMap<Position, Boolean>();
         player = new PlayerModel(new Position(50, 50), occupancy);
         blocks = new BlockModel[10][10];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                blocks[i][j] = new BlockModel(new Position(i, j), BlockModel.Type.IRON, occupancy);
+            }
+        }
     }
     public PlayerModel getPlayer() { return player; }
 
