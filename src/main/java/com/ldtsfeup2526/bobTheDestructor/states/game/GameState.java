@@ -1,6 +1,10 @@
 package com.ldtsfeup2526.bobTheDestructor.states.game;
 
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
+import com.ldtsfeup2526.bobTheDestructor.controller.elements.BlockController;
+import com.ldtsfeup2526.bobTheDestructor.controller.elements.BlocksController;
+import com.ldtsfeup2526.bobTheDestructor.controller.elements.PlayerController;
+import com.ldtsfeup2526.bobTheDestructor.controller.elements.SceneController;
 import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
@@ -20,6 +24,6 @@ public class GameState extends State<Scene> {
     }
 
     public Controller<Scene> createController() {
-        return null;
+        return new SceneController(new Scene(), new PlayerController(getModel().getPlayer()), new BlocksController(getModel().getBlocks()));
     }
 }

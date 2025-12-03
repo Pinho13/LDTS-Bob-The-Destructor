@@ -18,6 +18,7 @@ public class BlockController extends Controller<BlockModel> {
         super(block);
     }
 
+    @Override
     public void update(List<Action> actions) {
 
     }

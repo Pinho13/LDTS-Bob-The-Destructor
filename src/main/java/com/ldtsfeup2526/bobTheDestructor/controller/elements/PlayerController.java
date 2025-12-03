@@ -19,6 +19,7 @@ public class PlayerController extends Controller<PlayerModel> {
         super(player);
     }
 
+    @Override
     public void update(List<Action> actions) {
         if (actions.contains(Action.LEFT)) moveLeft();
         if (actions.contains(Action.RIGHT)) moveRight();

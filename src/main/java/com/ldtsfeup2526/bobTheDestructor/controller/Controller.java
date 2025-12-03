@@ -14,4 +14,6 @@ public abstract class Controller<T> {
     public T getModel() {
         return model;
     }
+
+    public abstract void update(List<Action> actions);
 }
