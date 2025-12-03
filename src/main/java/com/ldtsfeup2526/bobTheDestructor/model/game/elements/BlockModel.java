@@ -33,8 +33,4 @@ public class BlockModel extends ElementModel {
     public void setDurability(int durability) {
         this.durability = durability;
     }
-
-    public int decreaseDurability(PickaxeModel pickaxe) {
-        return durability - pickaxe.getDamage();
-    }
 }

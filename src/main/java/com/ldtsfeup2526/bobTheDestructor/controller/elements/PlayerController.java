@@ -14,13 +14,17 @@ import static com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel
 
 public class PlayerController extends Controller<PlayerModel> {
     private static HashMap<Position, Boolean> occupancy = getOccupancy();
+
     public PlayerController(PlayerModel player) {
         super(player);
     }
+
     public void update(List<Action> actions) {
-
+        if (actions.contains(Action.LEFT)) moveLeft();
+        if (actions.contains(Action.RIGHT)) moveRight();
+        if (actions.contains(Action.UP)) moveUp();
+        if (actions.contains(Action.DOWN)) moveDown();
     }
-
 
     public void moveLeft() {
         if (!collidesLeft(getModel().getPosition(), occupancy)) {
