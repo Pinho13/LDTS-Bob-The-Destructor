@@ -12,6 +12,8 @@ public class PlayerModel extends ElementModel {
         super(position, occupancy);
     }
 
+
+
     public PlayerState getState() {return state;}
 
     public void setState(PlayerState state) {this.state = state;}
