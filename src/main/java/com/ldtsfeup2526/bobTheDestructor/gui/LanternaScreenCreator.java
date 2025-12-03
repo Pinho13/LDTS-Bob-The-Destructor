@@ -8,6 +8,7 @@ import com.googlecode.lanterna.terminal.swing.AWTTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.AWTTerminalFrame;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 public class LanternaScreenCreator implements ScreenCreator {
 
-    public Screen createScreen(Resolution resolution, int fontSize, String title) throws URISyntaxException, IOException, FontFormatException {
+    public Screen createScreen(Resolution resolution, int fontSize, String title, KeyListener keyListener) throws URISyntaxException, IOException, FontFormatException {
         TerminalSize terminalSize = new TerminalSize(resolution.getWidth(), resolution.getHeight());
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
         terminalFactory.setInitialTerminalSize(terminalSize);
@@ -26,6 +27,7 @@ public class LanternaScreenCreator implements ScreenCreator {
         terminalFactory.setTerminalEmulatorFontConfiguration(font);
         TerminalScreen screen = terminalFactory.createScreen();
         AWTTerminalFrame terminal = (AWTTerminalFrame) screen.getTerminal();
+        terminal.getComponent(0).addKeyListener(keyListener);
         terminal.setTitle(title);
         return screen;
     }

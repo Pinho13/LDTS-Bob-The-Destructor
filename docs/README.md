@@ -1,41 +1,251 @@
 # LDTS_T04_G04 - BOB, THE DESTRUCTOR
 
-## com.ldtsfeup2526.bobTheDestructor.controller.Game Description
 
-    In this project, our main focus is to develop a 2D mining game inspired by games like Minecraft and Terraria. The main persona is a miner named Bob, as the game’s name suggests. This persona starts his adventure in the upperground area, where the core progression system (upgrades and shop) are located. 
-    The main objective of this game is to go lower and lower in the underground to discover the terrain blocks with the most valuable resources, collect them and return to the upperground area to invest them in rewards. The game’s dynamics is strictly on exploration, resource collection and tool upgrades. As the distance from the upperground area increases, the stiffness of the subterranean layers also increases.
+In this project, our main focus is to develop a 2D mining game inspired by games like Minecraft and Terraria. The main persona is a miner named Bob, as the game’s name suggests. This persona starts his adventure in the upperground area, where the core progression system (upgrades and shop) are located.
+The main objective of this game is to go lower and lower in the underground to discover the terrain blocks with the most valuable resources, collect them and return to the upperground area to invest them in rewards. The game’s dynamics is strictly on exploration, resource collection and tool upgrades. As the distance from the upperground area increases, the stiffness of the subterranean layers also increases.
 
-This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2024/25.
+This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2025/26.
 
-### Total features (to be split in the two below)
+## Implemented features
 
-- **Collision System**
-- **Physics System**
-- **Player Movement**
-- **Sprite Loader**
-- **Terrain Generator**
-- **Destruction System**
-- **Main Menu**
-- Screen Resizer
-- Animation Manager
-- Collectible System
-- Gadget System
-- Upgrade System
-- Shop System
-- Particle System
-- Ore System
-- GUI
-- Top score
-- Tile Visibility System
+* **Sprite Loader** - A class that parses and renders PNGs onto the GUI's screen.
+* **Input System** - A system that allows the user to use keyboard inputs, multiple inputs per frame are supported.
+* **Action System** - A system that implements the input system into the game by turning any user input into a game action.
+* **State System** - A system that allows the game to know in what state it is, and proceeds accordingly.
 
-### Implemented features
+## Planned features
 
-### Planned features
+* **Main Menu** - Menu screen when launching game.
+* **Collision System** - A system that allows objects to collide.
+* **Physics System** - A system that allows objects to have physics applied to them. (gravity, velocity, acceleration, ...)
+* **Player Movement** - A system that allows the player to move.
+* **Scene Generator** - A way to generate the terrain the player will dig.
+* **Destruction System** - A system that allows the player to break things.
+* **Ore System** - A system that allows the player to collect different ores with different value.
+* **Collectible System** - A system that allows the player to collect and spend in-game currency.
+* **Upgrade System** - A system that allows the player to upgrade the pickaxe.
 
-### Design
+## Notes About Features
 
-### Known code smells
+We still have no gameplay, as for this delivery we focused solely on making the structure organized and scalable. With the current implementation we can easily start working on the playable features while not worrying so much about code integrity as until now since the game's structure is very solid.
 
-### Testing
+## General Structure
+
+<img src="intermediateDelivery/uml.png">
+
+## Design
+
+### Code Structure
+
+#### Problem in Context
+
+When developing a game or any complex piece of software, it is essential to be very careful with the way it is implemented and structured.
+Due to this, it is essential to compartmentalize all the components.
+
+#### The Pattern
+
+We chose the **Model/View/Controller** pattern. This pattern is very common in projects which have to display any kind of interface.
+The main idea behind this pattern is dividing the software into three sections:
+
+* **Model** - represents the data and game logic
+* **View** - renders the model
+* **Controller** - receives and interprets the user inputs
+
+#### Implementation
+
+The following diagram explains the current implementation:
+
+<img src="images/MVC_diagram.jpg" alt="MVC Diagram" width="500">
+
+#### Consequences
+
+Benefits:
+* Allows for better code organization
+* Helps with the segregation of the code
+* Avoids conflicts
+
+### Game Loop
+
+#### Problem in Context
+
+In game development it is essential to control the frame rate of a game. Both the rendering and code speed depend on the game's frame rate.
+
+#### The Pattern
+
+The design pattern used to solve this issue is the **Game Loop**. A Game Loop is a while-loop that runs until there is a state change to quit the game.
+With this loop there is also a target FPS (frames per second), which represent how manny times per second all the code runs and how manny times the images in the screen are updated.
+There is also the need to track the **deltaTime** which is the time between frames. This value is extremely important to maintain compatibility with different FPS, while still maintaining the appropriate behaviour.
+This way our game will run continuously and smoothly across different systems and frame rates.
+
+#### Implementation
+
+The implementation of this pattern in our project is present in run method of our [game class](/src/main/java/com/ldtsfeup2526/bobTheDestructor/Game.java).
+
+Here is a visual representation of the game loop:
+<img src="images/gameLoop.png">
+
+#### Consequences
+
+Benefits:
+* Allows to control frame rate
+* Keeps the experience consistent
+
+### Multiple Game States
+
+#### Problem in Context
+
+It is crucial that we support multiple game states. The game should know whether it is currently on the game or in a menu.
+This means we can't mix rendering coordination with screen logic, because it would violate the Single Responsibility Principle and made transitions more complex.
+This could obviously be solved with some conditionals, this is not a very scalable approach as eventually there would be a giant block of code inside our game.
+
+#### The Pattern
+
+We applied the **State** pattern. Each game state is distinct encapsulating its own model, viewer and controller.
+`Game` holds a reference to the current `State<?>` and then it only needs to delegate to it. This way, switching game scene is now replacing the state instance.
+
+States are also the glue for our project structure, containing the model, view and controller. Allowing everything to be updated in order.
+
+#### Implementation
+
+- Core abstraction: [`states/State.java`](/src/main/java/com/ldtsfeup2526/bobTheDestructor/states/State.java#L11-L33). It holds the screen model, a `Controller<T>`, and a `ScreenViewer<T>`, created via factory methods.
+- Game loop delegation: [`Game.java`](/src/main/java/com/ldtsfeup2526/bobTheDestructor/Game.java#L43-L61) calls `state.update(gui)` every frame and exposes `setState(...)` for transitions ([`Game.java#setState`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/Game.java#L65-L67)).
+- Concrete states: a `GameState` links the `Scene` model with its screen viewer and controller.
+
+Here is a visualization of how it is implemented:
+<img src="images/states.png">
+
+#### Consequences
+
+Benefits:
+- Clean separation of concerns between the main loop and screen logic.
+- Adding a new screen is simpler: implement a new `State<T>` subclass and its viewer and controller.
+- Transitions are explicit and testable via `Game.setState(...)`.
+
+Liabilities:
+- More types and indirection.
+
+### Rendering Multiple Elements
+
+#### Problem in Context
+
+As we introduced multiple renderable elements like (player, tiles, decor, etc.), a single monolithic renderer would accumulate `if/switch` chains to handle each type,
+making it hard to add new visuals and violating the Open/Closed Principle.
+
+#### The Pattern
+
+We applied the **Strategy pattern** for the drawing method. Each drawable element has its own viewer strategy implementing a common interface.
+Screens then will compose these strategies to render the model.
+
+#### Implementation
+
+- Strategy interface: [`view/elements/ElementViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/elements/ElementViewer.java#L6-L8).
+- Strategy composition/provider: [`view/ViewerProvider.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java#L7-L16) instantiates and exposes concrete viewers like `PlayerViewer`.
+- Example concrete strategy: [`view/elements/PlayerViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/elements/PlayerViewer.java).
+- Screen-level composition: `ScreenViewer<T>` aggregates the strategies to draw a complete screen.
+
+#### Consequences
+
+Benefits:
+- New renderable types can be added by creating a new `ElementViewer` implementation while existing code stays closed to modification.
+- Testability improves by isolating drawing logic per element.
+
+Liabilities:
+- Slight increase in the number of classes and indirection through the provider.
+
+### Simplification of Lanterna's interface
+
+#### Problem in Context
+
+Directly using Lanterna's API can be frustrating and unclear, specially for rendering multiple game elements.
+This would mess up portability and made switching or configuring anything harder.
+
+#### The Pattern
+
+We combined **Adapter** and **Factory** patterns:
+- **Adapter:** define a minimal `GUI` interface for drawing operations, with `GUILanterna` adapting Lanterna’s `Screen` to that interface.
+- **Factory:** centralize creation and also configuration of the `Screen` via a `ScreenCreator`.
+
+#### Implementation
+
+- Adapter (`GUILanterna`): wraps Lanterna and implements drawing methods; see [`gui/GUILanterna.java`](/src/main/java/com/ldtsfeup2526/bobTheDestructor/gui/GUILanterna.java#L19-L81). Notable operations include `drawPixel`, `clear`, `refresh`, and `close`.
+- Factory (`ScreenCreator`): interface to build a configured Lanterna `Screen`; see [`gui/ScreenCreator.java`](/src/main/java/com/ldtsfeup2526/bobTheDestructor/gui/ScreenCreator.java#L11-L13). `GUILanterna` delegates actual creation to this factory in `createScreen(...)`.
+- Integration in boot: `Game` builds `GUILanterna` with resolution, pixel size, and title; see [`Game.java` constructor](/src/main/java/com/ldtsfeup2526/bobTheDestructor/Game.java#L26-L31).
+
+Here is a visualization of how it is implemented:
+<img src="images/GUI.png">
+
+#### Consequences
+
+Benefits:
+- The view classes uses a stable `GUI` API and is decoupled from Lanterna specific methods.
+- Screen creation details, the resolution, font size, window title and KeyListener are centralized, easing configuration and testing.
+- Future backends can be introduced by implementing `GUI` and a matching `ScreenCreator`.
+
+Liabilities:
+- Additional abstraction layers making it more complex and efficiency might be compromised.
+
+### Input Handling
+
+#### Problem in Context
+
+Raw key events (press/release) are noisy and platform-dependent. Game logic should operate on semantic actions (e.g., `UP`, `JUMP`, `SELECT`) and avoid repeated triggers for single-shot actions while a key is held.
+Naive solutions would scatter key-code checks and introduce confusion across controllers.
+
+#### The Pattern
+
+We leveraged the **Observer** style provided by Java AWT (`KeyListener`) to receive events, and applied a small parsing layer that behaves like a Command/Interpreter for inputs: `ActionParser` translates key codes into domain actions and coordinates one-shot behavior using an `InputReader` buffer.
+
+This combination cleanly separates event capture from action semantics. We also abstained from using Lanterna's implementation as it had a few drawbacks.
+This implementation allows for multiple Key Events per frame while having a clean implementation separate from the GUI.
+
+#### Implementation
+
+- Event capture buffer: [`controller/input/InputReader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/input/InputReader.java#L9-L56) implements `KeyListener`, maintaining `inputPressed` and `inputFinished` lists; `updateInputPressed()` updates inputs each frame.
+- Parsing to actions: [`controller/input/ActionParser.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/input/ActionParser.java#L8-L59) maps key codes to `Action` values and marks single-shot actions (`SPACE`, `ENTER`, `ESCAPE`) as finished.
+- Wiring in boot: `Game` creates the parser and passes its `InputReader` into the GUI, so the same listener receives events and focuses keyboard while using Lanterna's screen; see [`Game.java` boot](../src/main/java/com/ldtsfeup2526/bobTheDestructor/Game.java#L26-L31).
+
+#### Consequences
+
+Benefits:
+- Clear separation between event capture and semantic actions.
+- One-shot actions are handled uniformly; held keys don’t cause repeated triggers unless intended.
+- Controllers can depend on `Action` lists without caring about AWT details.
+
+Liabilities:
+- Requires careful usage of `inputFinished` to avoid starving inputs; controllers must mark single-shot actions appropriately.
+
+## Known code smells
+
+So far we haven't found any code smells. Although we would like that this continues, the number of code smells over time may change, as we keep implementing more features.
+
+## Testing
+
+We focused on unit testing to ensure the reliability of the game's architectural components, specifically the **Model**, **View**, and **State** systems. By isolating these components, we could verify behavior without relying on the complex graphical backend.
+
+#### Testing Strategy:
+*   **Models**: We verified that game elements (Player, Blocks, Minerals) hold state correctly and interactions (like collision bounding boxes) function as expected.
+*   **Controllers**: We tested the `InputReader` and `ActionParser` to ensure that raw keyboard inputs are correctly translated into semantic game actions (`UP`, `SELECT`, etc.).
+*   **Viewers**: We achieved high coverage in the view package by testing the strategy pattern implementations, ensuring the correct symbols and colors are associated with game elements.
+*   **States**: We validated that states correctly initialize their respective controllers and viewers.
+
+#### Coverage Summary:
+The project achieved a high degree of code coverage, as shown in the report below:
+
+![Coverage Report](intermediateDelivery/Overall_Coverage_Report.png)
+
+*   **Class Coverage**: 89.7%
+*   **Method Coverage**: 91.7%
+*   **Line Coverage**: 85.6%
+
+#### Detailed Breakdown:
+*   **Core Logic (`model.game`, `states`, `view`)**: These packages achieved **100% line coverage**. This ensures that the core gameplay loop, state transitions, and rendering logic are robust and error-free.
+*   **Input Handling (`controller.input`)**: With **89.8% line coverage**, the input system is reliable, ensuring smooth player control.
+*   **Untested Areas**: The lower coverage in specific areas (like `model.menu` or parts of the main `Game` loop) is due to these classes being simple data containers or the main entry point, which are verified through manual integration testing.
 
 ### Self-Evaluation
+
+| Name | Contribution |
+| :---: | :---: |
+| Aléxis Ramos | 33.33% |
+| Pedro Tomás Teixeira | 33.33% |
+| Rafael Pinho e Silva | 33.33% |
