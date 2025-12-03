@@ -14,7 +14,8 @@ public final class PlayerViewerJumping implements PlayerViewer {
 
     public PlayerViewerJumping(SpriteLoader spriteLoader) throws IOException {
         spriteMap = new HashMap<>();
-        spriteMap.put("sprites/player/player1.png", spriteLoader.get("sprites/player/player1.png"));
+        spriteMap.put("sprites/player/player_jump_1.png", spriteLoader.get("sprites/player/player_jump1.png"));
+        spriteMap.put("sprites/player/player_jump_2.png", spriteLoader.get("sprites/player/player_jump2.png"));
     }
     @Override public void draw(Position pos, GUI gui) {
         Sprite sprite = spriteMap.get("sprites/player/player1.png");

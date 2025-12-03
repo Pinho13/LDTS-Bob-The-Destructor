@@ -14,8 +14,10 @@ public final class PlayerViewerMoving implements PlayerViewer {
 
     public PlayerViewerMoving(SpriteLoader spriteLoader) throws IOException {
         spriteMap = new HashMap<>();
-        spriteMap.put("sprites/player/player1.png", spriteLoader.get("sprites/player/player1.png"));
-    }
+        spriteMap.put("sprites/player/player_walk_1.png", spriteLoader.get("sprites/player/player_walk4.png"));
+        spriteMap.put("sprites/player/player_walk_2.png", spriteLoader.get("sprites/player/player_walk3.png"));
+        spriteMap.put("sprites/player/player_walk_3.png", spriteLoader.get("sprites/player/player_walk2.png"));
+        spriteMap.put("sprites/player/player_walk_4.png", spriteLoader.get("sprites/player/player_walk1.png"));    }
     @Override public void draw(Position pos, GUI gui) {
         Sprite sprite = spriteMap.get("sprites/player/player1.png");
         sprite.draw(gui, pos);
