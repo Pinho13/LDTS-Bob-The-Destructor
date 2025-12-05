@@ -19,11 +19,13 @@ public class GameState extends State<Scene> {
         super(model, spriteLoader);
     }
 
+    @Override
     public ScreenViewer<Scene> createScreenViewer(ViewerProvider viewerProvider) {
         return new GameViewer(getModel(), viewerProvider);
     }
 
+    @Override
     public Controller<Scene> createController() {
-        return new SceneController(new Scene(), new PlayerController(getModel().getPlayer()), new BlocksController(getModel().getBlocks()));
+        return new SceneController(getModel(), new PlayerController(getModel().getPlayer()), new BlocksController(getModel().getBlocks()));
     }
 }

@@ -51,7 +51,7 @@ public class Game {
             if (list.size() != 0) {
                 System.out.println(list);
             }
-            state.update(gui);
+            state.update(gui, actionParser);
 
             long elapsedTime = System.currentTimeMillis() - startTime;
             long sleepTime = deltaTime - elapsedTime;

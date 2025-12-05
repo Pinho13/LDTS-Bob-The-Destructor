@@ -15,13 +15,11 @@ public abstract class State<T> {
     private final T model;
     private final Controller<T> controller;
     private final ScreenViewer<T> screenViewer;
-    private ActionParser actionParser;
 
     public State(T model, SpriteLoader spriteLoader) throws IOException {
         this.model = model;
         this.screenViewer = createScreenViewer(new ViewerProvider(spriteLoader));
         this.controller = createController();
-        actionParser = new ActionParser();
     }
 
     public abstract ScreenViewer<T> createScreenViewer(ViewerProvider viewerProvider);
@@ -31,7 +29,7 @@ public abstract class State<T> {
         return model;
     }
 
-    public void update(GUI gui) throws IOException {
+    public void update(GUI gui, ActionParser actionParser) throws IOException {
         controller.update(actionParser.get());
         screenViewer.draw(gui);
     }
