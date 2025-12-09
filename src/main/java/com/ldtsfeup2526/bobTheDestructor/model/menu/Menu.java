@@ -21,13 +21,17 @@ public abstract class Menu {
     }
 
     public void moveDown() {
+        getCurrentButton().setButtonState(ButtonState.UNSELECTED);
         currentButton++;
         currentButton %= getNumberOfButtons();
+        getCurrentButton().setButtonState(ButtonState.SELECTED);
     }
 
     public void moveUp() {
+        getCurrentButton().setButtonState(ButtonState.UNSELECTED);
         currentButton += getNumberOfButtons() - 1;
         currentButton %= getNumberOfButtons();
+        getCurrentButton().setButtonState(ButtonState.SELECTED);
     }
 
     public Button getCurrentButton() {

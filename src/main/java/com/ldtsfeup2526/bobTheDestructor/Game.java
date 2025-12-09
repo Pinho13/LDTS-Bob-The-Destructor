@@ -48,12 +48,12 @@ public class Game {
         while (this.state != null) {
             long startTime = System.currentTimeMillis();
 
-            // Used to test Inputs
-            List<Action> list = actionParser.get();
-            if (list.size() != 0) {
-                System.out.println(list);
+            List<Action> actions = actionParser.get();
+            if (actions.size() != 0) {
+                System.out.println(actions);
             }
-            state.update(gui);
+
+            state.update(this, gui, actions);
 
             long elapsedTime = System.currentTimeMillis() - startTime;
             long sleepTime = deltaTime - elapsedTime;
@@ -61,7 +61,7 @@ public class Game {
             if (sleepTime > 0) Thread.sleep(sleepTime);
         }
 
-        //gui.close();
+        gui.close();
     }
 
     public void setState(State<?> state) {

@@ -1,6 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.states.game;
 
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
+import com.ldtsfeup2526.bobTheDestructor.controller.menu.MainMenuController;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
@@ -20,6 +21,6 @@ public class MainMenuState extends State<MainMenu> {
     }
 
     public Controller<MainMenu> createController() {
-        return null;
+        return new MainMenuController(getModel());
     }
 }
