@@ -31,12 +31,4 @@ public class MainMenuViewer extends ScreenViewer<MainMenu>{
         gui.refresh();
     }
 
-    private <T extends ElementModel> void drawElement(GUI gui, T element, ElementViewer<T> viewer) {
-        viewer.draw(element, gui);
-    }
-
-    private <T extends ElementModel> void drawElements(GUI gui, List<T> elements, ElementViewer<T> viewer) {
-        for (T element: elements)
-            drawElement(gui, element, viewer);
-    }
 }

@@ -29,7 +29,7 @@ public class Sprite {
     }
 
     public void center() {
-        setOffset(new Position(getOffset().getX()-getSize().getX()/2, getOffset().getY()-getSize().getY()/2));
+        setOffset(new Position(-getSize().getX()/2, -getSize().getY()/2));
     }
 
     public void draw(Position position, GUI gui) {
