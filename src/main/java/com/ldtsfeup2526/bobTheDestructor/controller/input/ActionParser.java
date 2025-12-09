@@ -28,6 +28,23 @@ public class ActionParser {
         return currentActions;
     }
 
+    public List<Action> getOneShotAction() {
+        currentActions.clear();
+
+        List<Integer> inputPressed = inputReader.getInputPressed();
+        for (Integer integer : inputPressed) {
+            Action action = parseInput(integer);
+            inputReader.addInputFinished(integer);
+
+            if (action != Action.NONE) {
+                currentActions.add(parseInput(integer));
+            }
+        }
+        inputReader.updateInputPressed();
+
+        return currentActions;
+    }
+
     private Action parseInput(Integer input) {
         switch (input) {
             case KeyEvent.VK_UP:
