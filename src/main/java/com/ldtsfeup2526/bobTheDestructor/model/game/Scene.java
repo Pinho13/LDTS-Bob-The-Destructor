@@ -1,7 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game;
 
 import com.ldtsfeup2526.bobTheDestructor.model.Position;
-import com.ldtsfeup2526.bobTheDestructor.model.game.elements.PlayerModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 
 public class Scene {
     private PlayerModel playerModel = new PlayerModel(new Position(50, 50));
