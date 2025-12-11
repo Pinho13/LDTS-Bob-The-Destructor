@@ -16,6 +16,7 @@ import java.util.Map;
 public class ButtonViewer implements ElementViewer<Button> {
     private final Map<ButtonType, Map<ButtonState, Sprite>> spriteMap = new HashMap<>();
     private final Map<ButtonType, Sprite> iconMap = new HashMap<>();
+    private final Sprite pickaxeIcon;
 
     public ButtonViewer(SpriteLoader spriteLoader) throws IOException {
         Map<ButtonState, Sprite> tempMap;
@@ -35,6 +36,9 @@ public class ButtonViewer implements ElementViewer<Button> {
         for (Sprite s : iconMap.values()) {
             s.center();
         }
+
+        pickaxeIcon = spriteLoader.get("sprites/ui/buttons/selected_icon.png");
+        pickaxeIcon.center();
     }
 
     public void draw(Button button, GUI gui) {
@@ -48,6 +52,14 @@ public class ButtonViewer implements ElementViewer<Button> {
                 button.getPosition().getY()),
                 gui
         );
+
+        if (button.getButtonState() != ButtonState.UNSELECTED) {
+            pickaxeIcon.draw(new Position(
+                            button.getPosition().getX() - sprite.getSize().getX() / 2 - 4,
+                            button.getPosition().getY()),
+                    gui
+            );
+        }
     }
 
 }
