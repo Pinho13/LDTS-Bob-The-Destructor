@@ -31,6 +31,10 @@ public class Sprite {
         setOffset(new Position(-getSize().getX()/2, -getSize().getY()/2));
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
     public void draw(Position position, GUI gui) {
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {

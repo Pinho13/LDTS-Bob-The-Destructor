@@ -24,4 +24,17 @@ public class GameSpriteLoader implements SpriteLoader{
         spriteMap.put(spriteFilePath, sprite);
         return sprite;
     }
+
+    public BufferedImage getBufferedImage(String spriteFilePath) throws IOException {
+        if (spriteMap.containsKey(spriteFilePath)) {
+            return spriteMap.get(spriteFilePath).getImage();
+        }
+
+        URL resource = getClass().getClassLoader().getResource(spriteFilePath);
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(resource));
+
+        Sprite sprite = new Sprite(image);
+        spriteMap.put(spriteFilePath, sprite);
+        return image;
+    }
 }
