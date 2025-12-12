@@ -4,7 +4,7 @@ import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
-import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
+import com.ldtsfeup2526.bobTheDestructor.view.game.PlayerViewer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

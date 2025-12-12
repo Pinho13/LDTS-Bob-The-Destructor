@@ -1,6 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
-import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
+import com.ldtsfeup2526.bobTheDestructor.view.game.PlayerViewer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

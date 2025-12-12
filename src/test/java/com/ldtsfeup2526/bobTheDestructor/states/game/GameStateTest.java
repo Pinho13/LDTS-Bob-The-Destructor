@@ -5,7 +5,7 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
-import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
+import com.ldtsfeup2526.bobTheDestructor.view.game.PlayerViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.GameViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
 import org.junit.jupiter.api.BeforeEach;

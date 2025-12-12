@@ -1,20 +1,24 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
-import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
+import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
+import com.ldtsfeup2526.bobTheDestructor.view.game.PlayerViewer;
+import com.ldtsfeup2526.bobTheDestructor.view.game.SceneViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.menu.ButtonViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.menu.WallpaperViewer;
 
 import java.io.IOException;
 
 public class ViewerProvider {
-    private final PlayerViewer playerViewer;
     private final ButtonViewer buttonViewer;
     private final WallpaperViewer wallpaperViewer;
+    private final PlayerViewer playerViewer;
+    private final SceneViewer sceneViewer;
 
     public ViewerProvider(SpriteLoader spriteLoader) throws IOException {
-        this.playerViewer = new PlayerViewer(spriteLoader);
         this.buttonViewer = new ButtonViewer(spriteLoader);
         this.wallpaperViewer = new WallpaperViewer(spriteLoader);
+        this.playerViewer = new PlayerViewer(spriteLoader);
+        this.sceneViewer = new SceneViewer(spriteLoader);
     }
 
     public PlayerViewer getPlayerViewer() {
@@ -27,5 +31,9 @@ public class ViewerProvider {
 
     public WallpaperViewer getWallpaperViewer() {
         return wallpaperViewer;
+    }
+
+    public SceneViewer getSceneViewer() {
+        return sceneViewer;
     }
 }

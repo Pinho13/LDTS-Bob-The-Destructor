@@ -1,4 +1,4 @@
-package com.ldtsfeup2526.bobTheDestructor.view.elements;
+package com.ldtsfeup2526.bobTheDestructor.view.game;
 
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.*;

@@ -10,7 +10,7 @@ public class SceneBuilder implements ISceneBuilder{
     }
 
     public Scene createScene() {
-        return new Scene();
+        return new Scene("caves/");
     }
 
 }

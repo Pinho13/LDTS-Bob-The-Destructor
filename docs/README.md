@@ -138,9 +138,9 @@ Screens then will compose these strategies to render the model.
 
 #### Implementation
 
-- Strategy interface: [`view/elements/ElementViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/elements/ElementViewer.java#L6-L8).
+- Strategy interface: [`view/elements/ElementViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/game/ElementViewer.java#L6-L8).
 - Strategy composition/provider: [`view/ViewerProvider.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java#L7-L16) instantiates and exposes concrete viewers like `PlayerViewer`.
-- Example concrete strategy: [`view/elements/PlayerViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/elements/PlayerViewer.java).
+- Example concrete strategy: [`view/elements/PlayerViewer.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/game/PlayerViewer.java).
 - Screen-level composition: `ScreenViewer<T>` aggregates the strategies to draw a complete screen.
 
 #### Consequences

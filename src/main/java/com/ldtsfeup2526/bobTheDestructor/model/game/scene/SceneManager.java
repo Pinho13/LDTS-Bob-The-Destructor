@@ -11,4 +11,8 @@ public class SceneManager {
     public Scene getScene() {
         return scene;
     }
+
+    public SceneBuilder getSceneBuilder() {
+        return sceneBuilder;
+    }
 }
