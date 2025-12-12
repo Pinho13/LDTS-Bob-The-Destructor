@@ -6,6 +6,8 @@ import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
 import com.ldtsfeup2526.bobTheDestructor.gui.Resolution;
 import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.states.game.GameState;
 import com.ldtsfeup2526.bobTheDestructor.states.game.MainMenuState;

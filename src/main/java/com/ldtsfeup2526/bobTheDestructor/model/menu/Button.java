@@ -1,6 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.menu;
 
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel;
 
 public class Button extends ElementModel {

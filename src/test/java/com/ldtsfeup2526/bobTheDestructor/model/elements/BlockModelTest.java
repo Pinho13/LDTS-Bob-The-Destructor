@@ -1,6 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.elements;
 
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.BlockModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.PickaxeModel;
 import org.junit.jupiter.api.BeforeEach;

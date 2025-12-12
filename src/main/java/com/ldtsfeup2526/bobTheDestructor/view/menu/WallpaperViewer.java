@@ -2,7 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.menu;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 

@@ -1,7 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.gui;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;

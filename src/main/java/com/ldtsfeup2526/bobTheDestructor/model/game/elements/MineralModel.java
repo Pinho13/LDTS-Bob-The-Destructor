@@ -1,6 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements;
 
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 public class MineralModel extends ElementModel {
     public enum Type {COAL, IRON, GOLD, DIAMOND}

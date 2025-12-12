@@ -2,7 +2,6 @@ package com.ldtsfeup2526.bobTheDestructor.view.screens;
 
 import com.googlecode.lanterna.TextColor;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;

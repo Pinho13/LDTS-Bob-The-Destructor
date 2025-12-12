@@ -1,7 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.menu;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 import java.util.Arrays;
 import java.util.List;

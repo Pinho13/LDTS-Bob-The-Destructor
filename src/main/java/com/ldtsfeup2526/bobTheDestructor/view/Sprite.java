@@ -1,10 +1,9 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
 import com.googlecode.lanterna.TextColor;
-import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
-import com.ldtsfeup2526.bobTheDestructor.model.Size;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Size;
 
 import java.awt.image.BufferedImage;
 

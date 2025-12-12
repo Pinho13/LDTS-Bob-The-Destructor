@@ -1,6 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements;
 
-import com.ldtsfeup2526.bobTheDestructor.model.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 public abstract class ElementModel {
     private Position position;
@@ -18,18 +18,18 @@ public abstract class ElementModel {
     }
 
     public void moveLeft() {
-        this.position = position.getLeft();
+        //this.position = position.getLeft();
     }
 
     public void moveRight() {
-        this.position = position.getRight();
+        //this.position = position.getRight();
     }
 
     public void moveUp() {
-        this.position = position.getUp();
+        //this.position = position.getUp();
     }
 
     public void moveDown() {
-        this.position = position.getDown();
+        //this.position = position.getDown();
     }
 }
