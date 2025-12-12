@@ -1,22 +1,16 @@
 package com.ldtsfeup2526.bobTheDestructor;
 
-import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.ActionParser;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUILanterna;
 import com.ldtsfeup2526.bobTheDestructor.gui.Resolution;
-import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
-import com.ldtsfeup2526.bobTheDestructor.states.game.GameState;
 import com.ldtsfeup2526.bobTheDestructor.states.game.MainMenuState;
 import com.ldtsfeup2526.bobTheDestructor.view.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 public class Game {
     public static final Resolution resolution = new Resolution(160, 90);

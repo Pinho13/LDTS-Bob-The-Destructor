@@ -2,7 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.screens;
 
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.ldtsfeup2526.bobTheDestructor.model.game.Scene;
+import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.elements.PlayerViewer;
 import org.junit.jupiter.api.BeforeEach;
