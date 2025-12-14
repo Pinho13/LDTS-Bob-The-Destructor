@@ -1,7 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.controller.game.elements;
 
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
-import com.ldtsfeup2526.bobTheDestructor.model.game.elements.MineralModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 import java.util.ArrayList;
