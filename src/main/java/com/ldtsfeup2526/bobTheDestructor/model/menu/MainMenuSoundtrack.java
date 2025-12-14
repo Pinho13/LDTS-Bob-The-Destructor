@@ -1,7 +1,5 @@
 package com.ldtsfeup2526.bobTheDestructor.model.menu;
 
-import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
-
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -11,7 +9,7 @@ public class MainMenuSoundtrack {
     private final Clip soundtrackClip;
 
     public MainMenuSoundtrack() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        audioInput = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getClassLoader().getResource("sounds/MainMenuSoundtrack.mp3")));
+        audioInput = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getClassLoader().getResource("sounds/mainMenuSoundtrack.wav")));
         soundtrackClip = AudioSystem.getClip();
     }
 
