@@ -8,6 +8,6 @@ public class Size extends Spatial<Integer> {
     }
 
     public Size(Spatial<?> spatial) {
-        super(spatial);
+        super(spatial, Number::intValue);
     }
 }

@@ -9,6 +9,6 @@ public class Position extends Spatial<Integer> {
     }
 
     public Position(Spatial<?> spatial) {
-        super(spatial);
+        super(spatial, Number::intValue);
     }
 }
