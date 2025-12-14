@@ -38,7 +38,7 @@ public class Game {
     }
 
     public void run() throws IOException, InterruptedException {
-        int FPS = 30;
+        int FPS = 60;
         long deltaTime = 1000/FPS;
 
         while (this.state != null) {
