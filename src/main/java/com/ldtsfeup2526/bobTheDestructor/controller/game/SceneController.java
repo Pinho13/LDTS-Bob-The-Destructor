@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.controller.game;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
+import com.ldtsfeup2526.bobTheDestructor.controller.game.elements.PlayerController;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
@@ -12,8 +13,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class SceneController extends Controller<SceneManager> {
+    private final PlayerController playerController;
+
     public SceneController(SceneManager sceneManager) {
         super(sceneManager);
+        this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
     }
 
     @Override
@@ -21,5 +25,6 @@ public class SceneController extends Controller<SceneManager> {
         if (actions.contains(Action.QUIT)) {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
         }
+        playerController.update(game, actions);
     }
 }
