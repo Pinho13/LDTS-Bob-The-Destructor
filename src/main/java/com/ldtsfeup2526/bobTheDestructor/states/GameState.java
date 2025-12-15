@@ -15,7 +15,7 @@ public class GameState extends State<SceneManager> {
         super(model, spriteLoader);
     }
 
-    public ScreenViewer<SceneManager> createScreenViewer(ViewerProvider viewerProvider) {
+    public ScreenViewer<SceneManager> createScreenViewer(ViewerProvider viewerProvider) throws IOException {
         return new GameViewer(getModel(), viewerProvider);
     }
 

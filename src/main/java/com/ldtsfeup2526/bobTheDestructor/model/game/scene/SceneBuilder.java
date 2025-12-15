@@ -16,8 +16,7 @@ public class SceneBuilder implements ISceneBuilder{
         this.spriteLoader = spriteLoader;
     }
 
-    public Scene createScene() throws IOException {
-        String caveFilePath = "caves/";
+    public Scene createScene(String caveFilePath) throws IOException {
         BufferedImage image = spriteLoader.getBufferedImage(caveFilePath+"structure.png");
         Scene scene = new Scene(caveFilePath);
         scene.setBlockColliders(createColliders(image));
@@ -30,7 +29,7 @@ public class SceneBuilder implements ISceneBuilder{
 
         for (int y = 0; y < image.getHeight(); y+=8) {
             for (int x = 0; x < image.getWidth(); x+= 8) {
-                if (image.getRGB(x, y) != 0) {
+                if ((image.getRGB(x, y) >> 24) != 0) {
                     colliders.add(new Collider(new Position(x, y)));
                 }
             }

@@ -23,7 +23,7 @@ public abstract class State<T> {
         this.controller = createController();
     }
 
-    public abstract ScreenViewer<T> createScreenViewer(ViewerProvider viewerProvider);
+    public abstract ScreenViewer<T> createScreenViewer(ViewerProvider viewerProvider) throws IOException;
     public abstract  Controller<T> createController();
 
     public T getModel() {

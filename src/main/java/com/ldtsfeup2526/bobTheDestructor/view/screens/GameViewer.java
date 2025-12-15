@@ -15,10 +15,11 @@ public class GameViewer extends ScreenViewer<SceneManager> {
     private final PlayerViewer playerViewer;
     private final SceneViewer sceneViewer;
 
-    public GameViewer(SceneManager model, ViewerProvider viewerProvider) {
+    public GameViewer(SceneManager model, ViewerProvider viewerProvider) throws IOException {
         super(model);
         this.playerViewer = viewerProvider.getPlayerViewer();
         this.sceneViewer = viewerProvider.getSceneViewer();
+        this.sceneViewer.retrieveCaves(model.getCavesPathChosen());
     }
 
     @Override
@@ -29,11 +30,11 @@ public class GameViewer extends ScreenViewer<SceneManager> {
         sceneViewer.draw(getModel().getScene(), gui, deltaTime);
         playerViewer.draw(getModel().getScene().getPlayerModel(), gui, deltaTime);
 
-        /* Collision Visualizer, only for testing
+
         for (Collider c : getModel().getScene().getBlockColliders()) {
             gui.drawPixel(c.getPosition(), new TextColor.RGB(255, 255, 255));
         }
-        */
+
 
         gui.refresh();
     }

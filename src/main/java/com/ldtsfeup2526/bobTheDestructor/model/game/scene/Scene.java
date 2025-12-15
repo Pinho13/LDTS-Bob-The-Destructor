@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Scene {
     private final String caveFilePath;
-    private final PlayerModel playerModel = new PlayerModel(new Position(50, 50), this);
+    private final PlayerModel playerModel = new PlayerModel(new Position(13, 10), this);
     private List<Collider> blockColliders;
 
     public Scene(String caveFilePath) {
