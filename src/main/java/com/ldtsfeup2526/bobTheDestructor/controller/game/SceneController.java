@@ -24,7 +24,7 @@ public class SceneController extends Controller<SceneManager> {
 
     @Override
     public void update(Game game, List<Action> actions) throws IOException {
-        getModel().update();
+        getModel().update(game);
 
         if (actions.contains(Action.QUIT)) {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));

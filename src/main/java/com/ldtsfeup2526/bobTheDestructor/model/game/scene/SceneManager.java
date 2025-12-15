@@ -2,12 +2,15 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
+import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.sun.tools.attach.VirtualMachine.list;
 
@@ -48,7 +51,7 @@ public class SceneManager {
 
     private String getNextCavePath() {
         if (currentCavePathIndex >= cavesPathChosen.size()) {
-            return "";
+            return null;
         }
 
         String path = cavesPathChosen.get(currentCavePathIndex);
@@ -61,10 +64,16 @@ public class SceneManager {
         return cavesPathChosen;
     }
 
-    public void update() throws IOException {
+    public void update(Game game) throws IOException {
         PlayerModel playerModel = scene.getPlayerModel();
         if (playerModel.getPosition().getY() > Game.resolution.getHeight()) {
-            this.scene = sceneBuilder.createScene(getNextCavePath(), playerModel);
+            String path = getNextCavePath();
+            System.out.println(path);
+            if (Objects.equals(path, null)) {
+                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+                return;
+            }
+            this.scene = sceneBuilder.createScene(path, playerModel);
         }
     }
 }
