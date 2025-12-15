@@ -71,6 +71,60 @@ public class Sprite {
         }
     }
 
+    public void drawFlipY(Position position, GUI gui) {
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int ARGB = image.getRGB(x, image.getHeight() - y - 1);
+
+                if (getAlpha(ARGB) != 0) {
+                    Position pixelPosition = new Position(
+                            position.getX() + offset.getX() + x,
+                            position.getY() + offset.getY() + y
+                    );
+
+                    gui.drawPixel(pixelPosition, getRGB(ARGB));
+                }
+
+            }
+        }
+    }
+
+    public void drawRotRight(Position position, GUI gui) {
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int ARGB = image.getRGB(x, y);
+
+                if (getAlpha(ARGB) != 0) {
+                    Position pixelPosition = new Position(
+                            position.getY() + offset.getY() + y,
+                            position.getX() + offset.getX() + image.getWidth() - x - 1
+                            );
+
+                    gui.drawPixel(pixelPosition, getRGB(ARGB));
+                }
+
+            }
+        }
+    }
+
+    public void drawRotLeft(Position position, GUI gui) {
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int ARGB = image.getRGB(x, y);
+
+                if (getAlpha(ARGB) != 0) {
+                    Position pixelPosition = new Position(
+                            position.getY() + offset.getY() + image.getHeight() - y - 1,
+                            position.getX() + offset.getX() + x
+                    );
+
+                    gui.drawPixel(pixelPosition, getRGB(ARGB));
+                }
+
+            }
+        }
+    }
+
     private int getAlpha(int ARGB) {
         return ARGB >> 24;
     }
