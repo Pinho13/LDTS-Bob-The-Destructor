@@ -90,5 +90,13 @@ public class PlayerModel extends ElementModel {
     public void applyFriction() {
         state.applyFriction();
     }
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public void updateState() {
+        state = state.getNextState();
+    }
 }
 

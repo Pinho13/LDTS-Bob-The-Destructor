@@ -102,4 +102,8 @@ public class RigidBody {
     public void setFriction(float friction) {
         this.friction = friction;
     }
+
+    public float getGravity() {
+        return gravity;
+    }
 }
