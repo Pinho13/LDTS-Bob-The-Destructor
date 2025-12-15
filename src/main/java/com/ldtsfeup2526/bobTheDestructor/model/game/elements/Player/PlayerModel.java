@@ -18,7 +18,7 @@ public class PlayerModel extends ElementModel {
 
     public PlayerModel(Position position) {
         super(position);
-        this.collider = new Collider(position, new Size(5, 6));
+        this.collider = new Collider(position, new Size(5, 5));
         this.rigidBody = new RigidBody(position);
         this.state = new IdleState(this);
     }

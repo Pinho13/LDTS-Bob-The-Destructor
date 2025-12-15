@@ -57,7 +57,7 @@ public class PlayerViewer implements ElementViewer<PlayerModel> {
 
         for (Animation spriteArray : spriteMap.values()) {
             for (Sprite sprite : spriteArray.getSprites()) {
-                sprite.setOffset(new Position(-2, -5));
+                sprite.setOffset(new Position(-2, -6));
             }
         }
 
