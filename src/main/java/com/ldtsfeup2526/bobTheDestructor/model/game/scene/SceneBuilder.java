@@ -1,7 +1,9 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 
 import java.awt.image.BufferedImage;
@@ -16,10 +18,11 @@ public class SceneBuilder implements ISceneBuilder{
         this.spriteLoader = spriteLoader;
     }
 
-    public Scene createScene(String caveFilePath) throws IOException {
+    public Scene createScene(String caveFilePath, PlayerModel playerModel) throws IOException {
         BufferedImage structureImage = spriteLoader.getBufferedImage(caveFilePath+"structure.png");
         BufferedImage enterImage = spriteLoader.getBufferedImage(caveFilePath+"enter.png");
-        Scene scene = new Scene(caveFilePath, findEntrancePos(enterImage));
+        playerModel.getRigidBody().setPosition(new Vector(findEntrancePos(enterImage)));
+        Scene scene = new Scene(caveFilePath, playerModel);
         scene.setBlockColliders(createColliders(structureImage));
 
         return scene;

@@ -1,5 +1,9 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
+import com.ldtsfeup2526.bobTheDestructor.Game;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,11 +17,13 @@ public class SceneManager {
     private int numberOfCaves = 10;
     private List<String> cavesPathChosen;
     private int currentCavePathIndex;
+    private final PlayerModel playerModel;
 
     public SceneManager (SceneBuilder sceneBuilder) throws IOException {
         cavesPathChosen = chooseCaves();
         this.sceneBuilder = sceneBuilder;
-        this.scene = sceneBuilder.createScene(getNextCavePath());
+        this.scene = sceneBuilder.createScene(getNextCavePath(), new PlayerModel(new Position(0, 0)));
+        this.playerModel = scene.getPlayerModel();
     }
 
     public Scene getScene() {
@@ -53,5 +59,12 @@ public class SceneManager {
 
     public List<String> getCavesPathChosen() {
         return cavesPathChosen;
+    }
+
+    public void update() throws IOException {
+        PlayerModel playerModel = scene.getPlayerModel();
+        if (playerModel.getPosition().getY() > Game.resolution.getHeight()) {
+            this.scene = sceneBuilder.createScene(getNextCavePath(), playerModel);
+        }
     }
 }

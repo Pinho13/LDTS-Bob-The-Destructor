@@ -24,11 +24,13 @@ public class SceneController extends Controller<SceneManager> {
 
     @Override
     public void update(Game game, List<Action> actions) throws IOException {
+        getModel().update();
+
         if (actions.contains(Action.QUIT)) {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
         }
-        playerController.update(game, actions);
 
+        playerController.update(game, actions);
         mineralsController.update(getModel().getScene().getPlayerModel().getPosition(), actions);
     }
 }

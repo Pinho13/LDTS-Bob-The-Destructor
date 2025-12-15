@@ -11,16 +11,15 @@ import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 public class PlayerModel extends ElementModel {
     private Collider collider;
     private RigidBody rigidBody;
-    private final Scene scene;
+    private Scene scene;
     private boolean lookRight = true;
     private PlayerState state;
     private float jumpForce = 2.6f;
 
-    public PlayerModel(Position position, Scene scene) {
+    public PlayerModel(Position position) {
         super(position);
         this.collider = new Collider(position, new Size(5, 6));
         this.rigidBody = new RigidBody(position);
-        this.scene = scene;
         this.state = new IdleState(this);
     }
 
@@ -107,6 +106,10 @@ public class PlayerModel extends ElementModel {
 
     public float getJumpForce() {
         return jumpForce;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 }
 

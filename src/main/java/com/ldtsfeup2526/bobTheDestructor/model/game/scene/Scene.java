@@ -13,9 +13,10 @@ public class Scene {
     private final PlayerModel playerModel;
     private List<Collider> blockColliders;
 
-    public Scene(String caveFilePath, Position startPos) {
+    public Scene(String caveFilePath, PlayerModel playerModel) {
         this.caveFilePath = caveFilePath;
-        this.playerModel = new PlayerModel(startPos, this);
+        this.playerModel = playerModel;
+        this.playerModel.setScene(this);
     }
 
     public PlayerModel getPlayerModel() {
