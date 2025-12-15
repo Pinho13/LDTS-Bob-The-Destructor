@@ -7,6 +7,7 @@ public enum Action {
     LEFT,
     RIGHT,
     JUMP,
+    MINE,
     SELECT,
     QUIT
 }

@@ -65,6 +65,9 @@ public class ActionParser implements IGameStateObserver {
             case KeyEvent.VK_ESCAPE:
                 inputReader.addInputFinished(input);
                 return Action.QUIT;
+            case KeyEvent.VK_SHIFT:
+                inputReader.addInputFinished(input);
+                return Action.MINE;
             default:
                 return Action.NONE;
         }
