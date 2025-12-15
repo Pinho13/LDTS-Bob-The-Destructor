@@ -14,7 +14,7 @@ public class PlayerModel extends ElementModel {
     private final Scene scene;
     private boolean lookRight = true;
     private PlayerState state;
-    private float jumpForce = 3;
+    private float jumpForce = 2.6f;
 
     public PlayerModel(Position position, Scene scene) {
         super(position);

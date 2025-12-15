@@ -12,7 +12,7 @@ public class RigidBody {
     private Vector maxVelocity = new Vector(1, 10);
     private float speed = 0.1f;
     private float friction = 0.2f;
-    private float gravity = 0.5f;
+    private float gravity = 0.4f;
 
     public RigidBody(Position position) {
         this.position = new Vector(position);
