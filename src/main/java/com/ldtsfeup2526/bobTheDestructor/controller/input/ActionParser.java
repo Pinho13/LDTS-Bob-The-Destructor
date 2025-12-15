@@ -2,8 +2,8 @@ package com.ldtsfeup2526.bobTheDestructor.controller.input;
 
 import com.ldtsfeup2526.bobTheDestructor.states.IGameStateObserver;
 import com.ldtsfeup2526.bobTheDestructor.states.State;
-import com.ldtsfeup2526.bobTheDestructor.states.game.GameState;
-import com.ldtsfeup2526.bobTheDestructor.states.game.MainMenuState;
+import com.ldtsfeup2526.bobTheDestructor.states.GameState;
+import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;

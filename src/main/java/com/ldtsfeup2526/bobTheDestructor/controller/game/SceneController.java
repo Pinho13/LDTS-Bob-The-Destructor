@@ -5,10 +5,9 @@ import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.game.elements.MineralsController;
 import com.ldtsfeup2526.bobTheDestructor.controller.game.elements.PlayerController;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
-import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
-import com.ldtsfeup2526.bobTheDestructor.states.game.MainMenuState;
+import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.io.IOException;
 import java.util.List;

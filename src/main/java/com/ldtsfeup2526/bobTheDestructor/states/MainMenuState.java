@@ -1,9 +1,8 @@
-package com.ldtsfeup2526.bobTheDestructor.states.game;
+package com.ldtsfeup2526.bobTheDestructor.states;
 
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.menu.MainMenuController;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
-import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.MainMenuViewer;
