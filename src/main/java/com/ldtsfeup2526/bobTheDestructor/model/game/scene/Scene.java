@@ -10,11 +10,12 @@ import java.util.List;
 
 public class Scene {
     private final String caveFilePath;
-    private final PlayerModel playerModel = new PlayerModel(new Position(13, 10), this);
+    private final PlayerModel playerModel;
     private List<Collider> blockColliders;
 
-    public Scene(String caveFilePath) {
+    public Scene(String caveFilePath, Position startPos) {
         this.caveFilePath = caveFilePath;
+        this.playerModel = new PlayerModel(startPos, this);
     }
 
     public PlayerModel getPlayerModel() {
