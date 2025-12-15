@@ -50,7 +50,7 @@ public class Game {
                 System.out.println(actions);
             }*/
 
-            state.update(this, gui, actionParser);
+            state.update(this, gui, actionParser, 1.0/FPS);
 
             long elapsedTime = System.currentTimeMillis() - startTime;
             long sleepTime = deltaTime - elapsedTime;

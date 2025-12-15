@@ -22,12 +22,12 @@ public class GameViewer extends ScreenViewer<SceneManager> {
     }
 
     @Override
-    public void draw(GUI gui) throws IOException {
+    public void draw(GUI gui, double deltaTime) throws IOException {
 
         //gui.clear();
         gui.drawBackground(new TextColor.RGB(30, 30, 46));
-        sceneViewer.draw(getModel().getScene(), gui);
-        playerViewer.draw(getModel().getScene().getPlayerModel(), gui);
+        sceneViewer.draw(getModel().getScene(), gui, deltaTime);
+        playerViewer.draw(getModel().getScene().getPlayerModel(), gui, deltaTime);
 
         /* Collision Visualizer, only for testing
         for (Collider c : getModel().getScene().getBlockColliders()) {

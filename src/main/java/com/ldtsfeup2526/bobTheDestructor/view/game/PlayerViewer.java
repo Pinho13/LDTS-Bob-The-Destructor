@@ -3,6 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.game;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.*;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.view.Animation;
 import com.ldtsfeup2526.bobTheDestructor.view.ElementViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
@@ -12,45 +13,62 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerViewer implements ElementViewer<PlayerModel> {
-    private final Map<Class<?>, Sprite[]> spriteMap;
+    private final Map<Class<?>, Animation> spriteMap;
 
     public PlayerViewer(SpriteLoader spriteLoader) throws IOException {
         spriteMap = new HashMap<>();
 
-        spriteMap.put(IdleState.class, new Sprite[] {
-            spriteLoader.get("sprites/player/player1.png")
-        });
+        Animation tempAnim = new Animation(new Sprite[] {
+                spriteLoader.get("sprites/player/player1.png")},
+                0.1,
+                false
+        );
 
-        spriteMap.put(WalkingState.class, new Sprite[] {
-                spriteLoader.get("sprites/player/player_walk1.png"),
-                spriteLoader.get("sprites/player/player_walk2.png"),
+        spriteMap.put(IdleState.class, tempAnim);
+
+        tempAnim = new Animation(new Sprite[] {
+                spriteLoader.get("sprites/player/player_walk4.png"),
                 spriteLoader.get("sprites/player/player_walk3.png"),
-                spriteLoader.get("sprites/player/player_walk4.png")
-        });
+                spriteLoader.get("sprites/player/player_walk2.png"),
+                spriteLoader.get("sprites/player/player_walk1.png")},
+                0.1,
+                true
+        );
 
-        spriteMap.put(JumpingState.class, new Sprite[] {
+        spriteMap.put(WalkingState.class, tempAnim);
+
+        tempAnim = new Animation(new Sprite[] {
                 spriteLoader.get("sprites/player/player_jump1.png"),
-                spriteLoader.get("sprites/player/player_jump2.png")
-        });
+                spriteLoader.get("sprites/player/player_jump2.png")},
+                0.1,
+                false
+        );
 
-        spriteMap.put(FallingState.class, new Sprite[] {
+        spriteMap.put(JumpingState.class, tempAnim);
+
+        tempAnim = new Animation(new Sprite[] {
                 spriteLoader.get("sprites/player/player_fall1.png"),
-                spriteLoader.get("sprites/player/player_fall2.png")
-        });
+                spriteLoader.get("sprites/player/player_fall2.png")},
+                0.1,
+                false
+        );
 
-        for (Sprite[] spriteArray : spriteMap.values()) {
-            for (Sprite sprite : spriteArray) {
+        spriteMap.put(FallingState.class, tempAnim);
+
+        for (Animation spriteArray : spriteMap.values()) {
+            for (Sprite sprite : spriteArray.getSprites()) {
                 sprite.setOffset(new Position(-2, -5));
             }
         }
 
     }
-    public void draw(PlayerModel model, GUI gui) {
-        Sprite sprite = spriteMap.get(model.getState().getClass())[0];
+    public void draw(PlayerModel model, GUI gui, double deltaTime) {
+        Animation anim = spriteMap.get(model.getState().getClass());
+        anim.update(deltaTime);
         if (model.isLookingRight()) {
-            sprite.draw(model.getPosition(), gui);
+            anim.getSprites()[anim.getFrame()].draw(model.getPosition(), gui);
         } else {
-            sprite.drawFlipX(model.getPosition(), gui);
+            anim.getSprites()[anim.getFrame()].drawFlipX(model.getPosition(), gui);
         }
     }
 }

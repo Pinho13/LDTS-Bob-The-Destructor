@@ -30,8 +30,8 @@ public abstract class State<T> {
         return model;
     }
 
-    public void update(Game game, GUI gui, ActionParser actionParser) throws IOException {
+    public void update(Game game, GUI gui, ActionParser actionParser, double deltaTime) throws IOException {
         controller.update(game, actionParser.get());
-        screenViewer.draw(gui);
+        screenViewer.draw(gui, deltaTime);
     }
 }

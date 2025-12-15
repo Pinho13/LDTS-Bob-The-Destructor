@@ -41,7 +41,7 @@ public class ButtonViewer implements ElementViewer<Button> {
         pickaxeIcon.center();
     }
 
-    public void draw(Button button, GUI gui) {
+    public void draw(Button button, GUI gui, double deltaTime) {
         Map<ButtonState, Sprite> buttonTypeSprites = spriteMap.get(button.getButtonType());
         Sprite sprite = buttonTypeSprites.get(button.getButtonState());
 

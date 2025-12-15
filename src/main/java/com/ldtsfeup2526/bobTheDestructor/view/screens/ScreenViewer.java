@@ -18,15 +18,15 @@ public abstract class ScreenViewer<T> {
         return model;
     }
 
-    public abstract void draw(GUI gui) throws IOException;
+    public abstract void draw(GUI gui, double deltaTime) throws IOException;
 
-    protected <L extends ElementModel> void drawElement(GUI gui, L element, ElementViewer<L> viewer) {
-        viewer.draw(element, gui);
+    protected <L extends ElementModel> void drawElement(GUI gui, L element, ElementViewer<L> viewer, double deltaTime) {
+        viewer.draw(element, gui, deltaTime);
     }
 
-    protected  <L extends ElementModel> void drawElements(GUI gui, List<L> elements, ElementViewer<L> viewer) {
+    protected  <L extends ElementModel> void drawElements(GUI gui, List<L> elements, ElementViewer<L> viewer, double deltaTime) {
         for (L element: elements)
-            drawElement(gui, element, viewer);
+            drawElement(gui, element, viewer, deltaTime);
     }
 
 }

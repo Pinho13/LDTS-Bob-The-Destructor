@@ -20,7 +20,7 @@ public class SceneViewer implements ElementViewer<Scene> {
         });
     }
 
-    public void draw(Scene model, GUI gui) {
+    public void draw(Scene model, GUI gui, double deltaTime) {
         Sprite sprite = spriteMap.get(model.getCaveFilePath())[0];
         sprite.draw(new Position(0, 0), gui);
     }
