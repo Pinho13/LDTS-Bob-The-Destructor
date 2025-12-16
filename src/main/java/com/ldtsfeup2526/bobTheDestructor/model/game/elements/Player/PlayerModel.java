@@ -1,5 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
@@ -17,6 +19,8 @@ public class PlayerModel extends ElementModel {
     private boolean lookRight = true;
     private PlayerState state;
     private float jumpForce = 2.6f;
+    private MineralModel mineralSelected = null;
+    private float miningDistance = 8;
 
     public PlayerModel(Position position) {
         super(position);
@@ -28,6 +32,7 @@ public class PlayerModel extends ElementModel {
     public void update() {
         physicsUpdate();
         updateState();
+        findMineralInReach();
     }
 
     public void physicsUpdate() {
@@ -95,7 +100,7 @@ public class PlayerModel extends ElementModel {
     }
 
     public void mine() {
-        state = new MiningState(this);
+        state = new MiningState(this, mineralSelected);
     }
 
     public void applyFriction() {
@@ -121,6 +126,32 @@ public class PlayerModel extends ElementModel {
     public void notifyWhenAnimFinished(String animName) {
         if (Objects.equals(animName, "MineAnim")) {
             state = new IdleState(this);
+        }
+    }
+
+    public void findMineralInReach() {
+        if (mineralSelected != null) {
+            double distanceFromPlayer = getPosition().distance(mineralSelected.getPosition());
+            if (distanceFromPlayer > miningDistance) {
+                mineralSelected.setState(MineralState.UNSELECTED);
+                mineralSelected = null;
+            }
+        }
+
+        for (MineralModel mineralModel : scene.getMineralModels()) {
+            Position mineralPos = mineralModel.getPosition();
+            double distanceFromPlayer = getPosition().distance(mineralPos);
+            if (distanceFromPlayer <= miningDistance) {
+                if (mineralSelected == null) {
+                    mineralSelected = mineralModel;
+                    mineralModel.setState(MineralState.SELECTED);
+                } else if (distanceFromPlayer < getPosition().distance(mineralModel.getPosition())){
+                    mineralSelected.setState(MineralState.UNSELECTED);
+                    mineralModel.setState(MineralState.SELECTED);
+                    mineralSelected = mineralModel;
+                }
+
+            }
         }
     }
 }

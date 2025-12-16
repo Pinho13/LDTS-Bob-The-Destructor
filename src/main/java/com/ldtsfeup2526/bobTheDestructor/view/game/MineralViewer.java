@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.game;
 
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.PointingDirection;
 import com.ldtsfeup2526.bobTheDestructor.view.Animation;
@@ -99,25 +100,25 @@ public class MineralViewer implements ElementViewer<MineralModel> {
         switch (model.getDirection()) {
             case PointingDirection.UP:
                 sprite.draw(model.getPosition(), gui);
-                if (model.isSelected()) {
+                if (model.getState() == MineralState.SELECTED) {
                     selectedSprite.draw(model.getPosition(), gui);
                 }
                 break;
             case PointingDirection.DOWN:
                 sprite.drawFlipY(model.getPosition(), gui);
-                if (model.isSelected()) {
+                if (model.getState() == MineralState.SELECTED) {
                     selectedSprite.drawFlipY(model.getPosition(), gui);
                 }
                 break;
             case PointingDirection.LEFT:
                 sprite.drawRotLeft(model.getPosition(), gui);
-                if (model.isSelected()) {
+                if (model.getState() == MineralState.SELECTED) {
                     selectedSprite.drawRotLeft(model.getPosition(), gui);
                 }
                 break;
             case PointingDirection.RIGHT:
                 sprite.drawRotRight(model.getPosition(), gui);
-                if (model.isSelected()) {
+                if (model.getState() == MineralState.SELECTED) {
                     selectedSprite.drawRotRight(model.getPosition(), gui);
                 }
                 break;

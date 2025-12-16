@@ -7,7 +7,7 @@ public class MineralModel extends ElementModel {
 
     private final MineralType type;
     private final PointingDirection direction;
-    private boolean isSelected = false;
+    private MineralState state = MineralState.UNSELECTED;
 
     public MineralModel(Position position, String imageColor, int mineralType) {
         super(position);
@@ -34,11 +34,11 @@ public class MineralModel extends ElementModel {
         return direction;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public MineralState getState() {
+        return state;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setState(MineralState state) {
+        this.state = state;
     }
 }
