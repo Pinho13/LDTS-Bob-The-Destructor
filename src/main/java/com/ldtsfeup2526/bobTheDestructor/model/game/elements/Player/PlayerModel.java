@@ -8,6 +8,8 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Size;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 
+import java.util.Objects;
+
 public class PlayerModel extends ElementModel {
     private Collider collider;
     private RigidBody rigidBody;
@@ -92,6 +94,11 @@ public class PlayerModel extends ElementModel {
         state.jump();
     }
 
+    public void mine() {
+        System.out.println("a");
+        state = new MiningState(this);
+    }
+
     public void applyFriction() {
         state.applyFriction();
     }
@@ -110,6 +117,12 @@ public class PlayerModel extends ElementModel {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+
+    public void notifyWhenAnimFinished(String animName) {
+        if (Objects.equals(animName, "MineAnim")) {
+            state = new IdleState(this);
+        }
     }
 }
 
