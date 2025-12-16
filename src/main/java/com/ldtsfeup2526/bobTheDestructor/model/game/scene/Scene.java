@@ -15,7 +15,7 @@ public class Scene {
     private SoundPlayer soundtrackPlayer;
     private SoundPlayer walkingSoundPlayer;
     private SoundPlayer miningSoundPlayer;
-    private SoundPlayer fallingSoundPlayer;
+    private SoundPlayer jumpingSoundPlayer;
 
     public Scene(String caveFilePath, PlayerModel playerModel, List<MineralModel> mineralModels) {
         this.caveFilePath = caveFilePath;
@@ -44,9 +44,9 @@ public class Scene {
 
     public SoundPlayer getMiningSoundPlayer() {return miningSoundPlayer;}
 
-    public void setFallingSoundPlayer(SoundPlayer fallingSoundPlayer) {this.fallingSoundPlayer = fallingSoundPlayer;}
+    public void setJumpingSoundPlayer(SoundPlayer jumpingSoundPlayer) {this.jumpingSoundPlayer = jumpingSoundPlayer;}
 
-    public SoundPlayer getFallingSoundPlayer() {return fallingSoundPlayer;}
+    public SoundPlayer getJumpingSoundPlayer() {return jumpingSoundPlayer;}
 
     public void setBlockColliders(List<Collider> blockColliders) {
         this.blockColliders = blockColliders;

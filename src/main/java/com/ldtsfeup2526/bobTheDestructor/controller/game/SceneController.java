@@ -41,6 +41,9 @@ public class SceneController extends Controller<SceneManager> {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
             getModel().getScene().getSoundtrackPlayer().stop();
         }
+        if (actions.contains(Action.JUMP)) getModel().getScene().getJumpingSoundPlayer().start();
+        if (actions.contains(Action.MINE)) getModel().getScene().getMiningSoundPlayer().start();
+        if (actions.contains(Action.LEFT) || actions.contains(Action.RIGHT)) getModel().getScene().getWalkingSoundPlayer().start();
         playerController.update(game, actions);
 
         mineralsController.update(getModel().getScene().getPlayerModel().getPosition(), actions);

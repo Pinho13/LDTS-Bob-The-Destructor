@@ -4,10 +4,7 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
-import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.FallingSound;
-import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.JumpingSound;
-import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.SoundEffects;
-import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.WalkingSound;
+import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.*;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.sounds.BackgroundMusicPlayer;
@@ -43,8 +40,8 @@ public class SceneBuilder implements ISceneBuilder{
         scene.setBlockColliders(createColliders(structureImage));
         scene.setSoundtrackPlayer(createSoundPlayer());
         scene.setWalkingSoundPlayer(createSoundEffectsPlayer(WalkingSound::new));
-        scene.setMiningSoundPlayer(createSoundEffectsPlayer(JumpingSound::new));
-        scene.setFallingSoundPlayer(createSoundEffectsPlayer(FallingSound::new));
+        scene.setJumpingSoundPlayer(createSoundEffectsPlayer(JumpingSound::new));
+        scene.setMiningSoundPlayer(createSoundEffectsPlayer(MiningSound::new));
 
         return scene;
     }
