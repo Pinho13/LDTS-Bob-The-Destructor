@@ -62,8 +62,6 @@ public class PlayerViewer implements ElementViewer<PlayerModel> {
                 spriteLoader.get("sprites/player/player_mine3.png"),
                 spriteLoader.get("sprites/player/player_mine3.png"),
                 spriteLoader.get("sprites/player/player_mine3.png"),
-                spriteLoader.get("sprites/player/player_mine3.png"),
-                spriteLoader.get("sprites/player/player_mine3.png"),
                 spriteLoader.get("sprites/player/player_mine3.png")},
                 0.1,
                 false
