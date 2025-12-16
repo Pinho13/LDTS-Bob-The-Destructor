@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
@@ -70,7 +71,7 @@ public class SceneBuilder implements ISceneBuilder{
                         continue;
                     }
 
-                    mineralModels.add(new MineralModel(new Position(x, y), Integer.toHexString(image.getRGB(x, y))));
+                    mineralModels.add(new MineralModel(new Position(x, y), Integer.toHexString(image.getRGB(x, y)), random.nextInt(0, MineralType.values().length)));
                     System.out.println(Integer.toHexString(image.getRGB(x, y)));
                 }
             }

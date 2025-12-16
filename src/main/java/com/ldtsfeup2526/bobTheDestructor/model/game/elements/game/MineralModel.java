@@ -5,12 +5,13 @@ import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 public class MineralModel extends ElementModel {
 
-    private final MineralType type = MineralType.BLUE;
+    private final MineralType type;
     private final PointingDirection direction;
 
-    public MineralModel(Position position, String imageColor) {
+    public MineralModel(Position position, String imageColor, int mineralType) {
         super(position);
         this.direction = directionParser(imageColor);
+        this.type = MineralType.values()[mineralType];
         System.out.println(direction);
     }
 
