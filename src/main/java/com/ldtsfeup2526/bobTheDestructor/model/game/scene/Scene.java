@@ -35,25 +35,39 @@ public class Scene {
 
     public void setSoundtrackPlayer(SoundPlayer soundtrackPlayer) {this.soundtrackPlayer = soundtrackPlayer;}
 
-    public SoundPlayer getSoundtrackPlayer() {return soundtrackPlayer;}
+    public SoundPlayer getSoundPlayer() {
+        if (soundtrackPlayer == null) {
+            soundtrackPlayer = new NullSoundPlayer();
+        }
+        return soundtrackPlayer;
+    }
 
     public void setWalkingSoundPlayer(SoundPlayer walkingSoundPlayer) {this.walkingSoundPlayer = walkingSoundPlayer;}
 
-    public SoundPlayer getWalkingSoundPlayer() {return walkingSoundPlayer;}
+    public SoundPlayer getWalkingSoundPlayer() {
+        if (walkingSoundPlayer == null) {
+            walkingSoundPlayer = new NullSoundPlayer();
+        }
+        return walkingSoundPlayer;
+    }
 
     public void setMiningSoundPlayer(SoundPlayer miningSoundPlayer) {this.miningSoundPlayer = miningSoundPlayer;}
 
-    public SoundPlayer getSoundPlayer() {
-        if (soundPlayer == null) {
-            soundPlayer = new NullSoundPlayer();
+    public SoundPlayer getMiningSoundPlayer() {
+        if (miningSoundPlayer == null) {
+            miningSoundPlayer = new NullSoundPlayer();
         }
-        return soundPlayer;
+        return miningSoundPlayer;
     }
-    public SoundPlayer getMiningSoundPlayer() {return miningSoundPlayer;}
 
     public void setJumpingSoundPlayer(SoundPlayer jumpingSoundPlayer) {this.jumpingSoundPlayer = jumpingSoundPlayer;}
 
-    public SoundPlayer getJumpingSoundPlayer() {return jumpingSoundPlayer;}
+    public SoundPlayer getJumpingSoundPlayer() {
+        if (jumpingSoundPlayer == null) {
+            jumpingSoundPlayer = new NullSoundPlayer();
+        }
+        return jumpingSoundPlayer;
+    }
 
     public void setBlockColliders(List<Collider> blockColliders) {
         this.blockColliders = blockColliders;
