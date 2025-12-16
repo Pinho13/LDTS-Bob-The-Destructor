@@ -19,7 +19,7 @@ public class SceneController extends Controller<SceneManager> {
     public SceneController(SceneManager sceneManager) {
         super(sceneManager);
         this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
-        this.mineralsController = new MineralsController(getModel().getScene().getMineralsModel());
+        this.mineralsController = new MineralsController(getModel().getScene().getMineralModels());
     }
 
     @Override

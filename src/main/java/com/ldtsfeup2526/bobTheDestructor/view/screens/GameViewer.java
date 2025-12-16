@@ -31,6 +31,7 @@ public class GameViewer extends ScreenViewer<SceneManager> {
         //gui.clear();
         gui.drawBackground(new TextColor.RGB(30, 30, 46));
         sceneViewer.draw(getModel().getScene(), gui, deltaTime);
+        drawElements(gui, getModel().getScene().getMineralModels(), mineralViewer, deltaTime);
         playerViewer.draw(getModel().getScene().getPlayerModel(), gui, deltaTime);
 
         /* Collision Visualizer, only for testing

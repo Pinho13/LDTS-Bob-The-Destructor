@@ -1,6 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
@@ -21,8 +22,10 @@ public class SceneBuilder implements ISceneBuilder{
     public Scene createScene(String caveFilePath, PlayerModel playerModel) throws IOException {
         BufferedImage structureImage = spriteLoader.getBufferedImage(caveFilePath+"structure.png");
         BufferedImage enterImage = spriteLoader.getBufferedImage(caveFilePath+"enter.png");
+        BufferedImage mineralImage = spriteLoader.getBufferedImage(caveFilePath+"ores.png");
+
         playerModel.getRigidBody().setPosition(new Vector(findEntrancePos(enterImage)));
-        Scene scene = new Scene(caveFilePath, playerModel);
+        Scene scene = new Scene(caveFilePath, playerModel, createMinerals(mineralImage));
         scene.setBlockColliders(createColliders(structureImage));
 
         return scene;
@@ -54,5 +57,18 @@ public class SceneBuilder implements ISceneBuilder{
         return new Position(15, 15);
     }
 
+    private List<MineralModel> createMinerals(BufferedImage image) {
+        List<MineralModel> mineralModels = new ArrayList<>();
+
+        for (int y = 0; y < image.getHeight(); y+=8) {
+            for (int x = 0; x < image.getWidth(); x+= 8) {
+                if ((image.getRGB(x, y) >> 24) != 0) {
+                    mineralModels.add(new MineralModel(new Position(x, y)));
+                }
+            }
+        }
+
+        return mineralModels;
+    }
 
 }

@@ -5,11 +5,10 @@ import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 public class MineralModel extends ElementModel {
 
-    private final MineralType type;
+    private final MineralType type = MineralType.BLUE;
 
-    public MineralModel(Position position, MineralType type) {
+    public MineralModel(Position position) {
         super(position);
-        this.type = type;
     }
 
     public MineralType getType() {

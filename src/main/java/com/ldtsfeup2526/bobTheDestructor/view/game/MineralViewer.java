@@ -11,9 +11,11 @@ import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class MineralViewer implements ElementViewer<MineralModel> {
     private final Map<MineralType, Animation[]> spriteMap;
+    private final Random random = new Random();
 
     public MineralViewer(SpriteLoader spriteLoader) throws IOException {
         spriteMap = new HashMap<>();
@@ -24,7 +26,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
                 spriteLoader.get("sprites/gems/gem3.png"),
                 spriteLoader.get("sprites/gems/gem4.png"),
                 spriteLoader.get("sprites/gems/gem5.png")},
-                0.1,
+                0.3,
                 true
         );
 
@@ -66,7 +68,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
                 spriteLoader.get("sprites/gems/gem15.png"),
                 spriteLoader.get("sprites/gems/gem16.png"),
                 spriteLoader.get("sprites/gems/gem17.png")},
-                0.1,
+                2.5,
                 true
         );
 
@@ -84,6 +86,8 @@ public class MineralViewer implements ElementViewer<MineralModel> {
 
     @Override
     public void draw(MineralModel model, GUI gui, double deltaTime) {
-
+        Animation anim = spriteMap.get(model.getType())[0];
+        anim.update(deltaTime);
+        anim.getSprites()[anim.getFrame()].draw(model.getPosition(), gui);
     }
 }

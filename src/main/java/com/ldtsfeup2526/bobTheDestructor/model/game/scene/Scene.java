@@ -12,11 +12,13 @@ public class Scene {
     private final String caveFilePath;
     private final PlayerModel playerModel;
     private List<Collider> blockColliders;
+    private final List<MineralModel> mineralModels;
 
-    public Scene(String caveFilePath, PlayerModel playerModel) {
+    public Scene(String caveFilePath, PlayerModel playerModel, List<MineralModel> mineralModels) {
         this.caveFilePath = caveFilePath;
         this.playerModel = playerModel;
         this.playerModel.setScene(this);
+        this.mineralModels = mineralModels;
     }
 
     public PlayerModel getPlayerModel() {
@@ -44,7 +46,7 @@ public class Scene {
         return false;
     }
 
-    public List<MineralModel> getMineralsModel() {
-        return new ArrayList<>();
+    public List<MineralModel> getMineralModels() {
+        return mineralModels;
     }
 }
