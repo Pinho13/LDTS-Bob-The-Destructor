@@ -8,6 +8,7 @@ public class IdleState extends PlayerState {
         super(playerModel);
     }
 
+    @Override
     public PlayerState getNextState() {
         if (Math.abs(getPlayerModel().getRigidBody().getVelocity().getX()) > 0) {
             return new WalkingState(getPlayerModel());

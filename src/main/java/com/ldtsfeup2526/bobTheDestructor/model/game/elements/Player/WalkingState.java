@@ -8,6 +8,7 @@ public class WalkingState extends PlayerState{
         super(playerModel);
     }
 
+    @Override
     public PlayerState getNextState() {
         if (getPlayerModel().getRigidBody().getVelocity().getY() < 0) {
             return new JumpingState(getPlayerModel());

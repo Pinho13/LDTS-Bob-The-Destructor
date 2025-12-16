@@ -13,6 +13,7 @@ public class JumpingState extends PlayerState {
         ));
     }
 
+    @Override
     public PlayerState getNextState() {
 
         if (getPlayerModel().getRigidBody().getVelocity().getY() > 0.5) {

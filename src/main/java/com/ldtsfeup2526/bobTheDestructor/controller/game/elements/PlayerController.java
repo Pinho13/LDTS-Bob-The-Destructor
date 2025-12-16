@@ -3,6 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.controller.game.elements;
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.MiningState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
@@ -21,6 +22,7 @@ public class PlayerController extends Controller<PlayerModel> {
         if (actions.contains(Action.RIGHT)) player.moveRight();
         if (actions.contains(Action.LEFT)) player.moveLeft();
         if (actions.contains(Action.JUMP)) player.jump();
+        if (actions.contains(Action.MINE) && player.getState().getClass() != MiningState.class) player.mine();
 
         if (!actions.contains(Action.LEFT) && !actions.contains(Action.RIGHT)) player.applyFriction();
 
