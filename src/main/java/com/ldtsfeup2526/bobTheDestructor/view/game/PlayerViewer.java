@@ -55,6 +55,17 @@ public class PlayerViewer implements ElementViewer<PlayerModel> {
 
         spriteMap.put(FallingState.class, tempAnim);
 
+        tempAnim = new Animation(new Sprite[] {
+                spriteLoader.get("sprites/player/player_mine1.png"),
+                spriteLoader.get("sprites/player/player_mine1.png"),
+                spriteLoader.get("sprites/player/player_mine2.png"),
+                spriteLoader.get("sprites/player/player_mine3.png")},
+                0.1,
+                false
+        );
+
+        spriteMap.put(MiningState.class, tempAnim);
+
         for (Animation spriteArray : spriteMap.values()) {
             for (Sprite sprite : spriteArray.getSprites()) {
                 sprite.setOffset(new Position(-2, -6));
