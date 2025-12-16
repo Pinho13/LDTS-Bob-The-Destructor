@@ -45,4 +45,8 @@ public class Animation {
     public Sprite[] getSprites() {
         return sprites;
     }
+
+    public boolean isFinished() {
+        return !loop && currentFrame == sprites.length - 1;
+    }
 }
