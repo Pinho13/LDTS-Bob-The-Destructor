@@ -27,7 +27,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
                 spriteLoader.get("sprites/gems/gem2.png"),
                 spriteLoader.get("sprites/gems/gem3.png"),
                 spriteLoader.get("sprites/gems/gem4.png")},
-                0.25,
+                0.1,
                 true
         );
 
@@ -47,7 +47,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
                 spriteLoader.get("sprites/gems/gem8.png"),
                 spriteLoader.get("sprites/gems/gem9.png"),
                 spriteLoader.get("sprites/gems/gem10.png")},
-                0.25,
+                0.1,
                 true
         );
 
@@ -67,7 +67,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
                 spriteLoader.get("sprites/gems/gem14.png"),
                 spriteLoader.get("sprites/gems/gem15.png"),
                 spriteLoader.get("sprites/gems/gem16.png")},
-                0.25,
+                0.1,
                 true
         );
 
@@ -107,7 +107,9 @@ public class MineralViewer implements ElementViewer<MineralModel> {
     private Animation[] createAnimForSingleModel(MineralModel model) {
         if (!animationPerModel.containsKey(model)) {
             Animation[] anims = spriteMap.get(model.getType());
-            animationPerModel.put(model, new Animation[] {anims[0].copy(), anims[1].copy()});
+            Animation shineAnim = anims[0].copy();
+            shineAnim.setCooldownTime(random.nextDouble(1, 4));
+            animationPerModel.put(model, new Animation[] {shineAnim, anims[1].copy()});
         }
 
         return animationPerModel.get(model);
