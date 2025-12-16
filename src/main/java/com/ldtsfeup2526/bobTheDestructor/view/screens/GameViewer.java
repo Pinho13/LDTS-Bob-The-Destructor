@@ -5,6 +5,7 @@ import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
+import com.ldtsfeup2526.bobTheDestructor.view.game.MineralViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.game.PlayerViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.game.SceneViewer;
 
@@ -14,11 +15,13 @@ public class GameViewer extends ScreenViewer<SceneManager> {
 
     private final PlayerViewer playerViewer;
     private final SceneViewer sceneViewer;
+    private final MineralViewer mineralViewer;
 
     public GameViewer(SceneManager model, ViewerProvider viewerProvider) throws IOException {
         super(model);
         this.playerViewer = viewerProvider.getPlayerViewer();
         this.sceneViewer = viewerProvider.getSceneViewer();
+        this.mineralViewer = viewerProvider.getMineralViewer();
         this.sceneViewer.retrieveCaves(model.getCavesPathChosen());
     }
 
