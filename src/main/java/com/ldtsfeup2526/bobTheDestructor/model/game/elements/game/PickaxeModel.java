@@ -1,38 +1,37 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.game;
 
 public class PickaxeModel {
-    public enum Type {IRON, GOLD, DIAMOND}
 
-    private Type type;
+    private MineralType type;
 
     private int damage;
 
-    public PickaxeModel(Type type) {
+    public PickaxeModel(MineralType type) {
         this.type = type;
-        switch (type) {
+        /*switch (type) {
             case DIAMOND: damage = 3; break;
             case GOLD: damage = 2; break;
             default: damage = 1; break;
-        }
+        }*/
     }
 
     public int getDamage() {
         return damage;
     }
 
-    public Type getType() {
+    public MineralType getType() {
         return type;
     }
 
     private void updateDamage() {
-        switch (type) {
+        /*switch (type) {
             case DIAMOND: damage = 3; break;
             case GOLD: damage = 2; break;
             default: damage = 1; break;
-        }
+        }*/
     }
 
-    public void setType(Type type) {
+    public void setType(MineralType type) {
         this.type = type;
         updateDamage();
     }

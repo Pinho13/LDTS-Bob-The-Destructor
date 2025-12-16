@@ -24,7 +24,7 @@ public class MineralsController {
         if (actions.contains(Action.SELECT)){
             for (int i = 0; i < minerals.size(); i++){
                 if (withinArea(minerals.get(i).getPosition(), playerPosition)) {
-                    mineralControllers.get(i).decreaseHealth();
+                    //dmineralControllers.get(i).decreaseHealth();
                 }
             }
         }
