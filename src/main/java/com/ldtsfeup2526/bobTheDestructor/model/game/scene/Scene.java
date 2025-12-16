@@ -2,12 +2,9 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
-import com.ldtsfeup2526.bobTheDestructor.model.menu.Button;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Scene {
@@ -15,7 +12,10 @@ public class Scene {
     private final PlayerModel playerModel;
     private List<Collider> blockColliders;
     private final List<MineralModel> mineralModels;
-    private SoundPlayer soundPlayer;
+    private SoundPlayer soundtrackPlayer;
+    private SoundPlayer walkingSoundPlayer;
+    private SoundPlayer miningSoundPlayer;
+    private SoundPlayer fallingSoundPlayer;
 
     public Scene(String caveFilePath, PlayerModel playerModel, List<MineralModel> mineralModels) {
         this.caveFilePath = caveFilePath;
@@ -32,9 +32,21 @@ public class Scene {
         return caveFilePath;
     }
 
-    public void setSoundPlayer(SoundPlayer soundPlayer) {this.soundPlayer = soundPlayer;}
+    public void setSoundtrackPlayer(SoundPlayer soundtrackPlayer) {this.soundtrackPlayer = soundtrackPlayer;}
 
-    public SoundPlayer getSoundPlayer() {return soundPlayer;}
+    public SoundPlayer getSoundtrackPlayer() {return soundtrackPlayer;}
+
+    public void setWalkingSoundPlayer(SoundPlayer walkingSoundPlayer) {this.walkingSoundPlayer = walkingSoundPlayer;}
+
+    public SoundPlayer getWalkingSoundPlayer() {return walkingSoundPlayer;}
+
+    public void setMiningSoundPlayer(SoundPlayer miningSoundPlayer) {this.miningSoundPlayer = miningSoundPlayer;}
+
+    public SoundPlayer getMiningSoundPlayer() {return miningSoundPlayer;}
+
+    public void setFallingSoundPlayer(SoundPlayer fallingSoundPlayer) {this.fallingSoundPlayer = fallingSoundPlayer;}
+
+    public SoundPlayer getFallingSoundPlayer() {return fallingSoundPlayer;}
 
     public void setBlockColliders(List<Collider> blockColliders) {
         this.blockColliders = blockColliders;

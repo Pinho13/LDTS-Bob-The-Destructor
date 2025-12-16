@@ -4,9 +4,14 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
+import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.FallingSound;
+import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.JumpingSound;
+import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.SoundEffects;
+import com.ldtsfeup2526.bobTheDestructor.model.game.soundEffects.WalkingSound;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.sounds.BackgroundMusicPlayer;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundEffectsPlayer;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundLoader;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
@@ -17,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 public class SceneBuilder implements ISceneBuilder{
     private final SpriteLoader spriteLoader;
@@ -35,7 +41,10 @@ public class SceneBuilder implements ISceneBuilder{
         playerModel.getRigidBody().setPosition(new Vector(findEntrancePos(enterImage)));
         Scene scene = new Scene(caveFilePath, playerModel, createMinerals(mineralImage));
         scene.setBlockColliders(createColliders(structureImage));
-        scene.setSoundPlayer(createSoundPlayer());
+        scene.setSoundtrackPlayer(createSoundPlayer());
+        scene.setWalkingSoundPlayer(createSoundEffectsPlayer(WalkingSound::new));
+        scene.setMiningSoundPlayer(createSoundEffectsPlayer(JumpingSound::new));
+        scene.setFallingSoundPlayer(createSoundEffectsPlayer(FallingSound::new));
 
         return scene;
     }
@@ -90,6 +99,19 @@ public class SceneBuilder implements ISceneBuilder{
             GameSoundtrack soundtrack = new GameSoundtrack();
             Clip gameClip = new SoundLoader().loadSound(soundtrack.getAudioInput(), soundtrack.getSoundtrackClip());
             return new BackgroundMusicPlayer(gameClip);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private SoundPlayer createSoundEffectsPlayer(Callable<SoundEffects> soundFactory) {
+        try {
+            SoundEffects sound = soundFactory.call();
+
+            Clip clip = new SoundLoader().loadSound(sound.getAudioInput(), sound.getSoundtrackClip());
+
+            return new SoundEffectsPlayer(clip);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
