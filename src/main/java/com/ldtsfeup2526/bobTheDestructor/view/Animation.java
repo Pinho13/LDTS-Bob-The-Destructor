@@ -7,12 +7,14 @@ import com.sun.jdi.IntegerValue;
 import java.util.List;
 
 public class Animation {
-    private Sprite[] sprites;
-    private double frameTime;
+    private final String name;
+    private final Sprite[] sprites;
+    private final double frameTime;
+    private final boolean loop;
     private double elapsedTime;
     private int currentFrame;
-    private boolean loop;
-    private String name;
+    private double cooldownTime = 0;
+    private double currentCooldownTime = 0;
 
     public Animation(String name, Sprite[] sprites, double frameTime, boolean loop) {
         this.name = name;
@@ -22,6 +24,11 @@ public class Animation {
     }
 
     public void update(double deltaTime) {
+        if (currentCooldownTime > 0) {
+            currentCooldownTime -= deltaTime;
+            return;
+        }
+
         elapsedTime += deltaTime;
         currentFrame = (int) (elapsedTime / frameTime);
 
@@ -33,6 +40,7 @@ public class Animation {
                 currentFrame = sprites.length-1;
                 isFinished();
             }
+            currentCooldownTime = cooldownTime;
         }
     }
 
@@ -58,6 +66,17 @@ public class Animation {
     }
 
     public Animation copy() {
-        return new Animation(name, sprites, frameTime, loop);
+       Animation anim = new Animation(name, sprites, frameTime, loop);
+       anim.setCooldownTime(cooldownTime);
+       return anim;
+    }
+
+    public void setCooldownTime(double cooldownTime) {
+        currentCooldownTime = cooldownTime;
+        this.cooldownTime = cooldownTime;
+    }
+
+    public double getCooldownTime() {
+        return cooldownTime;
     }
 }
