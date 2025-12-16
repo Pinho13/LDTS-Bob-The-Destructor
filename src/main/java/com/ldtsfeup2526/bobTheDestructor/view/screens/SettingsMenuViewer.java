@@ -18,10 +18,10 @@ public class SettingsMenuViewer extends ScreenViewer<SettingsMenu> {
         this.wallpaperViewer = viewerProvider.getWallpaperViewer();
     }
 
-    public void draw(GUI gui) throws IOException {
+    public void draw(GUI gui, double deltaTime) throws IOException {
         gui.clear();
         wallpaperViewer.draw(gui);
-        drawElements(gui, getModel().getButtons(), buttonViewer);
+        drawElements(gui, getModel().getButtons(), buttonViewer, deltaTime);
         gui.refresh();
     }
 }

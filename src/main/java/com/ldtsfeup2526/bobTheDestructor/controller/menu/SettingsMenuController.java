@@ -5,7 +5,7 @@ import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.GameSettings;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.ButtonType;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.SettingsMenu;
-import com.ldtsfeup2526.bobTheDestructor.states.game.MainMenuState;
+import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.io.IOException;
 import java.util.List;
