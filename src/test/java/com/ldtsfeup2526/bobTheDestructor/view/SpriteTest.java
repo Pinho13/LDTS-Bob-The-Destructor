@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class SpriteTest {
@@ -34,15 +36,15 @@ public class SpriteTest {
 
     @Test
     void getOffsetTest() {
-        assert sprite.getOffset().getX() == 0;
-        assert sprite.getOffset().getY() == 0;
+        assertEquals(0, sprite.getOffset().getX());
+        assertEquals(0, sprite.getOffset().getY());
     }
 
     @Test
     void setOffsetTest() {
         sprite.setOffset(new Position(1, 2));
-        assert sprite.getOffset().getX() == 1;
-        assert sprite.getOffset().getY() == 2;
+        assertEquals(1, sprite.getOffset().getX());
+        assertEquals(2, sprite.getOffset().getY());
     }
 
     @Test
@@ -51,21 +53,20 @@ public class SpriteTest {
         sprite.setOffset(new Position(1, 1));
         Position base = new Position(5, 10);
 
-        sprite.draw(gui, base);
+        sprite.draw(base, gui);
 
         ArgumentCaptor<Position> posCaptor = ArgumentCaptor.forClass(Position.class);
         verify(gui, times(3)).drawPixel(posCaptor.capture(), any(TextColor.class));
 
-        List<Position> expected = new ArrayList<>();
-        expected.add(new Position(7, 11));
-        expected.add(new Position(6, 12));
-        expected.add(new Position(7, 12));
-
         List<Position> actual = posCaptor.getAllValues();
-        assert actual.size() == 3;
-        for (Position pos : expected) {
-            assert actual.contains(pos);
-        }
+        assertEquals(3, actual.size());
+
+        Set<String> coords = new HashSet<>();
+        for (Position p : actual) coords.add(p.getX() + "," + p.getY());
+
+        assertTrue(coords.contains("7,11"));
+        assertTrue(coords.contains("6,12"));
+        assertTrue(coords.contains("7,12"));
     }
 
     @Test
@@ -79,15 +80,14 @@ public class SpriteTest {
         ArgumentCaptor<Position> posCaptor = ArgumentCaptor.forClass(Position.class);
         verify(gui, times(3)).drawPixel(posCaptor.capture(), any(TextColor.class));
 
-        List<Position> expected = new ArrayList<>();
-        expected.add(new Position(6, 11));
-        expected.add(new Position(6, 12));
-        expected.add(new Position(7, 12));
-
         List<Position> actual = posCaptor.getAllValues();
-        assert actual.size() == 3;
-        for (Position pos : expected) {
-            assert actual.contains(pos);
-        }
+        assertEquals(3, actual.size());
+
+        Set<String> coords = new HashSet<>();
+        for (Position p : actual) coords.add(p.getX() + "," + p.getY());
+
+        assertTrue(coords.contains("6,11"));
+        assertTrue(coords.contains("6,12"));
+        assertTrue(coords.contains("7,12"));
     }
 }

@@ -13,7 +13,7 @@ public class ScreenViewerTest {
 
         ScreenViewer<Object> screenViewer = new ScreenViewer<>(model) {
             @Override
-            public void draw(GUI gui) {}
+            public void draw(GUI gui, double deltaTime) {}
         };
 
         assertEquals(model, screenViewer.getModel());

@@ -3,15 +3,16 @@ package com.ldtsfeup2526.bobTheDestructor.controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.ActionParser;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.InputReader;
-
+import com.ldtsfeup2526.bobTheDestructor.states.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class ActionParserTest {
     private ActionParser actionParser;
@@ -23,6 +24,9 @@ public class ActionParserTest {
         inputReader = actionParser.getInputReader();
     }
 
+    private Component eventSource() {
+        return new Component() { };
+    }
 
     @Test
     void getInputReaderTest() {
@@ -37,7 +41,7 @@ public class ActionParserTest {
 
     @Test
     void testUpKeyMapping() {
-        KeyEvent event = new KeyEvent(new Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UP, KeyEvent.CHAR_UNDEFINED);
+        KeyEvent event = new KeyEvent(eventSource(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UP, KeyEvent.CHAR_UNDEFINED);
         inputReader.keyPressed(event);
 
         List<Action> actions = actionParser.get();
@@ -46,7 +50,7 @@ public class ActionParserTest {
 
     @Test
     void testWASDMappings() {
-        KeyEvent event = new KeyEvent(new Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+        KeyEvent event = new KeyEvent(eventSource(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
         inputReader.keyPressed(event);
 
         List<Action> actions = actionParser.get();
@@ -55,7 +59,7 @@ public class ActionParserTest {
 
     @Test
     void testQuitAction() {
-        KeyEvent event = new KeyEvent(new Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ESCAPE, KeyEvent.CHAR_UNDEFINED);
+        KeyEvent event = new KeyEvent(eventSource(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ESCAPE, KeyEvent.CHAR_UNDEFINED);
         inputReader.keyPressed(event);
 
         List<Action> actions = actionParser.get();
@@ -64,11 +68,13 @@ public class ActionParserTest {
 
     @Test
     void testContinuousMovement() {
-        KeyEvent event = new KeyEvent(new Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, KeyEvent.CHAR_UNDEFINED);
+        // IMPORTANT: continuous movement requires allowKeyHold=true, which happens in GameState
+        actionParser.notifyStateChange(mock(GameState.class));
+
+        KeyEvent event = new KeyEvent(eventSource(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, KeyEvent.CHAR_UNDEFINED);
         inputReader.keyPressed(event);
 
         assertTrue(actionParser.get().contains(Action.RIGHT));
-
         assertTrue(actionParser.get().contains(Action.RIGHT));
 
         inputReader.keyReleased(event);
@@ -78,12 +84,10 @@ public class ActionParserTest {
 
     @Test
     void testOneShotAction() {
-        KeyEvent event = new KeyEvent(new Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_SPACE, ' ');
+        KeyEvent event = new KeyEvent(eventSource(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_SPACE, ' ');
         inputReader.keyPressed(event);
 
-
         assertTrue(actionParser.get().contains(Action.JUMP));
-
         assertFalse(actionParser.get().contains(Action.JUMP));
     }
 }

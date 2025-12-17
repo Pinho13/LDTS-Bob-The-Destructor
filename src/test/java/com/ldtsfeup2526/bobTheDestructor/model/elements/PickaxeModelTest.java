@@ -1,36 +1,34 @@
 package com.ldtsfeup2526.bobTheDestructor.model.elements;
 
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.PickaxeModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PickaxeModelTest {
     private PickaxeModel pickaxe;
 
     @BeforeEach
     void setUp() {
-        pickaxe = new PickaxeModel(PickaxeModel.Type.IRON);
+        pickaxe = new PickaxeModel(MineralType.PINK);
     }
 
     @Test
     void pickaxeGetDamageTest() {
-        assert pickaxe.getDamage() == 1;
-    }
-
-    @Test
-    void pickaxeGetDamageAfterSetTypeTest() {
-        pickaxe.setType(PickaxeModel.Type.DIAMOND);
-        assert pickaxe.getDamage() == 3;
+        assertEquals(0, pickaxe.getDamage());
     }
 
     @Test
     void pickaxeGetTypeTest() {
-        assert pickaxe.getType() == PickaxeModel.Type.IRON;
+        assertEquals(MineralType.PINK, pickaxe.getType());
     }
 
     @Test
     void pickaxeSetTypeTest() {
-        pickaxe.setType(PickaxeModel.Type.DIAMOND);
-        assert pickaxe.getType() == PickaxeModel.Type.DIAMOND;
+        pickaxe.setType(MineralType.BLUE);
+        assertEquals(MineralType.BLUE, pickaxe.getType());
+        assertEquals(0, pickaxe.getDamage());
     }
 }
