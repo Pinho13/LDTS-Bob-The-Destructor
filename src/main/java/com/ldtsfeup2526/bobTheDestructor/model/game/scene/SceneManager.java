@@ -18,7 +18,7 @@ public class SceneManager {
     private final SceneBuilder sceneBuilder;
     private Scene scene;
     private int numberOfCaves = 10;
-    private List<String> cavesPathChosen;
+    private final List<String> cavesPathChosen;
     private int currentCavePathIndex;
     private final PlayerModel playerModel;
 
@@ -75,5 +75,9 @@ public class SceneManager {
             }
             this.scene = sceneBuilder.createScene(path, playerModel);
         }
+    }
+
+    public int getCurrentCavePathIndex(){
+        return currentCavePathIndex-1;
     }
 }
