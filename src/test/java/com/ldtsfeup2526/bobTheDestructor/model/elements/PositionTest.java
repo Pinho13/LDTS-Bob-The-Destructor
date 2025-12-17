@@ -11,47 +11,30 @@ public class PositionTest {
 
     @BeforeEach
     void setUp() {
-        p = new Position(1, 2);
+        p = new Position(3, 4);
     }
 
     @Test
     void getTest() {
-        assertEquals(1, p.getX());
-        assertEquals(2, p.getY());
+        assertEquals(3, p.getX());
+        assertEquals(4, p.getY());
     }
 
     @Test
-    void getLeftTest() {
-        assertEquals(0, p.getLeft().getX());
-        assertEquals(2, p.getLeft().getY());
+    void copyConstructorTest() {
+        Position copy = new Position(p);
+        assertEquals(p.getX(), copy.getX());
+        assertEquals(p.getY(), copy.getY());
     }
 
     @Test
-    void getRightTest() {
-        assertEquals(2, p.getRight().getX());
-        assertEquals(2, p.getRight().getY());
+    void magnitudeTest() {
+        assertEquals(5.0, p.magnitude(), 1e-9);
     }
 
     @Test
-    void getUpTest() {
-        assertEquals(1, p.getUp().getX());
-        assertEquals(1, p.getUp().getY());
-    }
-
-    @Test
-    void getDownTest() {
-        assertEquals(1, p.getDown().getX());
-        assertEquals(3, p.getDown().getY());
-    }
-
-    @Test
-    void equalsTest() {
-        Position first_position = new Position(2, 3);
-        Position second_position = new Position(1, 2);
-
-        assertEquals(p, p);
-        assertNotEquals(p, first_position);
-        assertEquals(p, second_position);
-        assertNotEquals(null, p);
+    void distanceTest() {
+        Position other = new Position(6, 8);
+        assertEquals(5.0, p.distance(other), 1e-9);
     }
 }
