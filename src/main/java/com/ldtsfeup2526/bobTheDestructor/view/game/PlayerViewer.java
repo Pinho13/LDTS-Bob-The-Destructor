@@ -58,11 +58,7 @@ public class PlayerViewer implements ElementViewer<PlayerModel> {
 
         tempAnim = new Animation("MineAnim", new Sprite[] {
                 spriteLoader.get("sprites/player/player_mine1.png"),
-                spriteLoader.get("sprites/player/player_mine1.png"),
                 spriteLoader.get("sprites/player/player_mine2.png"),
-                spriteLoader.get("sprites/player/player_mine3.png"),
-                spriteLoader.get("sprites/player/player_mine3.png"),
-                spriteLoader.get("sprites/player/player_mine3.png"),
                 spriteLoader.get("sprites/player/player_mine3.png")},
                 0.1,
                 false
