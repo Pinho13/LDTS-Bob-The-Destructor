@@ -1,9 +1,12 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
+import com.ldtsfeup2526.bobTheDestructor.model.menu.Menu;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.states.EndState;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.io.IOException;
@@ -72,7 +75,8 @@ public class SceneManager {
             String path = getNextCavePath();
             //System.out.println(path);
             if (Objects.equals(path, null)) {
-                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+                //game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+                game.setState(new EndState(new MainMenu(), game.getSpriteLoader()));
                 return;
             }
             this.scene = sceneBuilder.createScene(path, playerModel);
