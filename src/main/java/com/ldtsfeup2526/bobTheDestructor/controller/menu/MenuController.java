@@ -36,11 +36,9 @@ public abstract class MenuController<T extends Menu> extends Controller<T> {
         for (Action action : actions) {
             switch (action) {
                 case UP:
-                case LEFT:
                     this.getModel().moveUp();
                     break;
                 case DOWN:
-                case RIGHT:
                     this.getModel().moveDown();
                     break;
                 case QUIT:

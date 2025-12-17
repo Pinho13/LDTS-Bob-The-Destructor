@@ -48,14 +48,17 @@ public class ButtonController extends Controller<Menu> {
                         game.setState(null);
                     }
                     break;
-                case VOLUME_UP:
-                    if (action == Action.SELECT) {
+                case VOLUME:
+                    if (action == Action.RIGHT) {
+                        if (GameSettings.getInstance().getMasterGain() > 40.0f) break;
                         GameSettings.getInstance().setMasterGain(GameSettings.getInstance().getMasterGain() + 10.0f);
                     }
-                    break;
-                case VOLUME_DOWN:
-                    if (action == Action.SELECT) {
+                    if (action == Action.LEFT) {
+                        if (GameSettings.getInstance().getMasterGain() < -40.0f) break;
                         GameSettings.getInstance().setMasterGain(GameSettings.getInstance().getMasterGain() - 10.0f);
+                    }
+                    if (action == Action.SELECT) {
+                        GameSettings.getInstance().setMasterGain(-50.f);
                     }
                     break;
             }

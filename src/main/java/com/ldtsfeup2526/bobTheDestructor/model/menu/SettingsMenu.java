@@ -17,9 +17,8 @@ public class SettingsMenu extends Menu {
     protected List<Button> createButtons() {
         int centerX = Game.resolution.getWidth()/2;
         int centerY = Game.resolution.getHeight()/2;
-        Button volumeDown = new Button(ButtonType.VOLUME_DOWN, ButtonState.SELECTED, new Position(centerX - 10, centerY));
-        Button volumeUp = new Button(ButtonType.VOLUME_UP, ButtonState.UNSELECTED, new Position(centerX + 10, centerY));
-        return java.util.Arrays.asList(volumeDown, volumeUp);
+        Button volume = new Button(ButtonType.VOLUME, ButtonState.SELECTED, new Position(centerX, centerY));
+        return java.util.Arrays.asList(volume);
     }
 
     @Override
