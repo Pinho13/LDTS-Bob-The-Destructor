@@ -6,6 +6,7 @@ import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.GameSettings;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
@@ -13,6 +14,7 @@ import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import javax.sound.sampled.FloatControl;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SceneController extends Controller<SceneManager> implements PlayerMiningListener {
@@ -37,6 +39,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
 
     @Override
     public void update(Game game, List<Action> actions) throws IOException {
+        cleanupMinerals();
         getModel().update(game);
 
         if (actions.contains(Action.QUIT)) {
@@ -58,4 +61,13 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
             getModel().getScene().incrementCurrentMineralsCollected();
         }
     }
+
+    public void cleanupMinerals() {
+        for (MineralModel mineralModel : new ArrayList<>(getModel().getScene().getMineralModels())) {
+            if (mineralModel.getState() == MineralState.CLEANUP) {
+                getModel().getScene().getMineralModels().remove(mineralModel);
+            }
+        }
+    }
+
 }

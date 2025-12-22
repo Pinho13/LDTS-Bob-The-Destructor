@@ -34,7 +34,6 @@ public class PlayerModel extends ElementModel {
     }
 
     public void update() {
-        cleanupMinerals();
         physicsUpdate();
         updateState();
         findMineralInReach();
@@ -170,14 +169,6 @@ public class PlayerModel extends ElementModel {
     public void notifyWhenPickaxeHit() {
         for (PlayerMiningListener listeners: playerMiningListeners) {
             listeners.onMiningFinished(this);
-        }
-    }
-
-    public void cleanupMinerals() {
-        for (MineralModel mineralModel : new ArrayList<>(scene.getMineralModels())) {
-            if (mineralModel.getState() == MineralState.CLEANUP) {
-                scene.getMineralModels().remove(mineralModel);
-            }
         }
     }
 
