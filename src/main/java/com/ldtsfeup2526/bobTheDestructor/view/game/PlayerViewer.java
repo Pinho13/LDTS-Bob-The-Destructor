@@ -1,10 +1,8 @@
 package com.ldtsfeup2526.bobTheDestructor.view.game;
 
-import com.ldtsfeup2526.bobTheDestructor.controller.game.elements.PlayerController;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.*;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.ldtsfeup2526.bobTheDestructor.states.State;
 import com.ldtsfeup2526.bobTheDestructor.view.*;
 
 import java.io.IOException;

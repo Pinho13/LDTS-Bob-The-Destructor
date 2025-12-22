@@ -2,7 +2,6 @@ package com.ldtsfeup2526.bobTheDestructor.controller.game;
 
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
-import com.ldtsfeup2526.bobTheDestructor.controller.game.elements.PlayerController;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.GameSettings;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
