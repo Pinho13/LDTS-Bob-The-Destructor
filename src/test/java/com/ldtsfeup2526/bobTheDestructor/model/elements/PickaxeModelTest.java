@@ -1,11 +1,8 @@
 package com.ldtsfeup2526.bobTheDestructor.model.elements;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralType;
-import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.PickaxeModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class PickaxeModelTest {
     private PickaxeModel pickaxe;
