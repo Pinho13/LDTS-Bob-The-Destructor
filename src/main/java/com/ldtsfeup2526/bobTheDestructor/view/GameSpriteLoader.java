@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class GameSpriteLoader implements SpriteLoader{
-    final Map<String, Sprite> spriteMap = new HashMap<>();
+    private final Map<String, Sprite> spriteMap = new HashMap<>();
 
     @Override
     public Sprite get(String spriteFilePath) throws IOException {
