@@ -4,6 +4,7 @@ import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.GameSettings;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
@@ -12,7 +13,7 @@ import javax.sound.sampled.FloatControl;
 import java.io.IOException;
 import java.util.List;
 
-public class SceneController extends Controller<SceneManager> {
+public class SceneController extends Controller<SceneManager> implements PlayerMiningListener {
     private final PlayerController playerController;
 
     public SceneController(SceneManager sceneManager) {
@@ -40,6 +41,11 @@ public class SceneController extends Controller<SceneManager> {
             if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
         }
         playerController.update(game, actions);
+
+    }
+
+    @Override
+    public void onMiningFinished(PlayerModel playerModel) {
 
     }
 }

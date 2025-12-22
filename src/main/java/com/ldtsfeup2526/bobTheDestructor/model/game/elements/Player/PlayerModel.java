@@ -1,5 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
+import com.ldtsfeup2526.bobTheDestructor.controller.game.PlayerMiningListener;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
@@ -11,6 +12,7 @@ import com.ldtsfeup2526.bobTheDestructor.model.spatials.Size;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PlayerModel extends ElementModel {
@@ -22,6 +24,7 @@ public class PlayerModel extends ElementModel {
     private float jumpForce = 2.6f;
     private MineralModel mineralSelected = null;
     private float miningDistance = 10;
+    private List<PlayerMiningListener> playerMiningListeners = new ArrayList<>();
 
     public PlayerModel(Position position) {
         super(position);
@@ -180,6 +183,14 @@ public class PlayerModel extends ElementModel {
                 scene.getMineralModels().remove(mineralModel);
             }
         }
+    }
+
+    public void addMiningListener(PlayerMiningListener listener) {
+        playerMiningListeners.add(listener);
+    }
+
+    public void removeMiningListener(PlayerMiningListener listener) {
+        playerMiningListeners.remove(listener);
     }
 }
 
