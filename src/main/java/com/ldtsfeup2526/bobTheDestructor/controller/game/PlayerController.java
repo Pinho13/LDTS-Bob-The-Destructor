@@ -27,28 +27,4 @@ public class PlayerController extends Controller<PlayerModel> {
 
         player.update();
     }
-
-    public void moveLeft() {
-        getModel().getRigidBody().setVelocity(new Vector(-1, getModel().getRigidBody().getVelocity().getY()));
-    }
-
-    public void moveRight() {
-        getModel().getRigidBody().setVelocity(new Vector(1, getModel().getRigidBody().getVelocity().getY()));
-    }
-
-    public void moveUp() {
-        getModel().getRigidBody().setVelocity(new Vector(getModel().getRigidBody().getVelocity().getX(), -1));
-    }
-
-    public void moveDown() {
-        getModel().getRigidBody().setVelocity(new Vector(getModel().getRigidBody().getVelocity().getX(), 1));
-    }
-
-    public void stopHorizontalMovement() {
-        getModel().getRigidBody().setVelocity(new Vector(0, getModel().getRigidBody().getVelocity().getY()));
-    }
-
-    public void stopVerticalMovement() {
-        getModel().getRigidBody().setVelocity(new Vector(getModel().getRigidBody().getVelocity().getX(), 0));
-    }
 }
