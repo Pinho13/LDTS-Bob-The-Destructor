@@ -46,6 +46,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
             if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
         }
         playerController.update(game, actions);
+        playerController.getModel().physicsUpdate(getModel().getScene());
         updateMining();
 
     }

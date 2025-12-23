@@ -3,6 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.CollisionChecker;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.Button;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
@@ -12,7 +13,7 @@ import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene {
+public class Scene implements CollisionChecker {
     private final String caveFilePath;
     private final PlayerModel playerModel;
     private List<Collider> blockColliders;
@@ -23,7 +24,6 @@ public class Scene {
     public Scene(String caveFilePath, PlayerModel playerModel, List<MineralModel> mineralModels) {
         this.caveFilePath = caveFilePath;
         this.playerModel = playerModel;
-        this.playerModel.setScene(this);
         this.mineralModels = mineralModels;
     }
 
@@ -52,7 +52,7 @@ public class Scene {
         return blockColliders;
     }
 
-    public boolean checkCollision(Collider collider) {
+    public boolean check(Collider collider) {
         for (Collider c : blockColliders) {
             if (c.isColliderOver(collider)) {
                 return true;

@@ -15,9 +15,7 @@ public class WalkingState extends PlayerState{
             return new JumpingState(getPlayerModel());
         }
 
-        Collider blockUnder = getPlayerModel().getCollider().colPosCheck(
-                new Position(getPlayerModel().getPosition().getX(), getPlayerModel().getPosition().getY()+1));
-        if (!getPlayerModel().getScene().checkCollision(blockUnder)) {
+        if (!getPlayerModel().isGrounded()) {
             return new FallingState(getPlayerModel());
         }
 

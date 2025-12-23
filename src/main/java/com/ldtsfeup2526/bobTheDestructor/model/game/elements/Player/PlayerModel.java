@@ -4,6 +4,7 @@ import com.ldtsfeup2526.bobTheDestructor.controller.game.PlayerMiningListener;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.CollisionChecker;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
@@ -18,13 +19,13 @@ import java.util.Objects;
 public class PlayerModel extends ElementModel {
     private Collider collider;
     private RigidBody rigidBody;
-    private Scene scene;
     private boolean lookRight = true;
     private PlayerState state;
     private float jumpForce = 2.6f;
     private MineralModel mineralSelected = null;
     private float miningDistance = 10;
     private List<PlayerMiningListener> playerMiningListeners = new ArrayList<>();
+    private boolean grounded = false;
 
     public PlayerModel(Position position) {
         super(position);
@@ -34,11 +35,10 @@ public class PlayerModel extends ElementModel {
     }
 
     public void update() {
-        physicsUpdate();
         updateState();
     }
 
-    public void physicsUpdate() {
+    public void physicsUpdate(CollisionChecker collisionChecker) {
         //rigidBody.getVelocity().print();
         rigidBody.update();
         Vector nextPosF = rigidBody.getNextPos();
@@ -46,8 +46,8 @@ public class PlayerModel extends ElementModel {
         Collider nextColX = collider.colPosCheck(new Position(nextPosI.getX(), getPosition().getY()));
         Collider nextColY = collider.colPosCheck(new Position(getPosition().getX(), nextPosI.getY()));
 
-        boolean canMoveX = !scene.checkCollision(nextColX);
-        boolean canMoveY = !scene.checkCollision(nextColY);
+        boolean canMoveX = !collisionChecker.check(nextColX);
+        boolean canMoveY = !collisionChecker.check(nextColY);
 
         float x = nextPosF.getX();
         float y = nextPosF.getY();
@@ -68,6 +68,15 @@ public class PlayerModel extends ElementModel {
         setPosition(finalPos);
         collider.setPosition(finalPos);
         rigidBody.setPosition(new Vector(finalPos));
+
+        groundedUpdate(collisionChecker);
+    }
+
+    private void groundedUpdate(CollisionChecker collisionChecker) {
+        Collider blockUnder = getCollider().colPosCheck(
+                new Position(getPosition().getX(), getPosition().getY()+1));
+
+        grounded = collisionChecker.check(blockUnder);
     }
 
     public RigidBody getRigidBody() {
@@ -84,10 +93,6 @@ public class PlayerModel extends ElementModel {
 
     public boolean isLookingRight() {
         return lookRight;
-    }
-
-    public Scene getScene() {
-        return scene;
     }
 
     public void moveRight() {
@@ -122,14 +127,14 @@ public class PlayerModel extends ElementModel {
         return jumpForce;
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
     public void notifyWhenAnimFinished(String animName) {
         if (Objects.equals(animName, "MineAnim")) {
             state = new IdleState(this);
         }
+    }
+
+    public boolean isGrounded() {
+        return grounded;
     }
 
     public void updateSelectedMineral(List<MineralModel> nearbyMinerals) {
