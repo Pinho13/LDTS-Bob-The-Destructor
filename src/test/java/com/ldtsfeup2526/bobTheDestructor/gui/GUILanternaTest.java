@@ -1,69 +1,68 @@
 package com.ldtsfeup2526.bobTheDestructor.gui;
 
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
-
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.*;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import java.awt.FontFormatException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class GUILanternaTest {
-    private GUILanterna gui;
     private Screen screen;
-    private TextGraphics tg;
+    private ScreenCreator screenCreator;
+    private GUILanterna gui;
+    private KeyListener keyListener;
+    private Resolution resolution;
 
     @BeforeEach
     void setUp() throws IOException, URISyntaxException, FontFormatException {
-        LanternaScreenCreator lscreenCreator = mock(LanternaScreenCreator.class);
         screen = mock(Screen.class);
-        tg = mock(TextGraphics.class);
-
-        when(lscreenCreator.createScreen(any(), anyInt(), any(), any())).thenReturn(screen);
-        when(screen.newTextGraphics()).thenReturn(tg);
-
-
-        gui = new GUILanterna(lscreenCreator, mock(KeyListener.class), new Resolution(240, 135), 6, "Test");
+        screenCreator = mock(ScreenCreator.class);
+        keyListener = mock(KeyListener.class);
+        resolution = new Resolution(10, 10);
+        
+        when(screenCreator.createScreen(any(), anyInt(), anyString(), any())).thenReturn(screen);
+        
+        gui = new GUILanterna(screenCreator, keyListener, resolution, 12, "Title");
     }
 
     @Test
-    void getScreen() {
-        assert gui.getScreen() == screen;
-    }
-
-
-    @Test
-    void drawPixel() {
-        gui.drawPixel(new Position(2, 3),new TextColor.RGB(255, 0, 0));
-        verify(tg, times(1)).setBackgroundColor(new TextColor.RGB(255, 0, 0));
-        verify(tg, times(1)).setCharacter(2, 3, ' ');
+    void testDrawPixel() {
+        TextGraphics graphics = mock(TextGraphics.class);
+        when(screen.newTextGraphics()).thenReturn(graphics);
+        
+        gui.drawPixel(new Position(1, 2), new TextColor.RGB(255, 0, 0));
+        
+        verify(graphics).setBackgroundColor(new TextColor.RGB(255, 0, 0));
+        verify(graphics).setCharacter(1, 2, ' ');
     }
 
     @Test
-    void clearScreen() {
+    void testClear() {
         gui.clear();
-        verify(screen, times(1)).clear();
+        verify(screen).clear();
     }
 
     @Test
-    void refreshScreen() throws IOException {
+    void testRefresh() throws IOException {
         gui.refresh();
-        verify(screen, times(1)).refresh();
+        verify(screen).refresh();
     }
 
     @Test
-    void closeScreen() throws IOException {
+    void testClose() throws IOException {
         gui.close();
-        verify(screen, times(1)).close();
+        verify(screen).close();
+    }
+    
+    @Test
+    void testGetScreen() {
+        assertEquals(screen, gui.getScreen());
     }
 }
