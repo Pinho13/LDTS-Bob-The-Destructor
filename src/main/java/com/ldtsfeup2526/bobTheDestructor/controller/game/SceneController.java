@@ -8,20 +8,28 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
+import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
+import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
+import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 
 import javax.sound.sampled.FloatControl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SceneController extends Controller<SceneManager> implements PlayerMiningListener {
     private final PlayerController playerController;
+    private final SceneBuilder sceneBuilder;
 
-    public SceneController(SceneManager sceneManager) {
+    public SceneController(SceneManager sceneManager, SceneBuilder sceneBuilder) throws IOException {
         super(sceneManager);
+        sceneManager.setScene(sceneBuilder.createScene(sceneManager.getNextCavePath(), new PlayerModel(new Position(0, 0))));
+        this.sceneBuilder = sceneBuilder;
         this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
         getModel().getScene().getPlayerModel().addMiningListener(this);
 
@@ -39,15 +47,12 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
 
     @Override
     public void update(Game game, List<Action> actions) throws IOException {
-        getModel().update(game);
+        updateSceneState(game, actions);
 
-        if (actions.contains(Action.QUIT)) {
-            game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
-            if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
-        }
         playerController.update(game, actions);
         playerController.getModel().physicsUpdate(getModel().getScene());
         updateMining();
+
 
     }
 
@@ -77,6 +82,24 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
         getModel().getScene().unselectAllMinerals();
         if (playerController.getModel().getMineralSelected() != null) {
             playerController.getModel().getMineralSelected().setState(MineralState.SELECTED);
+        }
+    }
+
+    public void updateSceneState(Game game, List<Action> actions) throws IOException {
+        if (actions.contains(Action.QUIT)) {
+            game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+            if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
+        }
+
+        if (getModel().getScene().getPlayerModel().getPosition().getY() > Game.resolution.getHeight()) {
+            getModel().updateTotalMineralsCollected();
+            String path = getModel().getNextCavePath();
+
+            if (Objects.isNull(path)) {
+                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+                return;
+            }
+            getModel().setScene(sceneBuilder.createScene(path, getModel().getScene().getPlayerModel()));
         }
     }
 

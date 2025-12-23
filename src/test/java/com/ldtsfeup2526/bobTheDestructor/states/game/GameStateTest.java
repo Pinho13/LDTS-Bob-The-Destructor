@@ -72,7 +72,7 @@ public class GameStateTest {
     }
 
     @org.junit.jupiter.api.Test
-    void createControllerTest() {
+    void createControllerTest() throws IOException {
         Controller<SceneManager> controller = gameState.createController();
 
         assertNotNull(controller);
