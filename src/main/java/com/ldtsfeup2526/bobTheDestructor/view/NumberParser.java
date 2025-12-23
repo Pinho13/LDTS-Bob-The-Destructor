@@ -23,13 +23,12 @@ public class NumberParser {
         }
     }
 
-    public List<Sprite> get(String string) {
-        List<Sprite> sprites = new ArrayList<>();
+    public List<SpriteInstance> get(String string) {
+        List<SpriteInstance> sprites = new ArrayList<>();
         for(int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
             Sprite sprite = spriteMap.get(c);
-            sprite.setOffset(new Position(distanceBetweenChars * i, 0));
-            sprites.add(sprite);
+            sprites.add(new SpriteInstance(sprite, new Position(distanceBetweenChars * i, 0)));
         }
         return sprites;
     }
