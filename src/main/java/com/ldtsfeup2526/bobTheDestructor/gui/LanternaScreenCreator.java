@@ -18,7 +18,7 @@ import java.util.Objects;
 public class LanternaScreenCreator implements ScreenCreator {
 
     public Screen createScreen(Resolution resolution, int fontSize, String title, KeyListener keyListener) throws URISyntaxException, IOException, FontFormatException {
-        TerminalSize terminalSize = new TerminalSize(resolution.getWidth(), resolution.getHeight());
+        TerminalSize terminalSize = new TerminalSize(resolution.width(), resolution.height());
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
         terminalFactory.setInitialTerminalSize(terminalSize);
         terminalFactory.setForceAWTOverSwing(true);

@@ -79,7 +79,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
             if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
         }
 
-        if (getModel().getScene().getPlayerModel().getPosition().getY() > Game.resolution.getHeight()) {
+        if (getModel().getScene().getPlayerModel().getPosition().getY() > Game.resolution.height()) {
             getModel().updateTotalMineralsCollected();
             String path = getModel().getNextCavePath();
 
