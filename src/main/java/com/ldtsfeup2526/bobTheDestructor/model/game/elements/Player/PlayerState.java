@@ -1,8 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
-import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
 public abstract class PlayerState {
     private final PlayerModel playerModel;
@@ -26,9 +24,7 @@ public abstract class PlayerState {
     }
 
     public void jump() {
-        Collider blockUnder = playerModel.getCollider().colPosCheck(
-                new Position(playerModel.getPosition().getX(), playerModel.getPosition().getY()+1));
-        if (playerModel.getScene().checkCollision(blockUnder)) {
+        if (playerModel.isGrounded()) {
             playerModel.getRigidBody().jump(playerModel.getJumpForce());
         }
     }

@@ -17,6 +17,6 @@ public class WallpaperViewer {
     }
 
     public void draw(GUI gui) {
-        sprite.draw(new Position(Game.resolution.getWidth()/2, Game.resolution.getHeight()/2), gui);
+        sprite.draw(new Position(Game.resolution.width()/2, Game.resolution.height()/2), gui);
     }
 }

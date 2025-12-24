@@ -15,27 +15,22 @@ import java.util.Objects;
 import static com.sun.tools.attach.VirtualMachine.list;
 
 public class SceneManager {
-    private final SceneBuilder sceneBuilder;
     private Scene scene;
     private int numberOfCaves = 10;
     private final List<String> cavesPathChosen;
     private int currentCavePathIndex;
-    private final PlayerModel playerModel;
     private int totalMineralsCollected = 0;
 
-    public SceneManager (SceneBuilder sceneBuilder) throws IOException {
+    public SceneManager () throws IOException {
         cavesPathChosen = chooseCaves();
-        this.sceneBuilder = sceneBuilder;
-        this.scene = sceneBuilder.createScene(getNextCavePath(), new PlayerModel(new Position(0, 0)));
-        this.playerModel = scene.getPlayerModel();
     }
 
     public Scene getScene() {
         return scene;
     }
 
-    public SceneBuilder getSceneBuilder() {
-        return sceneBuilder;
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
     private List<String> chooseCaves() {
@@ -50,7 +45,7 @@ public class SceneManager {
         return caveList;
     }
 
-    private String getNextCavePath() {
+    public String getNextCavePath() {
         if (currentCavePathIndex >= cavesPathChosen.size()) {
             return null;
         }
@@ -65,25 +60,15 @@ public class SceneManager {
         return cavesPathChosen;
     }
 
-    public void update(Game game) throws IOException {
-        PlayerModel playerModel = scene.getPlayerModel();
-        if (playerModel.getPosition().getY() > Game.resolution.getHeight()) {
-            totalMineralsCollected += scene.getCurrentMineralsCollected();
-            String path = getNextCavePath();
-            //System.out.println(path);
-            if (Objects.equals(path, null)) {
-                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
-                return;
-            }
-            this.scene = sceneBuilder.createScene(path, playerModel);
-        }
-    }
-
     public int getCurrentCavePathIndex(){
         return currentCavePathIndex-1;
     }
 
     public int getTotalMineralsCollected() {
         return totalMineralsCollected;
+    }
+
+    public void updateTotalMineralsCollected() {
+        totalMineralsCollected += scene.getCurrentMineralsCollected();
     }
 }

@@ -3,8 +3,6 @@ package com.ldtsfeup2526.bobTheDestructor.controller.menu;
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
-import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
-import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.ButtonType;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.Menu;
@@ -28,7 +26,7 @@ public class ButtonController extends Controller<Menu> {
                 case ButtonType.PLAY:
                     if (action == Action.SELECT) {
                         SpriteLoader spriteLoader = game.getSpriteLoader();
-                        game.setState(new GameState(new SceneManager(new SceneBuilder(spriteLoader)), spriteLoader));
+                        game.setState(new GameState(new SceneManager(), spriteLoader));
                         getModel().getSoundPlayer().stop();
                     }
                     break;

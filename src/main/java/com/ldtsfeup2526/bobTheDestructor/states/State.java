@@ -16,15 +16,17 @@ public abstract class State<T> {
     private final T model;
     private final Controller<T> controller;
     private final ScreenViewer<T> screenViewer;
+    protected final SpriteLoader spriteLoader;
 
     public State(T model, SpriteLoader spriteLoader) throws IOException {
         this.model = model;
+        this.spriteLoader = spriteLoader;
         this.screenViewer = createScreenViewer(new ViewerProvider(spriteLoader));
         this.controller = createController();
     }
 
     public abstract ScreenViewer<T> createScreenViewer(ViewerProvider viewerProvider) throws IOException;
-    public abstract  Controller<T> createController();
+    public abstract  Controller<T> createController() throws IOException;
 
     public T getModel() {
         return model;
