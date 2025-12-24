@@ -134,7 +134,47 @@ public class SceneControllerTest {
     }
 
     @Test
-    void testConstructorAddsListener() {
-        verify(player).addMiningListener(controller);
+    void testUpdateMiningWithSelected() {
+        MineralModel mineral = mock(MineralModel.class);
+        when(mineral.getState()).thenReturn(MineralState.UNSELECTED);
+        
+        // We need to mock the player controller and player model inside scene controller
+        // but it is private. 
+        // SceneController line 69: playerController.getModel().updateSelectedMineral(...)
+        // playerController.getModel().getMineralSelected()
+        
+        // In the constructor:
+        // this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
+        
+        // We can mock the player model in setup and control its getMineralSelected()
+        when(player.getMineralSelected()).thenReturn(mineral);
+        
+        controller.updateMining();
+        
+        verify(mineral).setState(MineralState.SELECTED);
+    }
+
+    @Test
+    void testUpdateSceneStateNextCave() throws IOException {
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height() + 1));
+        when(sceneManager.getNextCavePath()).thenReturn("caves/cave1/");
+        
+        // Reset verification since constructor already called it once
+        clearInvocations(sceneManager);
+        
+        controller.updateSceneState(game, new ArrayList<>());
+        
+        verify(sceneManager).updateTotalMineralsCollected();
+        verify(sceneManager).setScene(any(Scene.class));
+    }
+
+    @Test
+    void testUpdateSceneStateNoMoreCaves() throws IOException {
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height() + 1));
+        when(sceneManager.getNextCavePath()).thenReturn(null);
+        
+        controller.updateSceneState(game, new ArrayList<>());
+        
+        verify(game).setState(any(MainMenuState.class));
     }
 }

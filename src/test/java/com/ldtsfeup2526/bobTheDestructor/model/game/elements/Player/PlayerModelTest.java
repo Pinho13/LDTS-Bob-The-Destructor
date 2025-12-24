@@ -110,23 +110,70 @@ public class PlayerModelTest {
     }
 
     @Test
-    void testPhysicsUpdateCollision() {
-        // player at (10, 20)
-        player.getRigidBody().setVelocity(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(5, 0));
+    void testUpdate() {
+        // Initial state is IdleState. 
+        // We need to ensure grounded is true so it stays in IdleState.
+        // grounded is updated in physicsUpdate based on block under.
+        // Position is (10, 20). Block under is (10, 21).
+        when(collisionChecker.check(argThat(c -> c != null && c.getPosition().getY() == 21))).thenReturn(true);
+        player.physicsUpdate(collisionChecker);
         
-        // Mock collision in X but not Y
+        player.update();
+        assertInstanceOf(IdleState.class, player.getState());
+        
+        player.moveRight();
+        // Allow movement in X.
+        when(collisionChecker.check(argThat(c -> c != null && c.getPosition().getY() == 20))).thenReturn(false);
+
+        // RigidBody.update() needs to be called to update velocity from acceleration
+        player.physicsUpdate(collisionChecker);
+        player.update();
+        assertInstanceOf(WalkingState.class, player.getState());
+    }
+
+    @Test
+    void testApplyFriction() {
+        // Ensure grounded so it can be in WalkingState
+        when(collisionChecker.check(argThat(c -> c != null && c.getPosition().getY() == 21))).thenReturn(true);
+        player.physicsUpdate(collisionChecker);
+
+        player.moveRight();
+        when(collisionChecker.check(argThat(c -> c != null && c.getPosition().getY() == 20))).thenReturn(false);
+        player.physicsUpdate(collisionChecker);
+        player.update();
+        assertInstanceOf(WalkingState.class, player.getState());
+        player.applyFriction();
+    }
+
+    @Test
+    void testPhysicsUpdateCollisionY() {
+        // Mock collision in Y but not X
+        player.getRigidBody().setVelocity(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0, 5));
+        
         when(collisionChecker.check(any())).thenAnswer(invocation -> {
             com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider c = invocation.getArgument(0);
             if (c == null) return false;
-            // NextColX will be at (15, 20) roughly. Original pos (10, 20).
-            return c.getPosition().getX() != 10;
+            // Original Y is 20. Next pos Y will be around 25.
+            return c.getPosition().getY() > 20;
         });
         
         player.physicsUpdate(collisionChecker);
         
-        // Should not have moved in X
-        assertEquals(10, player.getPosition().getX());
-        assertEquals(0, player.getRigidBody().getVelocity().getX());
+        // Should not have moved in Y
+        assertEquals(20, player.getPosition().getY());
+        assertEquals(0, player.getRigidBody().getVelocity().getY());
+    }
+
+    @Test
+    void testIsGrounded() {
+        // Block under is at (10, 21)
+        when(collisionChecker.check(argThat(c -> c != null && c.getPosition().getY() == 21))).thenReturn(true);
+        player.physicsUpdate(collisionChecker);
+        assertTrue(player.isGrounded());
+        
+        when(collisionChecker.check(any())).thenReturn(false);
+        player.physicsUpdate(collisionChecker);
+        assertFalse(player.isGrounded());
     }
 
     @Test

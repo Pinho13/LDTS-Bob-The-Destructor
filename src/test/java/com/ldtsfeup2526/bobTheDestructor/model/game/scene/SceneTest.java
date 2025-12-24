@@ -65,11 +65,38 @@ public class SceneTest {
     }
 
     @Test
-    void testMineralsCollected() {
-        assertEquals(0, scene.getCurrentMineralsCollected());
-        scene.incrementCurrentMineralsCollected();
-        assertEquals(1, scene.getCurrentMineralsCollected());
-        scene.setCurrentMineralsCollected(10);
-        assertEquals(10, scene.getCurrentMineralsCollected());
+    void testUnselectAllMinerals() {
+        MineralModel m1 = mineralModels.get(0);
+        MineralModel m2 = mineralModels.get(1);
+        
+        when(m1.getState()).thenReturn(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.SELECTED);
+        when(m2.getState()).thenReturn(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.UNSELECTED);
+        
+        scene.unselectAllMinerals();
+        
+        verify(m1).setState(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.UNSELECTED);
+        verify(m2, never()).setState(any());
+    }
+
+    @Test
+    void testCleanupMinerals() {
+        MineralModel m1 = mineralModels.get(0);
+        MineralModel m2 = mineralModels.get(1);
+        
+        when(m1.getState()).thenReturn(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.CLEANUP);
+        when(m2.getState()).thenReturn(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.UNSELECTED);
+        
+        scene.cleanupMinerals();
+        
+        assertEquals(1, scene.getMineralModels().size());
+        assertFalse(scene.getMineralModels().contains(m1));
+        assertTrue(scene.getMineralModels().contains(m2));
+    }
+    @Test
+    void testGetSoundPlayerInitializesIfNull() {
+        // Scene constructor doesn't set soundPlayer, so it's null initially.
+        SoundPlayer sp = scene.getSoundPlayer();
+        assertNotNull(sp);
+        assertInstanceOf(com.ldtsfeup2526.bobTheDestructor.sounds.NullSoundPlayer.class, sp);
     }
 }

@@ -131,4 +131,19 @@ public class RigidBodyTest {
         rigidBody.applyFriction();
         assertEquals(rigidBody.getFriction(), rigidBody.getAcceleration().getX());
     }
+    @Test
+    void testSetters() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        Vector vel = new Vector(1, 1);
+        Vector acc = new Vector(0.1f, 0.1f);
+        rb.setVelocity(vel);
+        rb.setAcceleration(acc);
+        rb.setSpeed(0.5f);
+        rb.setFriction(0.3f);
+        assertEquals(vel, rb.getVelocity());
+        assertEquals(acc, rb.getAcceleration());
+        assertEquals(0.5f, rb.getSpeed());
+        assertEquals(0.3f, rb.getFriction());
+        assertEquals(0.4f, rb.getGravity());
+    }
 }

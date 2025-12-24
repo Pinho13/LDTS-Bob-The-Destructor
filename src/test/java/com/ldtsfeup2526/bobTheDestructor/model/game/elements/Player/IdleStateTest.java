@@ -76,6 +76,16 @@ public class IdleStateTest {
     }
 
     @Test
+    void testGetNextStateToFalling() {
+        IdleState state = new IdleState(player);
+        when(rb.getVelocity()).thenReturn(new Vector(0, 0));
+        when(player.isGrounded()).thenReturn(false);
+
+        PlayerState next = state.getNextState();
+        assertInstanceOf(FallingState.class, next);
+    }
+
+    @Test
     void testGetMineral() {
         IdleState state = new IdleState(player);
         assertNull(state.getMineral());

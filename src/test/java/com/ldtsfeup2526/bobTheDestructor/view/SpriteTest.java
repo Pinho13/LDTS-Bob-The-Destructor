@@ -28,6 +28,8 @@ public class SpriteTest {
         sprite.center();
         assertEquals(-5, sprite.getOffset().getX());
         assertEquals(-10, sprite.getOffset().getY());
+
+        assertEquals(image, sprite.getImage());
     }
 
     @Test

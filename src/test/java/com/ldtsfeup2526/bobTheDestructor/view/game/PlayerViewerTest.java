@@ -94,4 +94,18 @@ public class PlayerViewerTest {
         viewer.draw(model, gui, 0.1);
         // internally it should call stop() on IdleAnim
     }
+    @Test
+    void testDrawLookingLeft() {
+        PlayerModel model = mock(PlayerModel.class);
+        when(model.getState()).thenReturn(new IdleState(model));
+        when(model.getPosition()).thenReturn(new Position(0, 0));
+        when(model.isLookingRight()).thenReturn(false);
+        
+        GUI gui = mock(GUI.class);
+        viewer.draw(model, gui, 0.1);
+
+        // Should call drawFlipX on sprite
+        // In setUp, we mocked both draw and drawFlipX to call gui.drawPixel
+        verify(gui, atLeastOnce()).drawPixel(any(), any());
+    }
 }

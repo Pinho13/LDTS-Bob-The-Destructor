@@ -61,10 +61,20 @@ public class SceneManagerTest {
     }
 
     @Test
+    void testGetNextCavePathReturnsNullWhenFinished() {
+        for (int i = 0; i < 5; i++) {
+            assertNotNull(sceneManager.getNextCavePath());
+        }
+        assertNull(sceneManager.getNextCavePath());
+    }
+
+    @Test
     void testGetCurrentCavePathIndex() {
         // Starts at -1 because it's incremented when getNextCavePath is called
         assertEquals(-1, sceneManager.getCurrentCavePathIndex());
         sceneManager.getNextCavePath();
         assertEquals(0, sceneManager.getCurrentCavePathIndex());
+        sceneManager.getNextCavePath();
+        assertEquals(1, sceneManager.getCurrentCavePathIndex());
     }
 }

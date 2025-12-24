@@ -83,4 +83,16 @@ public class MineralViewerTest {
         viewer.draw(model, gui, 1.0); // Large deltaTime to finish animation
         verify(model, atLeastOnce()).notifyWhenAnimFinished(eq("CrackAnim"));
     }
+    @Test
+    void testDrawAllTypes() {
+        GUI gui = mock(GUI.class);
+        for (MineralType type : MineralType.values()) {
+            MineralModel model = mock(MineralModel.class);
+            when(model.getType()).thenReturn(type);
+            when(model.getState()).thenReturn(MineralState.UNSELECTED);
+            when(model.getPosition()).thenReturn(new Position(0, 0));
+            when(model.getDirection()).thenReturn(PointingDirection.UP);
+            viewer.draw(model, gui, 0.1);
+        }
+    }
 }

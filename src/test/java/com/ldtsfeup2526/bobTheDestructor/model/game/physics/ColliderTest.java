@@ -81,4 +81,15 @@ public class ColliderTest {
         assertEquals(checkPos, checkCollider.getPosition());
         assertEquals(collider.getSize(), checkCollider.getSize());
     }
+
+    @Test
+    void testSetters() {
+        Collider collider = new Collider(new Position(0, 0));
+        Position newPos = new Position(5, 5);
+        Size newSize = new Size(10, 10);
+        collider.setPosition(newPos);
+        collider.setSize(newSize);
+        assertEquals(newPos, collider.getPosition());
+        assertEquals(newSize, collider.getSize());
+    }
 }

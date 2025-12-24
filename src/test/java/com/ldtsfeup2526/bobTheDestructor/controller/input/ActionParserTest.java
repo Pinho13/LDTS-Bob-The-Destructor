@@ -75,11 +75,17 @@ public class ActionParserTest {
     void testParseInputAllKeys() {
         int[] keys = {KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_DOWN, KeyEvent.VK_S, KeyEvent.VK_LEFT, KeyEvent.VK_A, KeyEvent.VK_RIGHT, KeyEvent.VK_D, KeyEvent.VK_SPACE, KeyEvent.VK_ENTER, KeyEvent.VK_ESCAPE, KeyEvent.VK_SHIFT};
         Action[] expected = {Action.UP, Action.UP, Action.DOWN, Action.DOWN, Action.LEFT, Action.LEFT, Action.RIGHT, Action.RIGHT, Action.JUMP, Action.SELECT, Action.QUIT, Action.MINE};
+        
+        // When not in GameState, allowKeyHold is false, so ALL keys should be finished.
+        parser.notifyStateChange(mock(MainMenuState.class));
 
         for (int i = 0; i < keys.length; i++) {
             reader.keyPressed(new KeyEvent(source, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, keys[i], (char)0));
             List<Action> actions = parser.get();
             assertTrue(actions.contains(expected[i]), "Failed for key: " + keys[i]);
+            
+            assertTrue(reader.getInputFinished().contains(keys[i]), "Key should be finished: " + keys[i]);
+            
             reader.keyReleased(new KeyEvent(source, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, keys[i], (char)0));
         }
     }
