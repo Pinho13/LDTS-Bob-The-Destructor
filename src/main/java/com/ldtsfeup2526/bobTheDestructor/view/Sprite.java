@@ -36,15 +36,14 @@ public class Sprite {
     }
 
     public void draw(Position position, GUI gui) {
+        int posX = position.getX() + offset.getX();
+        int posY = position.getY() + offset.getY();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int ARGB = image.getRGB(x, y);
 
                 if (getAlpha(ARGB) != 0) {
-                    Position pixelPosition = new Position(
-                            position.getX() + offset.getX() + x,
-                            position.getY() + offset.getY() + y
-                        );
+                    Position pixelPosition = new Position(posX + x, posY + y);
 
                     gui.drawPixel(pixelPosition, getRGB(ARGB));
                 }
@@ -54,15 +53,14 @@ public class Sprite {
     }
 
     public void drawFlipX(Position position, GUI gui) {
+        int posX = position.getX() + offset.getX();
+        int posY = position.getY() + offset.getY();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int ARGB = image.getRGB(image.getWidth()-x-1, y);
 
                 if (getAlpha(ARGB) != 0) {
-                    Position pixelPosition = new Position(
-                            position.getX() + offset.getX() + x,
-                            position.getY() + offset.getY() + y
-                    );
+                    Position pixelPosition = new Position(posX + x, posY + y);
 
                     gui.drawPixel(pixelPosition, getRGB(ARGB));
                 }
@@ -72,15 +70,14 @@ public class Sprite {
     }
 
     public void drawFlipY(Position position, GUI gui) {
+        int posX = position.getX() + offset.getX();
+        int posY = position.getY() + offset.getY();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int ARGB = image.getRGB(x, image.getHeight() - y - 1);
 
                 if (getAlpha(ARGB) != 0) {
-                    Position pixelPosition = new Position(
-                            position.getX() + offset.getX() + x,
-                            position.getY() + offset.getY() + y
-                    );
+                    Position pixelPosition = new Position(posX + x, posY + y);
 
                     gui.drawPixel(pixelPosition, getRGB(ARGB));
                 }
@@ -92,6 +89,10 @@ public class Sprite {
     public void drawRotRight(Position position, GUI gui) {
         int width = image.getWidth();
         int height = image.getHeight();
+        int posX = position.getX() + offset.getX();
+        int posY = position.getY() + offset.getY();
+
+        int heightMinusOne = height - 1;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -99,8 +100,8 @@ public class Sprite {
 
                 if (getAlpha(argb) != 0) {
                     Position pixelPosition = new Position(
-                            position.getX() + offset.getX() + (height - 1 - y),
-                            position.getY() + offset.getY() + x
+                            posX + heightMinusOne - y,
+                            posY + x
                     );
 
                     gui.drawPixel(pixelPosition, getRGB(argb));
@@ -112,6 +113,10 @@ public class Sprite {
     public void drawRotLeft(Position position, GUI gui) {
         int width = image.getWidth();
         int height = image.getHeight();
+        int posX = position.getX() + offset.getX();
+        int posY = position.getY() + offset.getY();
+
+        int widthMinusOne = width - 1;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -119,8 +124,8 @@ public class Sprite {
 
                 if (getAlpha(argb) != 0) {
                     Position pixelPosition = new Position(
-                            position.getX() + offset.getX() + y,
-                            position.getY() + offset.getY() + (width - 1 - x)
+                            posX + y,
+                            posY + widthMinusOne - x
                     );
 
                     gui.drawPixel(pixelPosition, getRGB(argb));

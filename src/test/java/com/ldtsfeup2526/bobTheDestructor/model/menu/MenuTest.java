@@ -40,4 +40,13 @@ public class MenuTest {
         assertNotNull(menu.getButtons());
         assertNotNull(menu.getSoundPlayer());
     }
+
+    @Test
+    void testGetSoundPlayerNull() {
+        Menu menu = new Menu() {
+            @Override protected List<Button> createButtons() { return new ArrayList<>(); }
+            @Override protected SoundPlayer createSoundPlayer() { return null; }
+        };
+        assertInstanceOf(com.ldtsfeup2526.bobTheDestructor.sounds.NullSoundPlayer.class, menu.getSoundPlayer());
+    }
 }

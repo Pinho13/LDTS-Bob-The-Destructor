@@ -17,6 +17,11 @@ import static org.mockito.Mockito.*;
 
 public class LanternaScreenCreatorTest {
     @Test
+    void testDefaultConstructor() {
+        LanternaScreenCreator creator = new LanternaScreenCreator();
+    }
+
+    @Test
     void testCreateScreen() throws URISyntaxException, IOException, FontFormatException {
         DefaultTerminalFactory factory = mock(DefaultTerminalFactory.class);
         TerminalScreen screen = mock(TerminalScreen.class);

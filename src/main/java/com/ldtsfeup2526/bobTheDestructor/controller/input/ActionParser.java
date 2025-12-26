@@ -81,6 +81,9 @@ public class ActionParser implements IGameStateObserver {
             setAllowKeyHold(false);
         } else if (state instanceof GameState) {
             setAllowKeyHold(true);
+        } else {
+            // Default to no hold for other states (like Settings)
+            setAllowKeyHold(false);
         }
     }
 }

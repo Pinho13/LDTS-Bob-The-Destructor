@@ -45,6 +45,33 @@ public class OverlayViewerTest {
         GUI gui = mock(GUI.class);
         viewer.draw(model, gui, 0.1);
         
-        verify(gui, atLeastOnce()).drawPixel(any(), any());
+        verify(gui, atLeast(2)).drawPixel(any(), any());
+    }
+
+    @Test
+    void testDrawMarkerPosition() throws IOException {
+        spriteLoader = mock(SpriteLoader.class);
+        Sprite overlay = mock(Sprite.class);
+        Sprite marker = mock(Sprite.class);
+        Sprite num = mock(Sprite.class);
+        
+        when(spriteLoader.get("sprites/ui_overlay/ui_overlay.png")).thenReturn(overlay);
+        when(spriteLoader.get("sprites/ui_overlay/marker.png")).thenReturn(marker);
+        when(spriteLoader.get(contains("num"))).thenReturn(num);
+        
+        viewer = new OverlayViewer(spriteLoader);
+        
+        SceneManager model = mock(SceneManager.class);
+        Scene scene = mock(Scene.class);
+        when(model.getScene()).thenReturn(scene);
+        when(model.getCurrentCavePathIndex()).thenReturn(2);
+        
+        GUI gui = mock(GUI.class);
+        viewer.draw(model, gui, 0.1);
+        
+        verify(marker).draw(argThat(pos -> pos.getX() == 157 && pos.getY() == 50), eq(gui));
+
+        verify(num, atLeastOnce()).setOffset(any());
+        verify(num, atLeastOnce()).draw(any(), eq(gui));
     }
 }

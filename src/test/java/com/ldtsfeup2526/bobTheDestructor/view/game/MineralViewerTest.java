@@ -56,7 +56,11 @@ public class MineralViewerTest {
         when(model.getState()).thenReturn(MineralState.SELECTED);
         when(model.getPosition()).thenReturn(new Position(0, 0));
         GUI gui = mock(GUI.class);
-        Sprite sprite = spriteLoader.get(""); // cached mock
+        Sprite sprite = spriteLoader.get("");
+
+        when(model.getDirection()).thenReturn(PointingDirection.UP);
+        viewer.draw(model, gui, 0.1);
+        verify(sprite, atLeastOnce()).draw(any(), any());
 
         when(model.getDirection()).thenReturn(PointingDirection.DOWN);
         viewer.draw(model, gui, 0.1);
@@ -80,19 +84,24 @@ public class MineralViewerTest {
         when(model.getDirection()).thenReturn(PointingDirection.UP);
         GUI gui = mock(GUI.class);
         
-        viewer.draw(model, gui, 1.0); // Large deltaTime to finish animation
+        viewer.draw(model, gui, 1.0);
         verify(model, atLeastOnce()).notifyWhenAnimFinished(eq("CrackAnim"));
     }
     @Test
-    void testDrawAllTypes() {
+    void testDrawAllStatesAndDirections() {
         GUI gui = mock(GUI.class);
         for (MineralType type : MineralType.values()) {
-            MineralModel model = mock(MineralModel.class);
-            when(model.getType()).thenReturn(type);
-            when(model.getState()).thenReturn(MineralState.UNSELECTED);
-            when(model.getPosition()).thenReturn(new Position(0, 0));
-            when(model.getDirection()).thenReturn(PointingDirection.UP);
-            viewer.draw(model, gui, 0.1);
+            for (MineralState state : MineralState.values()) {
+                if (state == MineralState.CLEANUP) continue;
+                for (PointingDirection dir : PointingDirection.values()) {
+                    MineralModel model = mock(MineralModel.class);
+                    when(model.getType()).thenReturn(type);
+                    when(model.getState()).thenReturn(state);
+                    when(model.getPosition()).thenReturn(new Position(0, 0));
+                    when(model.getDirection()).thenReturn(dir);
+                    viewer.draw(model, gui, 0.1);
+                }
+            }
         }
     }
 }

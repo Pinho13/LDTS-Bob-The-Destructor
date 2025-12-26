@@ -1,6 +1,5 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.physics;
 
-import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 

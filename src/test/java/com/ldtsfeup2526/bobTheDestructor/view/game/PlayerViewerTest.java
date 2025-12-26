@@ -68,7 +68,7 @@ public class PlayerViewerTest {
         when(model.isLookingRight()).thenReturn(true);
         GUI gui = mock(GUI.class);
         
-        viewer.draw(model, gui, 0.3); // 3 frames of 0.1 each. Frame 2 reached.
+        viewer.draw(model, gui, 0.3);
         verify(model).notifyWhenPickaxeHit();
         verify(model).notifyWhenAnimFinished(eq("MineAnim"));
     }
@@ -76,23 +76,24 @@ public class PlayerViewerTest {
     @Test
     void testStateChangeStopsAnim() {
         PlayerModel model = mock(PlayerModel.class);
-        com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody rb = mock(com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody.class);
-        when(model.getRigidBody()).thenReturn(rb);
-        when(rb.getAcceleration()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0, 0));
-        when(rb.getVelocity()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0, 0));
-
         when(model.getPosition()).thenReturn(new Position(0, 0));
         when(model.isLookingRight()).thenReturn(true);
         GUI gui = mock(GUI.class);
 
-        // State 1
         when(model.getState()).thenReturn(new IdleState(model));
         viewer.draw(model, gui, 0.1);
-        
-        // State 2
+
         when(model.getState()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.WalkingState(model));
         viewer.draw(model, gui, 0.1);
-        // internally it should call stop() on IdleAnim
+        
+        when(model.getState()).thenReturn(new IdleState(model));
+        viewer.draw(model, gui, 0.1);
+    }
+
+    @Test
+    void testConstructorSetsOffsets() throws IOException {
+        Sprite mockSprite = spriteLoader.get("");
+        verify(mockSprite, atLeastOnce()).setOffset(any());
     }
     @Test
     void testDrawLookingLeft() {
@@ -104,8 +105,27 @@ public class PlayerViewerTest {
         GUI gui = mock(GUI.class);
         viewer.draw(model, gui, 0.1);
 
-        // Should call drawFlipX on sprite
-        // In setUp, we mocked both draw and drawFlipX to call gui.drawPixel
         verify(gui, atLeastOnce()).drawPixel(any(), any());
+    }
+    @Test
+    void testDrawAllStates() {
+        Class<?>[] states = {
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.IdleState.class,
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.WalkingState.class,
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.JumpingState.class,
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.FallingState.class,
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.MiningState.class
+        };
+        
+        GUI gui = mock(GUI.class);
+        PlayerModel model = mock(PlayerModel.class);
+        when(model.getPosition()).thenReturn(new Position(0, 0));
+        when(model.isLookingRight()).thenReturn(true);
+        
+        for (Class<?> stateClass : states) {
+            com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState state = (com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState) mock(stateClass);
+            when(model.getState()).thenReturn(state);
+            viewer.draw(model, gui, 0.1);
+        }
     }
 }

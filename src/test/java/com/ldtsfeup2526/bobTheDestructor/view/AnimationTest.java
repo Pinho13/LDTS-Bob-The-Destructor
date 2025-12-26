@@ -21,32 +21,40 @@ public class AnimationTest {
     }
 
     @Test
-    void testUpdateNoLoop() {
+    void testUpdateNoLoopBoundary() {
         Sprite s1 = mock(Sprite.class);
         Sprite s2 = mock(Sprite.class);
         Animation anim = new Animation("test", new Sprite[]{s1, s2}, 0.1, false);
         
-        anim.update(0.2);
-        assertEquals(1, anim.getFrame());
-        assertTrue(anim.isFinished());
-        
         anim.update(0.1);
         assertEquals(1, anim.getFrame());
+        assertTrue(anim.isFinished());
+
+        anim.update(10.0);
+        assertEquals(1, anim.getFrame());
+        assertTrue(anim.isFinished());
     }
 
     @Test
-    void testCooldown() {
+    void testCooldownLoop() {
         Sprite s1 = mock(Sprite.class);
-        Animation anim = new Animation("test", new Sprite[]{s1}, 0.1, true);
+        Sprite s2 = mock(Sprite.class);
+        Animation anim = new Animation("test", new Sprite[]{s1, s2}, 0.1, true);
         anim.setCooldownTime(0.5);
         
-        anim.update(0.11);
+        anim.update(0.3);
         assertEquals(0, anim.getFrame());
         
         anim.update(0.2);
-        anim.update(0.31);
+        assertEquals(0, anim.getFrame());
         
-        anim.update(0.01);
+        anim.update(0.11);
+        assertEquals(1, anim.getFrame());
+        
+        anim.update(0.1);
+        assertEquals(0, anim.getFrame());
+        
+        anim.update(0.4);
         assertEquals(0, anim.getFrame());
     }
 
@@ -87,29 +95,22 @@ public class AnimationTest {
         Animation anim = new Animation("test", new Sprite[]{s1, s2}, 0.1, true);
         anim.setCooldownTime(0.5);
         
-        // Initial state: frame 0
         assertEquals(0, anim.getFrame());
         
-        // Initial cooldown (set in setCooldownTime)
         anim.update(0.5);
         assertEquals(0, anim.getFrame());
         
-        // Now it should start
         anim.update(0.11);
         assertEquals(1, anim.getFrame());
         
-        // This update triggers frame 2 (0.21 / 0.1 = 2), resets and starts inter-loop cooldown
-        anim.update(0.1); 
-        assertEquals(0, anim.getFrame());
-        
-        // During cooldown, update should return early
         anim.update(0.1);
         assertEquals(0, anim.getFrame());
         
-        // Finish cooldown
+        anim.update(0.1);
+        assertEquals(0, anim.getFrame());
+        
         anim.update(0.4);
         
-        // Next update after cooldown should move time forward again
         anim.update(0.11);
         assertEquals(1, anim.getFrame());
     }

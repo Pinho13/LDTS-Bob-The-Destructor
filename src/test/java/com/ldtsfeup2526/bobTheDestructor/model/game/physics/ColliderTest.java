@@ -41,16 +41,13 @@ public class ColliderTest {
 
     @Test
     void testIsColliderOver() {
-        // Overlap cases
         assertTrue(collider.isColliderOver(new Collider(new Position(11, 11), new Size(2, 2))));
         assertTrue(collider.isColliderOver(new Collider(new Position(8, 8), new Size(4, 4))));
         assertTrue(collider.isColliderOver(new Collider(new Position(15, 10), new Size(2, 2))));
         
-        // Exact boundary overlap
-        assertTrue(collider.isColliderOver(new Collider(new Position(5, 5), new Size(5, 5)))); // Touching at (10,10)
-        assertTrue(collider.isColliderOver(new Collider(new Position(15, 15), new Size(5, 5)))); // Touching at (15,15)
+        assertTrue(collider.isColliderOver(new Collider(new Position(5, 5), new Size(5, 5))));
+        assertTrue(collider.isColliderOver(new Collider(new Position(15, 15), new Size(5, 5))));
 
-        // No overlap
         assertFalse(collider.isColliderOver(new Collider(new Position(16, 10), new Size(2, 2))));
         assertFalse(collider.isColliderOver(new Collider(new Position(10, 16), new Size(2, 2))));
         assertFalse(collider.isColliderOver(new Collider(new Position(0, 0), new Size(5, 5))));
@@ -91,5 +88,32 @@ public class ColliderTest {
         collider.setSize(newSize);
         assertEquals(newPos, collider.getPosition());
         assertEquals(newSize, collider.getSize());
+    }
+    @Test
+    void testIsPointOverBoundaries() {
+        assertTrue(collider.isPointOver(new Position(10, 10)));
+        assertTrue(collider.isPointOver(new Position(15, 10)));
+        assertTrue(collider.isPointOver(new Position(10, 15)));
+        assertTrue(collider.isPointOver(new Position(15, 15)));
+        
+        assertFalse(collider.isPointOver(new Position(9, 10)));
+        assertFalse(collider.isPointOver(new Position(16, 10)));
+        assertFalse(collider.isPointOver(new Position(10, 9)));
+        assertFalse(collider.isPointOver(new Position(10, 16)));
+    }
+
+    @Test
+    void testIsColliderOverBoundaries() {
+        assertTrue(collider.isColliderOver(new Collider(new Position(5, 10), new Size(5, 5))));
+        assertFalse(collider.isColliderOver(new Collider(new Position(4, 10), new Size(5, 5))));
+        
+        assertTrue(collider.isColliderOver(new Collider(new Position(10, 5), new Size(5, 5))));
+        assertFalse(collider.isColliderOver(new Collider(new Position(10, 4), new Size(5, 5))));
+
+        assertTrue(collider.isColliderOver(new Collider(new Position(15, 10), new Size(5, 5))));
+        assertFalse(collider.isColliderOver(new Collider(new Position(16, 10), new Size(5, 5))));
+
+        assertTrue(collider.isColliderOver(new Collider(new Position(10, 15), new Size(5, 5))));
+        assertFalse(collider.isColliderOver(new Collider(new Position(10, 16), new Size(5, 5))));
     }
 }

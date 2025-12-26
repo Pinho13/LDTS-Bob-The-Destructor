@@ -33,10 +33,16 @@ public class SettingsMenuViewerTest {
     @Test
     void testDraw() throws IOException {
         GUI gui = mock(GUI.class);
+        java.util.List<com.ldtsfeup2526.bobTheDestructor.model.menu.Button> buttons = new java.util.ArrayList<>();
+        com.ldtsfeup2526.bobTheDestructor.model.menu.Button button = mock(com.ldtsfeup2526.bobTheDestructor.model.menu.Button.class);
+        buttons.add(button);
+        when(menu.getButtons()).thenReturn(buttons);
+
         viewer.draw(gui, 0.1);
         
         verify(gui).clear();
         verify(viewerProvider.getWallpaperViewer()).draw(eq(gui));
+        verify(viewerProvider.getButtonViewer()).draw(eq(button), eq(gui), anyDouble());
         verify(gui).refresh();
     }
 }

@@ -65,10 +65,12 @@ public class MainMenuControllerTest {
         when(player.getSound()).thenReturn(clip);
         when(clip.isControlSupported(FloatControl.Type.MASTER_GAIN)).thenReturn(true);
         when(clip.getControl(FloatControl.Type.MASTER_GAIN)).thenReturn(control);
-        
+
+        com.ldtsfeup2526.bobTheDestructor.model.GameSettings.getInstance().setMasterGain(5.0f);
+
         new MainMenuController(menuWithSound);
-        
-        verify(control).setValue(anyFloat());
+
+        verify(control).setValue(-15.0f);
         verify(player).start();
     }
 

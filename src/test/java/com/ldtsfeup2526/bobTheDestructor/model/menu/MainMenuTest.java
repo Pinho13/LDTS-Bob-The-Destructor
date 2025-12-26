@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.model.menu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -55,6 +56,16 @@ public class MainMenuTest {
     @Test
     void testGetSoundPlayer() {
         assertNotNull(mainMenu.getSoundPlayer());
+    }
+
+    @Test
+    void testCreateSoundPlayerException() {
+        try (var mockedSoundLoader = mockConstruction(com.ldtsfeup2526.bobTheDestructor.sounds.SoundLoader.class, (mock, context) -> {
+            when(mock.loadSound(any(), any())).thenThrow(new RuntimeException("Test"));
+        })) {
+            MainMenu menu = new MainMenu();
+            assertInstanceOf(com.ldtsfeup2526.bobTheDestructor.sounds.NullSoundPlayer.class, menu.getSoundPlayer());
+        }
     }
 
     private int getSelectedIndex(Menu menu) {

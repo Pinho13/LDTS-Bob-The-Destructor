@@ -35,14 +35,26 @@ public class SceneViewerTest {
 
     @Test
     void testDraw() throws IOException {
+        SpriteLoader spriteLoader = mock(SpriteLoader.class);
+        Sprite structureSprite = mock(Sprite.class);
+        Sprite detailsSprite = mock(Sprite.class);
+        Sprite bgSprite = mock(Sprite.class);
+
+        when(spriteLoader.get("cave/structure.png")).thenReturn(structureSprite);
+        when(spriteLoader.get("cave/details.png")).thenReturn(detailsSprite);
+        when(spriteLoader.get(contains("background/bg"))).thenReturn(bgSprite);
+
+        SceneViewer viewer = new SceneViewer(spriteLoader);
+        viewer.retrieveCaves(List.of("cave/"));
+
         Scene scene = mock(Scene.class);
         when(scene.getCaveFilePath()).thenReturn("cave/");
-        
-        viewer.retrieveCaves(List.of("cave/"));
-        
+
         GUI gui = mock(GUI.class);
         viewer.draw(scene, gui, 0.1);
-        
-        verify(gui, atLeastOnce()).drawPixel(any(), any());
+
+        verify(bgSprite, atLeastOnce()).draw(any(), eq(gui));
+        verify(structureSprite).draw(any(), eq(gui));
+        verify(detailsSprite).draw(any(), eq(gui));
     }
 }

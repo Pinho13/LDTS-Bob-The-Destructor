@@ -1,11 +1,5 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
-import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.sun.jdi.IntegerValue;
-
-import java.util.List;
-
 public class Animation {
     private final String name;
     private final Sprite[] sprites;
@@ -38,7 +32,6 @@ public class Animation {
                 currentFrame = 0;
             } else {
                 currentFrame = sprites.length-1;
-                isFinished();
             }
             currentCooldownTime = cooldownTime;
         }

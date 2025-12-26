@@ -4,9 +4,8 @@ import org.junit.jupiter.api.Test;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
-import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class SoundLoaderTest {
@@ -26,8 +25,6 @@ public class SoundLoaderTest {
         when(clip.isOpen()).thenReturn(true);
         when(ais.getFormat()).thenReturn(new AudioFormat(44100, 16, 2, true, false));
         
-        // This will likely fail on AudioSystem.getAudioInputStream if not careful
-        // But we want to test the isOpen check
         try {
             loader.loadSound(ais, clip);
         } catch (Exception e) {
@@ -36,5 +33,18 @@ public class SoundLoaderTest {
         
         verify(clip).stop();
         verify(clip).close();
+    }
+
+    @Test
+    void testLoadSoundExceptionCatch() throws Exception {
+        SoundLoader loader = new SoundLoader();
+        AudioInputStream ais = mock(AudioInputStream.class);
+        Clip clip = mock(Clip.class);
+
+        when(ais.getFormat()).thenThrow(new RuntimeException("Test Exception"));
+
+        Exception exception = assertThrows(Exception.class, () -> loader.loadSound(ais, clip));
+        assertTrue(exception.getMessage().contains("Unable to load sound file"));
+        assertEquals(RuntimeException.class, exception.getCause().getClass());
     }
 }

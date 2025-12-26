@@ -44,4 +44,17 @@ public class BatViewerTest {
         
         verify(gui, atLeastOnce()).drawPixel(any(), any());
     }
+
+    @Test
+    void testDrawAllStates() {
+        GUI gui = mock(GUI.class);
+        for (BatState state : BatState.values()) {
+            BatModel model = mock(BatModel.class);
+            when(model.getBatState()).thenReturn(state);
+            when(model.getPosition()).thenReturn(new Position(0, 0));
+            viewer.draw(model, gui, 0.1);
+            // Draw again to test cache
+            viewer.draw(model, gui, 0.1);
+        }
+    }
 }

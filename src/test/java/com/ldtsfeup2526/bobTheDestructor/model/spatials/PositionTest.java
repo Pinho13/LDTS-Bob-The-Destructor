@@ -28,7 +28,7 @@ public class PositionTest {
     @Test
     void testPrint() {
         Position pos = new Position(10, 20);
-        pos.print(); // coverage for print method
+        pos.print();
     }
 
     @Test

@@ -20,4 +20,11 @@ public class BatModelTest {
         bat.setBatState(BatState.FLAPPING);
         assertEquals(BatState.FLAPPING, bat.getBatState());
     }
+
+    @Test
+    void testEnumBatState() {
+        assertEquals(2, BatState.values().length);
+        assertEquals(BatState.SLEEPING, BatState.valueOf("SLEEPING"));
+        assertEquals(BatState.FLAPPING, BatState.valueOf("FLAPPING"));
+    }
 }

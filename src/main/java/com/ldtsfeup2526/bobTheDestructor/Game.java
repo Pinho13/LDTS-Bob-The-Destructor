@@ -21,10 +21,20 @@ public class Game {
     private State<?> state;
 
     public Game() throws IOException, URISyntaxException, FontFormatException {
+        this(new ActionParser());
+    }
+
+    public Game(ActionParser actionParser) throws IOException, URISyntaxException, FontFormatException {
+        this.actionParser = actionParser;
         System.out.println("Starting GUI... ");
         gui = new GUILanterna(actionParser.getInputReader(), resolution, PIXEL_SIZE, "Bob, The Destructor");
 
         setState(new MainMenuState(new MainMenu(), spriteLoader));
+    }
+
+    public Game(GUILanterna gui, ActionParser actionParser) {
+        this.gui = gui;
+        this.actionParser = actionParser;
     }
 
     public static void main(String[] args) {
@@ -55,10 +65,14 @@ public class Game {
             long elapsedTime = System.currentTimeMillis() - startTime;
             long sleepTime = deltaTime - elapsedTime;
 
-            if (sleepTime > 0) Thread.sleep(sleepTime);
+            sleep(sleepTime);
         }
 
         gui.close();
+    }
+
+    protected void sleep(long sleepTime) throws InterruptedException {
+        if (sleepTime > 0) Thread.sleep(sleepTime);
     }
 
     public void setState(State<?> state) {

@@ -35,14 +35,13 @@ public class SceneManager {
 
     private List<String> chooseCaves() {
         List<String> caveList = new ArrayList<>();
-        for (int i = 0; i < numberOfCaves; i++) {
-            caveList.add("caves/cave" + String.valueOf(i) + "/");
+        for (int i = 0; i < 10; i++) {
+            caveList.add("caves/cave" + i + "/");
         }
 
         Collections.shuffle(caveList);
-        caveList.subList(5, caveList.size()).clear();
 
-        return caveList;
+        return new ArrayList<>(caveList.subList(0, 5));
     }
 
     public String getNextCavePath() {

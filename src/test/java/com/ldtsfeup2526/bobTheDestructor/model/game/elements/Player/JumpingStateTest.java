@@ -1,9 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
-import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
-import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,12 +41,10 @@ public class JumpingStateTest {
     @Test
     void testGetNextStateToFallingBoundary() {
         JumpingState state = new JumpingState(player);
-        // > 0.5
         when(rb.getVelocity()).thenReturn(new Vector(0, 0.501f));
         assertInstanceOf(FallingState.class, state.getNextState());
         
-        when(rb.getVelocity()).thenReturn(new Vector(0, 0.499f));
-        // Also need to mock grounded to not land
+        when(rb.getVelocity()).thenReturn(new Vector(0, 0.5f));
         when(player.isGrounded()).thenReturn(false);
         assertSame(state, state.getNextState());
     }

@@ -72,6 +72,18 @@ public class PlayerControllerTest {
     }
 
     @Test
+    void testJumpBoth() {
+        controller.update(game, List.of(Action.JUMP, Action.UP));
+        verify(player).jump();
+    }
+
+    @Test
+    void testNoApplyFrictionWhenMovingBoth() {
+        controller.update(game, List.of(Action.LEFT, Action.RIGHT));
+        verify(player, never()).applyFriction();
+    }
+
+    @Test
     void testApplyFriction() {
         controller.update(game, List.of());
         verify(player).applyFriction();

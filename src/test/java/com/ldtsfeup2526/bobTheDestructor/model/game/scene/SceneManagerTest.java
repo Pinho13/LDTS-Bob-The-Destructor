@@ -1,10 +1,5 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
-import com.ldtsfeup2526.bobTheDestructor.Game;
-import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
-import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,11 +61,11 @@ public class SceneManagerTest {
             assertNotNull(sceneManager.getNextCavePath());
         }
         assertNull(sceneManager.getNextCavePath());
+        assertNull(sceneManager.getNextCavePath());
     }
 
     @Test
     void testGetCurrentCavePathIndex() {
-        // Starts at -1 because it's incremented when getNextCavePath is called
         assertEquals(-1, sceneManager.getCurrentCavePathIndex());
         sceneManager.getNextCavePath();
         assertEquals(0, sceneManager.getCurrentCavePathIndex());

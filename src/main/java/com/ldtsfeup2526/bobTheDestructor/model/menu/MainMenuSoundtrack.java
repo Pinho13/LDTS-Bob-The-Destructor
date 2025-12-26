@@ -10,10 +10,14 @@ public class MainMenuSoundtrack {
     private final Clip soundtrackClip;
 
     public MainMenuSoundtrack() {
+        this("sounds/mainMenuSoundtrack.wav");
+    }
+
+    public MainMenuSoundtrack(String path) {
         AudioInputStream input = null;
         Clip clip = null;
         try {
-            URL url = getClass().getClassLoader().getResource("sounds/mainMenuSoundtrack.wav");
+            URL url = getClass().getClassLoader().getResource(path);
             if (url != null) {
                 input = AudioSystem.getAudioInputStream(url);
                 clip = AudioSystem.getClip();

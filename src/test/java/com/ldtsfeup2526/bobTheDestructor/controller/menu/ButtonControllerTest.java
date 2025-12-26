@@ -68,4 +68,33 @@ public class ButtonControllerTest {
         buttonController.update(game, Collections.singletonList(Action.NONE));
         verify(game, never()).setState(any());
     }
+
+    @Test
+    void testUpdatePlayNotSelect() throws IOException {
+        when(button.getButtonType()).thenReturn(ButtonType.PLAY);
+        buttonController.update(game, Collections.singletonList(Action.UP));
+        verify(game, never()).setState(any());
+    }
+
+    @Test
+    void testUpdateConfigNotSelect() throws IOException {
+        when(button.getButtonType()).thenReturn(ButtonType.CONFIG);
+        buttonController.update(game, Collections.singletonList(Action.UP));
+        verify(game, never()).setState(any());
+    }
+
+    @Test
+    void testUpdateExitNotSelect() throws IOException {
+        when(button.getButtonType()).thenReturn(ButtonType.EXIT);
+        buttonController.update(game, Collections.singletonList(Action.UP));
+        verify(game, never()).setState(any());
+    }
+
+    @Test
+    void testUpdateCreditsAnyAction() throws IOException {
+        when(button.getButtonType()).thenReturn(ButtonType.CREDITS);
+        buttonController.update(game, Collections.singletonList(Action.SELECT));
+        buttonController.update(game, Collections.singletonList(Action.UP));
+        verify(game, never()).setState(any());
+    }
 }

@@ -38,9 +38,6 @@ public class Scene implements CollisionChecker {
     public void setSoundPlayer(SoundPlayer soundPlayer) {this.soundPlayer = soundPlayer;}
 
     public SoundPlayer getSoundPlayer() {
-        if (soundPlayer == null) {
-            soundPlayer = new NullSoundPlayer();
-        }
         return soundPlayer;
     }
 

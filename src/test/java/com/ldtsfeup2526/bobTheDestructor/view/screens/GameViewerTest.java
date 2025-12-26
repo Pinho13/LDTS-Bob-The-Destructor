@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -27,7 +28,11 @@ public class GameViewerTest {
         sceneManager = mock(SceneManager.class);
         Scene scene = mock(Scene.class);
         when(sceneManager.getScene()).thenReturn(scene);
-        when(scene.getMineralModels()).thenReturn(new ArrayList<>());
+        
+        List<com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel> minerals = new ArrayList<>();
+        minerals.add(mock(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel.class));
+        when(scene.getMineralModels()).thenReturn(minerals);
+        
         when(scene.getPlayerModel()).thenReturn(mock(PlayerModel.class));
         
         viewerProvider = mock(ViewerProvider.class);
@@ -46,6 +51,14 @@ public class GameViewerTest {
         
         verify(gui).drawBackground(any());
         verify(viewerProvider.getSceneViewer()).draw(any(), eq(gui), anyDouble());
+        verify(viewerProvider.getMineralViewer()).draw(any(), eq(gui), anyDouble());
+        verify(viewerProvider.getPlayerViewer()).draw(any(), eq(gui), anyDouble());
+        verify(viewerProvider.getOverlayViewer()).draw(any(), eq(gui), anyDouble());
         verify(gui).refresh();
+    }
+
+    @Test
+    void testConstructorCallsRetrieveCaves() throws IOException {
+        verify(viewerProvider.getSceneViewer()).retrieveCaves(anyList());
     }
 }

@@ -41,4 +41,16 @@ public class MineralModelTest {
         mineral.notifyWhenAnimFinished("CrackAnim");
         assertEquals(MineralState.CLEANUP, mineral.getState());
     }
+
+    @Test
+    void testEnums() {
+        assertEquals(3, MineralType.values().length);
+        assertEquals(MineralType.PINK, MineralType.valueOf("PINK"));
+        
+        assertEquals(4, MineralState.values().length);
+        assertEquals(MineralState.UNSELECTED, MineralState.valueOf("UNSELECTED"));
+        
+        assertEquals(4, PointingDirection.values().length);
+        assertEquals(PointingDirection.UP, PointingDirection.valueOf("UP"));
+    }
 }

@@ -10,10 +10,14 @@ public class GameSoundtrack {
     private final Clip soundtrackClip;
 
     public GameSoundtrack() {
+        this("sounds/gameSoundtrack.wav");
+    }
+
+    public GameSoundtrack(String path) {
         AudioInputStream input = null;
         Clip clip = null;
         try {
-            URL url = getClass().getClassLoader().getResource("sounds/gameSoundtrack.wav");
+            URL url = getClass().getClassLoader().getResource(path);
             if (url != null) {
                 input = AudioSystem.getAudioInputStream(url);
                 clip = AudioSystem.getClip();

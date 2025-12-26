@@ -38,11 +38,31 @@ public class ButtonViewerTest {
     }
 
     @Test
-    void testDraw() {
-        Button button = new Button(ButtonType.PLAY, ButtonState.SELECTED, new Position(0, 0));
+    void testDrawSelected() {
+        Button button = new Button(ButtonType.PLAY, ButtonState.SELECTED, new Position(50, 50));
         GUI gui = mock(GUI.class);
         viewer.draw(button, gui, 0.1);
-        
-        verify(gui, atLeastOnce()).drawPixel(any(), any());
+
+        verify(gui).drawPixel(argThat(pos -> pos.getX() == 50 && pos.getY() == 50), any());
+        verify(gui).drawPixel(argThat(pos -> pos.getX() == 60 && pos.getY() == 50), any());
+        verify(gui).drawPixel(argThat(pos -> pos.getX() == 41 && pos.getY() == 50), any());
+    }
+
+    @Test
+    void testConstructorCentersSprites() throws IOException {
+        verify(spriteLoader, atLeastOnce()).get(anyString());
+        Sprite mockSprite = spriteLoader.get(""); 
+        verify(mockSprite, atLeastOnce()).center();
+    }
+
+    @Test
+    void testDrawUnselected() {
+        Button button = new Button(ButtonType.EXIT, ButtonState.UNSELECTED, new Position(50, 50));
+        GUI gui = mock(GUI.class);
+        viewer.draw(button, gui, 0.1);
+
+        verify(gui).drawPixel(argThat(pos -> pos.getX() == 50 && pos.getY() == 50), any());
+        verify(gui).drawPixel(argThat(pos -> pos.getX() == 60 && pos.getY() == 50), any());
+        verify(gui, never()).drawPixel(argThat(pos -> pos.getX() == 41 && pos.getY() == 50), any());
     }
 }

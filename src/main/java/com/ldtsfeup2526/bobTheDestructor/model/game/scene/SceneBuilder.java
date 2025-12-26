@@ -87,12 +87,16 @@ public class SceneBuilder implements ISceneBuilder{
 
     private SoundPlayer createSoundPlayer() {
         try {
-            GameSoundtrack soundtrack = new GameSoundtrack();
-            Clip gameClip = new SoundLoader().loadSound(soundtrack.getAudioInput(), soundtrack.getSoundtrackClip());
-            return new BackgroundMusicPlayer(gameClip);
+            return createSoundPlayerInternal();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    protected SoundPlayer createSoundPlayerInternal() throws Exception {
+        GameSoundtrack soundtrack = new GameSoundtrack();
+        Clip gameClip = new SoundLoader().loadSound(soundtrack.getAudioInput(), soundtrack.getSoundtrackClip());
+        return new BackgroundMusicPlayer(gameClip);
     }
 }

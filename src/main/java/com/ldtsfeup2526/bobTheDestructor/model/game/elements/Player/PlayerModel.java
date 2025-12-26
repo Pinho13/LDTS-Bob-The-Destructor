@@ -41,29 +41,28 @@ public class PlayerModel extends ElementModel {
         //rigidBody.getVelocity().print();
         rigidBody.update();
         Vector nextPosF = rigidBody.getNextPos();
-        Position nextPosI = new Position(Math.round(nextPosF.getX()), nextPosF.getY());
+        Position nextPosI = new Position((int) Math.round(nextPosF.getX()), nextPosF.getY().intValue());
         Collider nextColX = collider.colPosCheck(new Position(nextPosI.getX(), getPosition().getY()));
         Collider nextColY = collider.colPosCheck(new Position(getPosition().getX(), nextPosI.getY()));
 
         boolean canMoveX = !collisionChecker.check(nextColX);
         boolean canMoveY = !collisionChecker.check(nextColY);
 
-        float x = nextPosF.getX();
-        float y = nextPosF.getY();
+        float finalX = nextPosF.getX();
+        float finalY = nextPosF.getY();
 
         if (!canMoveX) {
-            x = rigidBody.getPosition().getX();
+            finalX = rigidBody.getPosition().getX();
             rigidBody.setVelocity(new Vector(0, rigidBody.getVelocity().getY()));
             rigidBody.setAcceleration(new Vector(0, rigidBody.getAcceleration().getY()));
         }
 
         if (!canMoveY) {
-            y = rigidBody.getPosition().getY();
+            finalY = rigidBody.getPosition().getY();
             rigidBody.setVelocity(new Vector(rigidBody.getVelocity().getX(), 0));
-            //rigidBody.setAcceleration(new Vector(rigidBody.getAcceleration().getX(), 0));
         }
 
-        Position finalPos = new Position((int) Math.round(x), (int) y);
+        Position finalPos = new Position((int) Math.round(finalX), (int) finalY);
         setPosition(finalPos);
         collider.setPosition(finalPos);
         rigidBody.setPosition(new Vector(finalPos));
@@ -102,16 +101,24 @@ public class PlayerModel extends ElementModel {
         state.movePlayerLeft();
     }
 
-    public void jump() {
-        state.jump();
+    public boolean jump() {
+        if (state != null) {
+            state.jump();
+            return true;
+        }
+        return false;
     }
 
     public void mine() {
         state = new MiningState(this, mineralSelected);
     }
 
-    public void applyFriction() {
-        state.applyFriction();
+    public boolean applyFriction() {
+        if (state != null) {
+            state.applyFriction();
+            return true;
+        }
+        return false;
     }
 
     public PlayerState getState() {

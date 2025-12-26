@@ -18,19 +18,11 @@ public class GUILanterna implements GUI {
     private Screen screen;
 
     public GUILanterna(KeyListener keyListener, String title) throws IOException, URISyntaxException, FontFormatException {
-        this.title = title;
-        this.resolution = new Resolution(240, 135);
-        this.screenCreator = new LanternaScreenCreator();
-
-        createScreen(6, keyListener);
+        this(new LanternaScreenCreator(), keyListener, new Resolution(240, 135), 6, title);
     }
 
     public GUILanterna(KeyListener keyListener, Resolution resolution, int fontSize, String title) throws IOException, URISyntaxException, FontFormatException {
-        this.title = title;
-        this.resolution = resolution;
-        this.screenCreator = new LanternaScreenCreator();
-
-        createScreen(fontSize, keyListener);
+        this(new LanternaScreenCreator(), keyListener, resolution, fontSize, title);
     }
 
     public GUILanterna(ScreenCreator screenCreator, KeyListener keyListener, Resolution resolution, int fontSize, String title) throws IOException, URISyntaxException, FontFormatException {

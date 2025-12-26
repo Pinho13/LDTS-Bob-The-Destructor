@@ -7,12 +7,12 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
-import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,6 +92,41 @@ public class SceneControllerTest {
         controller.update(game, List.of(Action.LEFT));
         
         verify(scene, atLeastOnce()).getMineralModels();
+        verify(scene).cleanupMinerals();
+        verify(player).moveLeft();
+        verify(player).physicsUpdate(scene);
+    }
+
+    @Test
+    void testConstructorWithSound() throws IOException {
+        SceneManager sm = mock(SceneManager.class);
+        Scene s = mock(Scene.class);
+        SoundPlayer sp = mock(SoundPlayer.class);
+        Clip clip = mock(Clip.class);
+        FloatControl control = mock(FloatControl.class);
+        PlayerModel pm = mock(PlayerModel.class);
+        RigidBody rb = mock(RigidBody.class);
+
+        when(sm.getScene()).thenReturn(s);
+        when(s.getSoundPlayer()).thenReturn(sp);
+        when(sp.getSound()).thenReturn(clip);
+        when(clip.isControlSupported(FloatControl.Type.MASTER_GAIN)).thenReturn(true);
+        when(clip.getControl(FloatControl.Type.MASTER_GAIN)).thenReturn(control);
+        when(s.getPlayerModel()).thenReturn(pm);
+        when(pm.getRigidBody()).thenReturn(rb);
+        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0,0));
+        when(pm.getState()).thenReturn(new IdleState(pm));
+        
+        com.ldtsfeup2526.bobTheDestructor.model.GameSettings.getInstance().setMasterGain(10.0f);
+
+        SceneBuilder sb = mock(SceneBuilder.class);
+        when(sb.createScene(any(), any())).thenReturn(s);
+
+        new SceneController(sm, sb);
+        
+        verify(control).setValue(5.0f);
+        verify(sp).start();
+        verify(pm).addMiningListener(any());
     }
 
     @Test
@@ -104,6 +139,8 @@ public class SceneControllerTest {
         
         controller.updateMining();
         verify(scene).cleanupMinerals();
+        verify(player).updateSelectedMineral(minerals);
+        verify(scene).unselectAllMinerals();
     }
 
     @Test
@@ -137,16 +174,7 @@ public class SceneControllerTest {
     void testUpdateMiningWithSelected() {
         MineralModel mineral = mock(MineralModel.class);
         when(mineral.getState()).thenReturn(MineralState.UNSELECTED);
-        
-        // We need to mock the player controller and player model inside scene controller
-        // but it is private. 
-        // SceneController line 69: playerController.getModel().updateSelectedMineral(...)
-        // playerController.getModel().getMineralSelected()
-        
-        // In the constructor:
-        // this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
-        
-        // We can mock the player model in setup and control its getMineralSelected()
+
         when(player.getMineralSelected()).thenReturn(mineral);
         
         controller.updateMining();
@@ -159,13 +187,43 @@ public class SceneControllerTest {
         when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height() + 1));
         when(sceneManager.getNextCavePath()).thenReturn("caves/cave1/");
         
-        // Reset verification since constructor already called it once
         clearInvocations(sceneManager);
         
         controller.updateSceneState(game, new ArrayList<>());
         
         verify(sceneManager).updateTotalMineralsCollected();
         verify(sceneManager).setScene(any(Scene.class));
+    }
+
+    @Test
+    void testUpdateSceneStateBoundary() throws IOException {
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height()));
+        controller.updateSceneState(game, new ArrayList<>());
+        verify(sceneManager, never()).updateTotalMineralsCollected();
+
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height() + 1));
+        when(sceneManager.getNextCavePath()).thenReturn("caves/cave1/");
+        controller.updateSceneState(game, new ArrayList<>());
+        verify(sceneManager).updateTotalMineralsCollected();
+    }
+
+    @Test
+    void testUpdateQuitNoSound() throws IOException {
+        when(scene.getSoundPlayer()).thenReturn(null);
+
+        controller.updateSceneState(game, List.of(Action.QUIT));
+        verify(game).setState(any(MainMenuState.class));
+    }
+
+    @Test
+    void testUpdateQuitNoClip() throws IOException {
+        SoundPlayer sp = mock(SoundPlayer.class);
+        when(scene.getSoundPlayer()).thenReturn(sp);
+        when(sp.getSound()).thenReturn(null);
+        
+        controller.updateSceneState(game, List.of(Action.QUIT));
+        verify(game).setState(any(MainMenuState.class));
+        verify(sp, never()).stop();
     }
 
     @Test
@@ -176,5 +234,107 @@ public class SceneControllerTest {
         controller.updateSceneState(game, new ArrayList<>());
         
         verify(game).setState(any(MainMenuState.class));
+    }
+
+    @Test
+    void testUpdateSceneStateNotBeyondHeight() throws IOException {
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, Game.resolution.height()));
+        
+        controller.updateSceneState(game, new ArrayList<>());
+        
+        verify(sceneManager, never()).updateTotalMineralsCollected();
+    }
+
+    @Test
+    void testConstructorWithSoundNoControl() throws IOException {
+        SceneManager sm = mock(SceneManager.class);
+        Scene s = mock(Scene.class);
+        SoundPlayer sp = mock(SoundPlayer.class);
+        Clip clip = mock(Clip.class);
+        PlayerModel pm = mock(PlayerModel.class);
+        RigidBody rb = mock(RigidBody.class);
+
+        when(sm.getScene()).thenReturn(s);
+        when(s.getSoundPlayer()).thenReturn(sp);
+        when(sp.getSound()).thenReturn(clip);
+        when(clip.isControlSupported(FloatControl.Type.MASTER_GAIN)).thenReturn(false);
+        when(s.getPlayerModel()).thenReturn(pm);
+        when(pm.getRigidBody()).thenReturn(rb);
+        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0,0));
+        when(pm.getState()).thenReturn(new IdleState(pm));
+
+        SceneBuilder sb = mock(SceneBuilder.class);
+        when(sb.createScene(any(), any())).thenReturn(s);
+
+        new SceneController(sm, sb);
+        
+        verify(sp).start();
+    }
+    @Test
+    void testOnMiningFinishedSelected() {
+        PlayerModel player = mock(PlayerModel.class);
+        com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel mineral = mock(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel.class);
+        com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState state = mock(com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState.class);
+        when(player.getState()).thenReturn(state);
+        when(state.getMineral()).thenReturn(null);
+        when(player.getMineralSelected()).thenReturn(mineral);
+        
+        controller.onMiningFinished(player);
+        verify(mineral).setState(MineralState.DESTROYED);
+    }
+
+    @Test
+    void testOnMiningFinishedBothNull() {
+        PlayerModel player = mock(PlayerModel.class);
+        com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState state = mock(com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState.class);
+        when(player.getState()).thenReturn(state);
+        when(state.getMineral()).thenReturn(null);
+        when(player.getMineralSelected()).thenReturn(null);
+        
+        controller.onMiningFinished(player);
+
+        verify(scene, never()).incrementCurrentMineralsCollected();
+    }
+
+    @Test
+    void testConstructorNoSoundPlayer() throws IOException {
+        SceneManager sm = mock(SceneManager.class);
+        Scene s = mock(Scene.class);
+        when(sm.getScene()).thenReturn(s);
+        when(s.getSoundPlayer()).thenReturn(null);
+        
+        PlayerModel pm = mock(PlayerModel.class);
+        RigidBody rb = mock(RigidBody.class);
+        when(s.getPlayerModel()).thenReturn(pm);
+        when(pm.getRigidBody()).thenReturn(rb);
+        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0,0));
+        when(pm.getState()).thenReturn(new IdleState(pm));
+
+        SceneBuilder sb = mock(SceneBuilder.class);
+        when(sb.createScene(any(), any())).thenReturn(s);
+
+        new SceneController(sm, sb);
+    }
+
+    @Test
+    void testConstructorNoClip() throws IOException {
+        SceneManager sm = mock(SceneManager.class);
+        Scene s = mock(Scene.class);
+        when(sm.getScene()).thenReturn(s);
+        SoundPlayer sp = mock(SoundPlayer.class);
+        when(s.getSoundPlayer()).thenReturn(sp);
+        when(sp.getSound()).thenReturn(null);
+
+        PlayerModel pm = mock(PlayerModel.class);
+        RigidBody rb = mock(RigidBody.class);
+        when(s.getPlayerModel()).thenReturn(pm);
+        when(pm.getRigidBody()).thenReturn(rb);
+        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0,0));
+        when(pm.getState()).thenReturn(new IdleState(pm));
+
+        SceneBuilder sb = mock(SceneBuilder.class);
+        when(sb.createScene(any(), any())).thenReturn(s);
+
+        new SceneController(sm, sb);
     }
 }

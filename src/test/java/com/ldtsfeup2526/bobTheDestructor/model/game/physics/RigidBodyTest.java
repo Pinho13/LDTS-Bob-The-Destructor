@@ -67,6 +67,38 @@ public class RigidBodyTest {
         rigidBody.update();
         assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
         assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
+
+        rigidBody.setVelocity(new Vector(0.95f, 0));
+        rigidBody.setAcceleration(new Vector(0.1f, 0));
+        rigidBody.update();
+        assertEquals(1.0f, rigidBody.getVelocity().getX(), 0.001);
+
+        rigidBody.setVelocity(new Vector(-0.95f, 0));
+        rigidBody.setAcceleration(new Vector(-0.1f, 0));
+        rigidBody.update();
+        assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
+
+        rigidBody.setVelocity(new Vector(0, 9.9f));
+        rigidBody.setAcceleration(new Vector(0, 0.2f));
+        rigidBody.update();
+        assertEquals(10.0f, rigidBody.getVelocity().getY(), 0.001);
+
+        rigidBody.setVelocity(new Vector(0, -9.9f));
+        rigidBody.setAcceleration(new Vector(0, -0.2f));
+        rigidBody.update();
+        assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
+
+        rigidBody.setVelocity(new Vector(1.0f, 10.0f));
+        rigidBody.setAcceleration(new Vector(0.1f, 0.1f));
+        rigidBody.update();
+        assertEquals(1.0f, rigidBody.getVelocity().getX(), 0.001);
+        assertEquals(10.0f, rigidBody.getVelocity().getY(), 0.001);
+
+        rigidBody.setVelocity(new Vector(-1.0f, -10.0f));
+        rigidBody.setAcceleration(new Vector(-0.1f, -0.1f));
+        rigidBody.update();
+        assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
+        assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
     }
 
     @Test
@@ -118,6 +150,15 @@ public class RigidBodyTest {
         assertEquals(0, rigidBody.getAcceleration().getX());
         assertEquals(1.0f, rigidBody.getVelocity().getY());
         assertEquals(1.0f, rigidBody.getAcceleration().getY());
+        
+        rigidBody.setVelocity(new Vector(0.2f, 0));
+        rigidBody.setAcceleration(new Vector(1, 1));
+        rigidBody.applyFriction();
+        assertNotEquals(0, rigidBody.getAcceleration().getX());
+        
+        rigidBody.setVelocity(new Vector(0.199f, 0));
+        rigidBody.applyFriction();
+        assertEquals(0, rigidBody.getVelocity().getX());
     }
 
     @Test
@@ -126,10 +167,12 @@ public class RigidBodyTest {
         rigidBody.setAcceleration(new Vector(0, 0.4f));
         rigidBody.applyFriction();
         assertEquals(-rigidBody.getFriction(), rigidBody.getAcceleration().getX());
+        assertTrue(rigidBody.getAcceleration().getX() < 0);
 
         rigidBody.setVelocity(new Vector(-1.0f, 1.0f));
         rigidBody.applyFriction();
         assertEquals(rigidBody.getFriction(), rigidBody.getAcceleration().getX());
+        assertTrue(rigidBody.getAcceleration().getX() > 0);
     }
     @Test
     void testSetters() {
@@ -145,5 +188,33 @@ public class RigidBodyTest {
         assertEquals(0.5f, rb.getSpeed());
         assertEquals(0.3f, rb.getFriction());
         assertEquals(0.4f, rb.getGravity());
+    }
+    @Test
+    void testMoveRightZeroVelocity() {
+        rigidBody.setVelocity(new Vector(0, 0));
+        rigidBody.moveRight();
+        assertEquals(0, rigidBody.getVelocity().getX());
+        assertEquals(rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
+    }
+
+    @Test
+    void testMoveLeftZeroVelocity() {
+        rigidBody.setVelocity(new Vector(0, 0));
+        rigidBody.moveLeft();
+        assertEquals(0, rigidBody.getVelocity().getX());
+        assertEquals(-rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
+    }
+
+    @Test
+    void testApplyFrictionNegativeBoundary() {
+        rigidBody.setVelocity(new Vector(-0.199f, 0));
+        rigidBody.applyFriction();
+        assertEquals(0, rigidBody.getVelocity().getX());
+
+        rigidBody.setVelocity(new Vector(-0.2f, 0));
+        rigidBody.setAcceleration(new Vector(1, 1));
+        rigidBody.applyFriction();
+        assertNotEquals(0, rigidBody.getAcceleration().getX());
+        assertTrue(rigidBody.getAcceleration().getX() > 0);
     }
 }

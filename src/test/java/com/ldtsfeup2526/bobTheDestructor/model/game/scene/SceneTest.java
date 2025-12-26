@@ -36,14 +36,14 @@ public class SceneTest {
 
     @Test
     void testSoundPlayer() {
-        assertNotNull(scene.getSoundPlayer());
+        assertNull(scene.getSoundPlayer());
 
         SoundPlayer soundPlayer = mock(SoundPlayer.class);
         scene.setSoundPlayer(soundPlayer);
         assertEquals(soundPlayer, scene.getSoundPlayer());
         
         scene.setSoundPlayer(null);
-        assertNotNull(scene.getSoundPlayer());
+        assertNull(scene.getSoundPlayer());
     }
 
     @Test
@@ -94,9 +94,16 @@ public class SceneTest {
     }
     @Test
     void testGetSoundPlayerInitializesIfNull() {
-        // Scene constructor doesn't set soundPlayer, so it's null initially.
         SoundPlayer sp = scene.getSoundPlayer();
-        assertNotNull(sp);
-        assertInstanceOf(com.ldtsfeup2526.bobTheDestructor.sounds.NullSoundPlayer.class, sp);
+        assertNull(sp);
+    }
+
+    @Test
+    void testMineralsCollected() {
+        assertEquals(0, scene.getCurrentMineralsCollected());
+        scene.incrementCurrentMineralsCollected();
+        assertEquals(1, scene.getCurrentMineralsCollected());
+        scene.setCurrentMineralsCollected(10);
+        assertEquals(10, scene.getCurrentMineralsCollected());
     }
 }

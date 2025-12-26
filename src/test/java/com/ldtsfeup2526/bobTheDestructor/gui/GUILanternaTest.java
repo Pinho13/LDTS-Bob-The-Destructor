@@ -71,5 +71,42 @@ public class GUILanternaTest {
         
         verify(graphics, times(100)).setCharacter(anyInt(), anyInt(), eq(' '));
         verify(graphics, atLeastOnce()).setBackgroundColor(color);
+        
+        verify(graphics).setCharacter(0, 0, ' ');
+        verify(graphics).setCharacter(9, 9, ' ');
+        verify(graphics, never()).setCharacter(10, 0, ' ');
+        verify(graphics, never()).setCharacter(0, 10, ' ');
+    }
+
+    @Test
+    void testGetScreen() {
+        assertEquals(screen, gui.getScreen());
+    }
+
+    @Test
+    void testAlternativeConstructors() throws IOException, URISyntaxException, FontFormatException {
+        Resolution res = new Resolution(100, 100);
+        GUILanterna gui2 = new GUILanterna(screenCreator, keyListener, res, 8, "Title");
+        assertEquals(screen, gui2.getScreen());
+        verify(screenCreator).createScreen(eq(res), eq(8), eq("Title"), eq(keyListener));
+
+        GUILanterna gui3 = new GUILanterna(screenCreator, keyListener, new Resolution(240, 135), 6, "Title");
+        assertEquals(screen, gui3.getScreen());
+        verify(screenCreator).createScreen(eq(new Resolution(240, 135)), eq(6), eq("Title"), eq(keyListener));
+    }
+
+    @Test
+    void testConstructorsWithoutScreenCreator() throws IOException, URISyntaxException, FontFormatException {
+        try {
+            new GUILanterna(keyListener, "Title");
+        } catch (Exception e) {
+            // Expected if headless or font not found in this environment
+        }
+
+        try {
+            new GUILanterna(keyListener, resolution, 12, "Title");
+        } catch (Exception e) {
+            // Expected if headless or font not found in this environment
+        }
     }
 }

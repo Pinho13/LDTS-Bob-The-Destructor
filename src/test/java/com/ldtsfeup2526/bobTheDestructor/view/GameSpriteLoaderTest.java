@@ -17,7 +17,6 @@ public class GameSpriteLoaderTest {
     @Test
     void testGetAndCache() throws IOException {
         GameSpriteLoader loader = new GameSpriteLoader();
-        // Use a real resource that exists in the project
         String path = "background/bg1.png";
         Sprite sprite1 = loader.get(path);
         assertNotNull(sprite1);

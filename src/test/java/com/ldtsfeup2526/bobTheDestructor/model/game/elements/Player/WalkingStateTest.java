@@ -1,9 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
-import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
-import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,13 +54,33 @@ public class WalkingStateTest {
     @Test
     void testGetNextStateToIdleBoundary() {
         WalkingState state = new WalkingState(player);
-        // < 0.2
-        when(rb.getVelocity()).thenReturn(new Vector(0.199f, 0));
+
         when(player.isGrounded()).thenReturn(true);
 
+        when(rb.getVelocity()).thenReturn(new Vector(0.199f, 0));
+        assertInstanceOf(IdleState.class, state.getNextState());
+
+        when(rb.getVelocity()).thenReturn(new Vector(-0.199f, 0));
         assertInstanceOf(IdleState.class, state.getNextState());
         
-        when(rb.getVelocity()).thenReturn(new Vector(0.201f, 0));
+
+        when(rb.getVelocity()).thenReturn(new Vector(0.2f, 0));
+        assertSame(state, state.getNextState());
+
+        when(rb.getVelocity()).thenReturn(new Vector(-0.2f, 0));
+        assertSame(state, state.getNextState());
+        
+        when(rb.getVelocity()).thenReturn(new Vector(0.2f, 0));
+        assertSame(state, state.getNextState());
+
+        when(rb.getVelocity()).thenReturn(new Vector(0.199999f, 0));
+        assertInstanceOf(IdleState.class, state.getNextState());
+
+        when(rb.getVelocity()).thenReturn(new Vector(0.5f, -0.0001f));
+        assertInstanceOf(JumpingState.class, state.getNextState());
+        
+        when(rb.getVelocity()).thenReturn(new Vector(0.5f, 0.0f));
+        when(player.isGrounded()).thenReturn(true);
         assertSame(state, state.getNextState());
     }
 

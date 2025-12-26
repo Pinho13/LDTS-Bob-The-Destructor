@@ -12,12 +12,23 @@ public class NumberParserTest {
         SpriteLoader loader = mock(SpriteLoader.class);
         Sprite s1 = mock(Sprite.class);
         when(loader.get(anyString())).thenReturn(s1);
-        
+
         NumberParser parser = new NumberParser(loader, "font/");
         List<SpriteInstance> sprites = parser.get("12");
         
         assertEquals(2, sprites.size());
-        assertEquals(s1, sprites.get(0).sprite());
-        assertEquals(s1, sprites.get(1).sprite());
+        assertEquals(0, sprites.get(0).offset().getX());
+        assertEquals(5, sprites.get(1).offset().getX());
+
+        for (int i = 0; i < 10; i++) {
+            verify(loader).get("font/num" + i + ".png");
+        }
+
+        verify(loader, never()).get("font/num10.png");
+
+        parser = new NumberParser(loader, "font/", 10);
+        sprites = parser.get("12");
+        assertEquals(0, sprites.get(0).offset().getX());
+        assertEquals(10, sprites.get(1).offset().getX());
     }
 }
