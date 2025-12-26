@@ -9,6 +9,8 @@ import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,11 +34,11 @@ public abstract class State<T> {
         return model;
     }
 
-    public void update(Game game, GUI gui, ActionParser actionParser, double deltaTime) throws IOException {
+    public void update(Game game, GUI gui, ActionParser actionParser, double deltaTime) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         controller.update(game, actionParser.get());
         screenViewer.draw(gui, deltaTime);
     }
 
-    public abstract void onEnter(Game game);
-    public abstract void onExit(Game game);
+    public void onEnter(Game game) throws UnsupportedAudioFileException, LineUnavailableException, IOException {}
+    public void onExit(Game game) {}
 }

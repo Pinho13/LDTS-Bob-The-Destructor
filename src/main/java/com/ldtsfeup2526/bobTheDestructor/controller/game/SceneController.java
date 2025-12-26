@@ -14,6 +14,8 @@ import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +34,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
     }
 
     @Override
-    public void update(Game game, List<Action> actions) throws IOException {
+    public void update(Game game, List<Action> actions) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         updateSceneState(game, actions);
 
         playerController.update(game, actions);
@@ -63,7 +65,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
         }
     }
 
-    public void updateSceneState(Game game, List<Action> actions) throws IOException {
+    public void updateSceneState(Game game, List<Action> actions) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         if (actions.contains(Action.QUIT)) {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
         }

@@ -11,6 +11,8 @@ import com.ldtsfeup2526.bobTheDestructor.states.SettingsMenuState;
 import com.ldtsfeup2526.bobTheDestructor.states.GameState;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class ButtonController extends Controller<Menu> {
     }
 
     @Override
-    public void update(Game game, List<Action> actions) throws IOException {
+    public void update(Game game, List<Action> actions) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         for (Action action : actions) {
             switch (getModel().getCurrentButton().getButtonType()) {
                 case ButtonType.PLAY:

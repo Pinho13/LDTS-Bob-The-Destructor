@@ -1,5 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.states;
 
+import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.game.SceneController;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
@@ -9,6 +10,8 @@ import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.GameViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
 public class GameState extends State<SceneManager> {
@@ -22,5 +25,15 @@ public class GameState extends State<SceneManager> {
 
     public Controller<SceneManager> createController() throws IOException {
         return new SceneController(getModel(), new SceneBuilder(spriteLoader));
+    }
+
+    @Override
+    public void onEnter(Game game) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        game.getSoundManager().playMusic("sounds/gameSoundtrack.wav");
+    }
+
+    @Override
+    public void onExit(Game game) {
+        game.getSoundManager().stopMusic();
     }
 }

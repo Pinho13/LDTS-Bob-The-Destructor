@@ -1,5 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.states;
 
+import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.menu.SettingsMenuController;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.SettingsMenu;
@@ -8,6 +9,8 @@ import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.SettingsMenuViewer;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
 public class SettingsMenuState extends State<SettingsMenu> {
@@ -23,5 +26,15 @@ public class SettingsMenuState extends State<SettingsMenu> {
     @Override
     public Controller<SettingsMenu> createController() {
         return new SettingsMenuController(getModel());
+    }
+
+    @Override
+    public void onEnter(Game game) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        game.getSoundManager().playMusic("sounds/mainMenuSoundtrack.wav");
+    }
+
+    @Override
+    public void onExit(Game game) {
+        game.getSoundManager().stopMusic();
     }
 }

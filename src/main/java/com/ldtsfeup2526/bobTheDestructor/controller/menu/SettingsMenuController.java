@@ -7,6 +7,8 @@ import com.ldtsfeup2526.bobTheDestructor.model.menu.ButtonType;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.SettingsMenu;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,12 +21,12 @@ public class SettingsMenuController extends MenuController<SettingsMenu> {
     }
 
     @Override
-    protected void onQuit(Game game) throws IOException {
+    protected void onQuit(Game game) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         game.setState(new MainMenuState(new com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu(), game.getSpriteLoader()));
     }
 
     @Override
-    public void update(Game game, List<Action> actions) throws IOException {
+    public void update(Game game, List<Action> actions) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         for (Action action : actions) {
             switch (action) {
                 case UP:
