@@ -1,9 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.sounds;
 
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
 import java.util.Objects;
 
 public class GameSoundManager extends SoundManager{
@@ -16,7 +13,7 @@ public class GameSoundManager extends SoundManager{
 
 
     @Override
-    public void playMusic(String soundFilePath) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public void playMusic(String soundFilePath) {
         if (Objects.equals(currentMusicPath, soundFilePath)) {
             return;
         }
@@ -44,7 +41,7 @@ public class GameSoundManager extends SoundManager{
     }
 
     @Override
-    public void playSFX(String soundFilePath) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public void playSFX(String soundFilePath) {
         Clip sfx = soundLoader.get(soundFilePath);
 
         applyVolumeToClip(sfx, sfxVolume);
