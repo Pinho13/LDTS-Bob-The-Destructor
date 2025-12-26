@@ -36,4 +36,7 @@ public abstract class State<T> {
         controller.update(game, actionParser.get());
         screenViewer.draw(gui, deltaTime);
     }
+
+    public abstract void onEnter(Game game);
+    public abstract void onExit(Game game);
 }
