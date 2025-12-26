@@ -29,16 +29,6 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
         this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
         getModel().getScene().getPlayerModel().addMiningListener(this);
 
-
-        if (getModel().getScene().getSoundPlayer().getSound() != null) {
-            if (getModel().getScene().getSoundPlayer().getSound().isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                FloatControl gainControl = (FloatControl) getModel().getScene().getSoundPlayer().getSound().getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-5.0f + GameSettings.getInstance().getMasterGain());
-            } else {
-                System.err.println("VOLUME control not supported on this Clip.");
-            }
-            getModel().getScene().getSoundPlayer().start();
-        }
     }
 
     @Override
@@ -76,7 +66,6 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
     public void updateSceneState(Game game, List<Action> actions) throws IOException {
         if (actions.contains(Action.QUIT)) {
             game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
-            if (getModel().getScene().getSoundPlayer().getSound() != null) getModel().getScene().getSoundPlayer().stop();
         }
 
         if (getModel().getScene().getPlayerModel().getPosition().getY() > Game.resolution.height()) {
