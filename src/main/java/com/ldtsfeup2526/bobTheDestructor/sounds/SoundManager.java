@@ -1,7 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.sounds;
 
-public abstract class SoundManager {
-    private final SoundLoader soundLoader;
+public abstract class SoundManager implements VolumeControl{
+    protected final SoundLoader soundLoader;
 
     public SoundManager(SoundLoader soundLoader) {
         this.soundLoader = soundLoader;
