@@ -19,13 +19,8 @@ public class SettingsMenuController extends MenuController<SettingsMenu> {
     }
 
     @Override
-    protected void onQuit(Game game) {
-        try {
-            game.setState(new MainMenuState(new com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu(), game.getSpriteLoader()));
-            getModel().getSoundPlayer().stop();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    protected void onQuit(Game game) throws IOException {
+        game.setState(new MainMenuState(new com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu(), game.getSpriteLoader()));
     }
 
     @Override

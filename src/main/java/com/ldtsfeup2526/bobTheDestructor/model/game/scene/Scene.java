@@ -35,7 +35,6 @@ public class Scene implements CollisionChecker {
         return caveFilePath;
     }
 
-    public void setSoundPlayer(SoundPlayer soundPlayer) {this.soundPlayer = soundPlayer;}
 
     public SoundPlayer getSoundPlayer() {
         if (soundPlayer == null) {

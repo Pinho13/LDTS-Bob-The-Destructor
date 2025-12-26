@@ -16,17 +16,6 @@ public abstract class MenuController<T extends Menu> extends Controller<T> {
     public MenuController(T model) {
         super(model);
         this.buttonController = new ButtonController(getModel());
-
-        if (getModel().getSoundPlayer().getSound() != null) {
-            if (getModel().getSoundPlayer().getSound().isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                FloatControl gainControl = (FloatControl) getModel().getSoundPlayer().getSound().getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-20.0f + GameSettings.getInstance().getMasterGain());
-            } else {
-                System.err.println("MASTER_GAIN control not supported on this Clip.");
-            }
-
-            getModel().getSoundPlayer().start();
-        }
     }
 
     @Override
@@ -49,5 +38,5 @@ public abstract class MenuController<T extends Menu> extends Controller<T> {
         }
     }
 
-    protected abstract void onQuit(Game game);
+    protected abstract void onQuit(Game game) throws IOException;
 }
