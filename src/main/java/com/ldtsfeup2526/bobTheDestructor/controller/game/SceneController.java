@@ -48,8 +48,10 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
         if (actions.contains(Action.JUMP)) getModel().getJumpingSoundPlayer().start();
         if (actions.contains(Action.MINE)) getModel().getMiningSoundPlayer().start();
         if (actions.contains(Action.LEFT) || actions.contains(Action.RIGHT)) {
-            if (walkTimer % 14 == 0) getModel().getWalkingSoundPlayer().start();
-            walkTimer++;
+            if (walkTimer == 0) {
+                getModel().getWalkingSoundPlayer().start();
+            }
+            walkTimer = (walkTimer + 1) % 14;
         }
 
         playerController.update(game, actions);
