@@ -1,6 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
 import com.ldtsfeup2526.bobTheDestructor.controller.game.PickaxeHitEventListener;
+import com.ldtsfeup2526.bobTheDestructor.controller.game.PlayerStateListener;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
@@ -24,7 +25,7 @@ public class PlayerModel extends ElementModel {
     private MineralModel mineralSelected = null;
     private float miningDistance = 10;
     private List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
-
+    private List<PlayerStateListener> playerStateListeners = new ArrayList<>();
     private boolean grounded = false;
 
     public PlayerModel(Position position) {
@@ -166,6 +167,14 @@ public class PlayerModel extends ElementModel {
 
     public void removePickaxeHitEventListener(PickaxeHitEventListener listener) {
         pickaxeHitEventListeners.remove(listener);
+    }
+
+    public void addPlayerStateListener(PlayerStateListener listener) {
+        playerStateListeners.add(listener);
+    }
+
+    public void removePlayerStateListener(PlayerStateListener listener) {
+        playerStateListeners.remove(listener);
     }
 
     public MineralModel getMineralSelected() {

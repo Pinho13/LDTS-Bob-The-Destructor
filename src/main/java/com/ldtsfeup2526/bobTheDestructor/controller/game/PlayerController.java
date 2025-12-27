@@ -12,6 +12,7 @@ import java.util.List;
 public class PlayerController extends Controller<PlayerModel> implements PlayerStateListener{
     public PlayerController(PlayerModel player) {
         super(player);
+        getModel().addPlayerStateListener(this);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
 
     @Override
     public void onPlayerStateEnter(PlayerState playerState) {
-
+        System.out.println("Changed State");
     }
 
     @Override
