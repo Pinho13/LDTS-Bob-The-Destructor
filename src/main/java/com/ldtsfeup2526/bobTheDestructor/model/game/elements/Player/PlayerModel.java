@@ -109,7 +109,9 @@ public class PlayerModel extends ElementModel {
     }
 
     public void mine() {
-        state = new MiningState(this, mineralSelected);
+        if (!(state instanceof MiningState)) {
+            setState(new MiningState(this, mineralSelected));
+        }
     }
 
     public void applyFriction() {
@@ -121,8 +123,10 @@ public class PlayerModel extends ElementModel {
     }
 
     public void updateState() {
-        PlayerState newState = state.getNextState();
+        setState(state.getNextState());
+    }
 
+    public void setState(PlayerState newState) {
         if (newState != state) {
             for(PlayerStateListener playerStateListener : playerStateListeners) {
                 playerStateListener.onPlayerStateExit(state);
