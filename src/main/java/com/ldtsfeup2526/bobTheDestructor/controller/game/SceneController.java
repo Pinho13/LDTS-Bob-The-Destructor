@@ -3,7 +3,6 @@ package com.ldtsfeup2526.bobTheDestructor.controller.game;
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
-import com.ldtsfeup2526.bobTheDestructor.model.GameSettings;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class SceneController extends Controller<SceneManager> implements PlayerMiningListener {
+public class SceneController extends Controller<SceneManager> implements PickaxeHitEventListener {
     private final PlayerController playerController;
     private final SceneBuilder sceneBuilder;
 
@@ -42,7 +41,7 @@ public class SceneController extends Controller<SceneManager> implements PlayerM
     }
 
     @Override
-    public void onMiningFinished(PlayerModel playerModel) {
+    public void onPickaxeHit(PlayerModel playerModel) {
         PlayerState state = playerModel.getState();
         if (state.getMineral() != null) {
             state.getMineral().setState(MineralState.DESTROYED);
