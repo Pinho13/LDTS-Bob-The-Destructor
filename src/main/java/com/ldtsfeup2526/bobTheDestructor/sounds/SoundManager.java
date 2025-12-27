@@ -41,5 +41,6 @@ public abstract class SoundManager implements VolumeControl{
     public abstract void stopMusic();
 
     public abstract void playSFX(String soundFilePath);
+    public abstract void stopSFX(String soundFilePath);
 
 }
