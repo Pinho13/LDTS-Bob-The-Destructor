@@ -10,6 +10,7 @@ import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 import com.ldtsfeup2526.bobTheDestructor.states.MainMenuState;
 
 import java.io.IOException;
@@ -20,11 +21,11 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
     private final PlayerController playerController;
     private final SceneBuilder sceneBuilder;
 
-    public SceneController(SceneManager sceneManager, SceneBuilder sceneBuilder) throws IOException {
+    public SceneController(SceneManager sceneManager, SceneBuilder sceneBuilder, SoundManager soundManager) throws IOException {
         super(sceneManager);
         sceneManager.setScene(sceneBuilder.createScene(sceneManager.getNextCavePath(), new PlayerModel(new Position(0, 0))));
         this.sceneBuilder = sceneBuilder;
-        this.playerController = new PlayerController(getModel().getScene().getPlayerModel());
+        this.playerController = new PlayerController(getModel().getScene().getPlayerModel(), soundManager);
         getModel().getScene().getPlayerModel().addPickaxeHitEventListener(this);
 
     }
@@ -63,7 +64,7 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
 
     public void updateSceneState(Game game, List<Action> actions) throws IOException {
         if (actions.contains(Action.QUIT)) {
-            game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+            game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader(), game.getSoundManager()));
         }
 
         if (getModel().getScene().getPlayerModel().getPosition().getY() > Game.resolution.height()) {
@@ -71,7 +72,7 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
             String path = getModel().getNextCavePath();
 
             if (Objects.isNull(path)) {
-                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader()));
+                game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader(), game.getSoundManager()));
                 return;
             }
             getModel().setScene(sceneBuilder.createScene(path, getModel().getScene().getPlayerModel()));

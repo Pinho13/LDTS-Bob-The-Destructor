@@ -5,6 +5,8 @@ import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.ActionParser;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundLoader;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
@@ -16,12 +18,14 @@ public abstract class State<T> {
     private final Controller<T> controller;
     private final ScreenViewer<T> screenViewer;
     protected final SpriteLoader spriteLoader;
+    protected final SoundManager soundManager;
 
-    public State(T model, SpriteLoader spriteLoader) throws IOException {
+    public State(T model, SpriteLoader spriteLoader, SoundManager soundManager) throws IOException {
         this.model = model;
         this.spriteLoader = spriteLoader;
         this.screenViewer = createScreenViewer(new ViewerProvider(spriteLoader));
         this.controller = createController();
+        this.soundManager = soundManager;
     }
 
     public abstract ScreenViewer<T> createScreenViewer(ViewerProvider viewerProvider) throws IOException;

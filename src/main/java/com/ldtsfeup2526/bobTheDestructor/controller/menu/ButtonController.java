@@ -26,13 +26,13 @@ public class ButtonController extends Controller<Menu> {
                 case ButtonType.PLAY:
                     if (action == Action.SELECT) {
                         SpriteLoader spriteLoader = game.getSpriteLoader();
-                        game.setState(new GameState(new SceneManager(), spriteLoader));
+                        game.setState(new GameState(new SceneManager(), spriteLoader, game.getSoundManager()));
                     }
                     break;
                 case CONFIG:
                     if (action == Action.SELECT) {
                         SpriteLoader spriteLoader = game.getSpriteLoader();
-                        game.setState(new SettingsMenuState(new SettingsMenu(), spriteLoader));
+                        game.setState(new SettingsMenuState(new SettingsMenu(), spriteLoader, game.getSoundManager()));
                     }
                     break;
                 case CREDITS:

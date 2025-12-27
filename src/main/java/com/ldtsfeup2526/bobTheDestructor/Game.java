@@ -29,7 +29,7 @@ public class Game {
         System.out.println("Starting GUI... ");
         gui = new GUILanterna(actionParser.getInputReader(), resolution, PIXEL_SIZE, "Bob, The Destructor");
 
-        setState(new MainMenuState(new MainMenu(), spriteLoader));
+        setState(new MainMenuState(new MainMenu(), spriteLoader, getSoundManager()));
     }
 
     public static void main(String[] args) {

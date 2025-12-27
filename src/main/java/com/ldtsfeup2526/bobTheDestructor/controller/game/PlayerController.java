@@ -6,13 +6,17 @@ import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.MiningState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 
 import java.util.List;
 
 public class PlayerController extends Controller<PlayerModel> implements PlayerStateListener{
-    public PlayerController(PlayerModel player) {
+    private final SoundManager soundManager;
+
+    public PlayerController(PlayerModel player, SoundManager soundManager) {
         super(player);
         getModel().addPlayerStateListener(this);
+        this.soundManager = soundManager;
     }
 
     @Override
@@ -31,7 +35,9 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
 
     @Override
     public void onPlayerStateEnter(PlayerState playerState) {
-        System.out.println(playerState.getClass().getName());
+        if (playerState instanceof MiningState) {
+            //play sound
+        }
     }
 
     @Override
