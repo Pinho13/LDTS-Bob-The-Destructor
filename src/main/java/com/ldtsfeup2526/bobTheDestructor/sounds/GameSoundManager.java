@@ -49,10 +49,24 @@ public class GameSoundManager extends SoundManager{
     public void playSFX(String soundFilePath) {
         Clip sfx = soundLoader.get(soundFilePath);
         if (sfx == null) return;
+
         sfx.setFramePosition(0);
 
         applyVolumeToClip(sfx, sfxVolume);
 
+        sfx.start();
+    }
+
+    public void playSFXLoop(String soundFilePath) {
+        Clip sfx = soundLoader.get(soundFilePath);
+        if (sfx == null) return;
+
+        sfx.setFramePosition(0);
+
+        applyVolumeToClip(sfx, sfxVolume);
+
+
+        sfx.loop(Clip.LOOP_CONTINUOUSLY);
         sfx.start();
     }
 
