@@ -4,9 +4,14 @@ import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.*;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.CollisionChecker;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Vector;
 
 public class PlayerController extends Controller<PlayerModel> implements PlayerStateListener{
     private final SoundManager soundManager;
@@ -47,5 +52,25 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
         if (playerState instanceof WalkingState) {
             soundManager.stopSFX("sounds/soundEffects/walking.wav");
         }
+    }
+
+    public void positionCorrection(CollisionChecker collisionChecker) {
+        Collider collider = collisionChecker.check(getModel().getCollider());
+
+        if (Objects.isNull(collider)) {
+            return;
+        }
+
+        int vecX = getModel().getPosition().getX() - collider.getPosition().getX();
+        int vecY = getModel().getPosition().getY() - collider.getPosition().getY();
+
+        int moveX = collider.getSize().getX() - Math.abs(vecX);
+        int moveY = collider.getSize().getY() - Math.abs(vecY);
+
+        new Position(moveX, moveY).print();
+
+        int newX = (int) (getModel().getPosition().getX() + moveX * Math.signum(vecX) + Math.signum(vecX));
+        int newY = (int) (getModel().getPosition().getY() + moveY * Math.signum(vecY) + Math.signum(vecY));
+        getModel().setPosition(new Position(newX, newY));
     }
 }
