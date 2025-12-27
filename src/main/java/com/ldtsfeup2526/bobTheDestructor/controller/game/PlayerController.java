@@ -31,7 +31,7 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
 
     @Override
     public void onPlayerStateEnter(PlayerState playerState) {
-        System.out.println("Changed State");
+        System.out.println(playerState.getClass().getName());
     }
 
     @Override

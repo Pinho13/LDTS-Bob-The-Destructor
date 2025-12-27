@@ -121,7 +121,16 @@ public class PlayerModel extends ElementModel {
     }
 
     public void updateState() {
-        state = state.getNextState();
+        PlayerState newState = state.getNextState();
+
+        if (newState != state) {
+            for(PlayerStateListener playerStateListener : playerStateListeners) {
+                playerStateListener.onPlayerStateExit(state);
+                playerStateListener.onPlayerStateEnter(newState);
+            }
+        }
+
+        state = newState;
     }
 
     public float getJumpForce() {
