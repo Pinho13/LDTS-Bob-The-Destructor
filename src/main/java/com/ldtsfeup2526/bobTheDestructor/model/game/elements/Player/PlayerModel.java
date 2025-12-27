@@ -23,7 +23,7 @@ public class PlayerModel extends ElementModel {
     private float jumpForce = 2.6f;
     private MineralModel mineralSelected = null;
     private float miningDistance = 10;
-    private List<PickaxeHitEventListener> playerMiningListeners = new ArrayList<>();
+    private List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
     private boolean grounded = false;
 
     public PlayerModel(Position position) {
@@ -154,17 +154,17 @@ public class PlayerModel extends ElementModel {
     }
 
     public void notifyWhenPickaxeHit() {
-        for (PickaxeHitEventListener listeners: playerMiningListeners) {
+        for (PickaxeHitEventListener listeners: pickaxeHitEventListeners) {
             listeners.onPickaxeHit(this);
         }
     }
 
     public void addMiningListener(PickaxeHitEventListener listener) {
-        playerMiningListeners.add(listener);
+        pickaxeHitEventListeners.add(listener);
     }
 
     public void removeMiningListener(PickaxeHitEventListener listener) {
-        playerMiningListeners.remove(listener);
+        pickaxeHitEventListeners.remove(listener);
     }
 
     public MineralModel getMineralSelected() {
