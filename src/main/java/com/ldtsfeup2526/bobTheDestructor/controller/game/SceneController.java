@@ -20,12 +20,14 @@ import java.util.Objects;
 public class SceneController extends Controller<SceneManager> implements PickaxeHitEventListener {
     private final PlayerController playerController;
     private final SceneBuilder sceneBuilder;
+    private final SoundManager soundManager;
 
     public SceneController(SceneManager sceneManager, SceneBuilder sceneBuilder, SoundManager soundManager) throws IOException {
         super(sceneManager);
         sceneManager.setScene(sceneBuilder.createScene(sceneManager.getNextCavePath(), new PlayerModel(new Position(0, 0))));
         this.sceneBuilder = sceneBuilder;
         this.playerController = new PlayerController(getModel().getScene().getPlayerModel(), soundManager);
+        this.soundManager = soundManager;
         getModel().getScene().getPlayerModel().addPickaxeHitEventListener(this);
 
     }
@@ -51,6 +53,7 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
             playerModel.getMineralSelected().setState(MineralState.DESTROYED);
             getModel().getScene().incrementCurrentMineralsCollected();
         }
+        soundManager.playSFX("sounds/soundEffects/mining.wav");
     }
 
     public void updateMining() {

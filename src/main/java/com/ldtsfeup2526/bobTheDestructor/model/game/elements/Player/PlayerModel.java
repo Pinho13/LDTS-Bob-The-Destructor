@@ -109,9 +109,7 @@ public class PlayerModel extends ElementModel {
     }
 
     public void mine() {
-        if (!(state instanceof MiningState)) {
-            setState(new MiningState(this, mineralSelected));
-        }
+        setState(new MiningState(this, mineralSelected));
     }
 
     public void applyFriction() {
