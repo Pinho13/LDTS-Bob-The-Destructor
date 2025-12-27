@@ -47,8 +47,8 @@ public class PlayerModel extends ElementModel {
         Collider nextColX = collider.colPosCheck(new Position(nextPosI.getX(), getPosition().getY()));
         Collider nextColY = collider.colPosCheck(new Position(getPosition().getX(), nextPosI.getY()));
 
-        boolean canMoveX = !collisionChecker.check(nextColX);
-        boolean canMoveY = !collisionChecker.check(nextColY);
+        boolean canMoveX = Objects.isNull(collisionChecker.check(nextColX));
+        boolean canMoveY = Objects.isNull(collisionChecker.check(nextColY));
 
         float x = nextPosF.getX();
         float y = nextPosF.getY();
@@ -77,7 +77,7 @@ public class PlayerModel extends ElementModel {
         Collider blockUnder = getCollider().colPosCheck(
                 new Position(getPosition().getX(), getPosition().getY()+1));
 
-        grounded = collisionChecker.check(blockUnder);
+        grounded = !Objects.isNull(collisionChecker.check(blockUnder));
     }
 
     public RigidBody getRigidBody() {

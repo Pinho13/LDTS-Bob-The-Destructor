@@ -38,13 +38,13 @@ public class Scene implements CollisionChecker {
         return blockColliders;
     }
 
-    public boolean check(Collider collider) {
+    public Collider check(Collider collider) {
         for (Collider c : blockColliders) {
             if (c.isColliderOver(collider)) {
-                return true;
+                return c;
             }
         }
-        return false;
+        return null;
     }
 
     public List<MineralModel> getMineralModels() {
