@@ -3,15 +3,15 @@ package com.ldtsfeup2526.bobTheDestructor.model.menu;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel;
 
-public class Button extends ElementModel {
+public class Widget extends ElementModel {
     private final ButtonType buttonType;
     private ButtonState buttonState;
 
-    public Button(ButtonType buttonType) {
+    public Widget(ButtonType buttonType) {
         this(buttonType, ButtonState.UNSELECTED, new Position(0, 0));
     }
 
-    public Button(ButtonType buttonType, ButtonState buttonState, Position position) {
+    public Widget(ButtonType buttonType, ButtonState buttonState, Position position) {
         super(position);
         this.buttonState = buttonState;
         this.buttonType = buttonType;

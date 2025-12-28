@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SettingsMenu extends Menu {
     @Override
-    protected List<Button> createButtons() {
-        Button volume = new Button(ButtonType.VOLUME, ButtonState.SELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)));
+    protected List<Widget> createButtons() {
+        Widget volume = new Widget(ButtonType.VOLUME, ButtonState.SELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)));
         return Collections.singletonList(volume);
     }
 }

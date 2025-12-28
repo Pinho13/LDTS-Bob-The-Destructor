@@ -2,7 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.menu;
 
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
-import com.ldtsfeup2526.bobTheDestructor.model.menu.Button;
+import com.ldtsfeup2526.bobTheDestructor.model.menu.Widget;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.ButtonState;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.ButtonType;
 import com.ldtsfeup2526.bobTheDestructor.view.ElementViewer;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ButtonViewer implements ElementViewer<Button> {
+public class ButtonViewer implements ElementViewer<Widget> {
     private final Map<ButtonType, Map<ButtonState, Sprite>> spriteMap = new HashMap<>();
     private final Map<ButtonType, Sprite> iconMap = new HashMap<>();
     private final Sprite pickaxeIcon;
@@ -41,22 +41,22 @@ public class ButtonViewer implements ElementViewer<Button> {
         pickaxeIcon.center();
     }
 
-    public void draw(Button button, GUI gui, double deltaTime) {
-        Map<ButtonState, Sprite> buttonTypeSprites = spriteMap.get(button.getButtonType());
-        Sprite sprite = buttonTypeSprites.get(button.getButtonState());
+    public void draw(Widget widget, GUI gui, double deltaTime) {
+        Map<ButtonState, Sprite> buttonTypeSprites = spriteMap.get(widget.getButtonType());
+        Sprite sprite = buttonTypeSprites.get(widget.getButtonState());
 
-        sprite.draw(button.getPosition(), gui);
+        sprite.draw(widget.getPosition(), gui);
 
-        iconMap.get(button.getButtonType()).draw(new Position(
-                sprite.getSize().getX()/2 + button.getPosition().getX() + 5,
-                button.getPosition().getY()),
+        iconMap.get(widget.getButtonType()).draw(new Position(
+                sprite.getSize().getX()/2 + widget.getPosition().getX() + 5,
+                widget.getPosition().getY()),
                 gui
         );
 
-        if (button.getButtonState() != ButtonState.UNSELECTED) {
+        if (widget.getButtonState() != ButtonState.UNSELECTED) {
             pickaxeIcon.draw(new Position(
-                            button.getPosition().getX() - sprite.getSize().getX() / 2 - 4,
-                            button.getPosition().getY()),
+                            widget.getPosition().getX() - sprite.getSize().getX() / 2 - 4,
+                            widget.getPosition().getY()),
                     gui
             );
         }

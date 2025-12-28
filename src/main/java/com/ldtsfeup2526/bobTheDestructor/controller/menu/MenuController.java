@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class MenuController<T extends Menu> extends Controller<T> {
-    private final ButtonController buttonController;
+    private final WidgetController widgetController;
 
     public MenuController(T model) {
         super(model);
-        this.buttonController = new ButtonController(getModel());
+        this.widgetController = new WidgetController(getModel());
     }
 
     @Override
@@ -30,7 +30,7 @@ public abstract class MenuController<T extends Menu> extends Controller<T> {
                     onQuit(game);
                     break;
                 default:
-                    buttonController.update(game, List.of(action));
+                    widgetController.update(game, List.of(action));
                     break;
             }
         }

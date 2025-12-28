@@ -3,21 +3,21 @@ package com.ldtsfeup2526.bobTheDestructor.model.menu;
 import java.util.List;
 
 public abstract class Menu {
-    private final List<Button> buttons;
+    private final List<Widget> widgets;
     private int currentButton = 0;
 
     public Menu() {
-        this.buttons = createButtons();
+        this.widgets = createButtons();
     }
 
-    protected abstract List<Button> createButtons();
+    protected abstract List<Widget> createButtons();
 
-    public List<Button> getButtons() {
-        return buttons;
+    public List<Widget> getButtons() {
+        return widgets;
     }
 
     public int getNumberOfButtons() {
-        return buttons.size();
+        return widgets.size();
     }
 
     public void moveDown() {
@@ -34,7 +34,7 @@ public abstract class Menu {
         getCurrentButton().setButtonState(ButtonState.SELECTED);
     }
 
-    public Button getCurrentButton() {
-        return buttons.get(currentButton);
+    public Widget getCurrentButton() {
+        return widgets.get(currentButton);
     }
 }

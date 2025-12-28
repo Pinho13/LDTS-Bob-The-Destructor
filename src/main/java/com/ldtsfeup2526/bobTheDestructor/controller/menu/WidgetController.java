@@ -14,8 +14,8 @@ import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 import java.io.IOException;
 import java.util.List;
 
-public class ButtonController extends Controller<Menu> {
-    public ButtonController(Menu menu) {
+public class WidgetController extends Controller<Menu> {
+    public WidgetController(Menu menu) {
         super(menu);
     }
 
