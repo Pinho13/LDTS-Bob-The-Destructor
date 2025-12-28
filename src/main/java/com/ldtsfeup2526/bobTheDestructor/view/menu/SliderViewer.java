@@ -33,7 +33,7 @@ public class SliderViewer implements ElementViewer<Widget> {
         String value;
 
         switch (model.getWidgetType()) {
-            case VOLUME:
+            case MASTER_VOLUME:
                 value = Objects.toString(GameSettings.getInstance().getMasterVolume());
                 break;
             default:

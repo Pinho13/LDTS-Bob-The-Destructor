@@ -5,5 +5,7 @@ public enum WidgetType {
     CONFIG,
     CREDITS,
     EXIT,
-    VOLUME
+    MASTER_VOLUME,
+    MUSIC_VOLUME,
+    SFX_VOLUME,
 }

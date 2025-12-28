@@ -10,6 +10,7 @@ import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class ButtonViewer implements ElementViewer<Widget> {
 
     public ButtonViewer(SpriteLoader spriteLoader) throws IOException {
         Map<WidgetState, Sprite> tempMap;
-        for (WidgetType widgetType : WidgetType.values()) {
+        for (WidgetType widgetType : Arrays.asList(WidgetType.PLAY, WidgetType.CONFIG, WidgetType.CREDITS, WidgetType.EXIT)) {
             tempMap = new HashMap<>();
             tempMap.put(WidgetState.UNSELECTED, spriteLoader.get("sprites/ui/buttons/" + widgetType.name().toLowerCase() + "/button1.png"));
             tempMap.put(WidgetState.SELECTED, spriteLoader.get("sprites/ui/buttons/" + widgetType.name().toLowerCase() + "/button2.png"));
