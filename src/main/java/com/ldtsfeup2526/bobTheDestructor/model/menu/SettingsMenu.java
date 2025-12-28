@@ -11,7 +11,7 @@ import java.util.List;
 public class SettingsMenu extends Menu {
     @Override
     protected List<Widget> createWidgets() {
-        Widget masterVolume = new Widget(WidgetType.MASTER_VOLUME, WidgetState.UNSELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2 - 20)));
+        Widget masterVolume = new Widget(WidgetType.MASTER_VOLUME, WidgetState.SELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2 - 20)));
         Widget musicVolume = new Widget(WidgetType.MUSIC_VOLUME, WidgetState.UNSELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)));
         Widget sfxVolume = new Widget(WidgetType.SFX_VOLUME, WidgetState.UNSELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2 + 20)));
 
