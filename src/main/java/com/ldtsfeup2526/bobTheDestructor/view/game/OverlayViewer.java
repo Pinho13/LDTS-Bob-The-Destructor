@@ -17,8 +17,8 @@ public class OverlayViewer implements ElementViewer<SceneManager> {
         overlay = spriteLoader.get("sprites/ui_overlay/ui_overlay.png");
         marker = spriteLoader.get("sprites/ui_overlay/marker.png");
         numberParsers = new NumberParser[] {
-                new NumberParser(spriteLoader, "sprites/ui_overlay/num_large/"),
-                new NumberParser(spriteLoader, "sprites/ui_overlay/num_small/", 4)
+                new NumberParser(spriteLoader, "sprites/ui_overlay/num_large/num", 5),
+                new NumberParser(spriteLoader, "sprites/ui_overlay/num_small/num", 4)
         };
     }
 
