@@ -23,7 +23,7 @@ public class SliderViewer implements ElementViewer<Widget> {
 
     public SliderViewer(SpriteLoader spriteLoader) throws IOException {
         spriteMap.put(WidgetState.UNSELECTED, spriteLoader.get("sprites/ui/sliders/arrow_left_normal.png"));
-        spriteMap.put(WidgetState.SELECTED, spriteLoader.get("sprites/ui/sliders/arrow_left_pressed.png"));
+        spriteMap.put(WidgetState.SELECTED, spriteLoader.get("sprites/ui/sliders/arrow_left_selected.png"));
 
         this.stringParser = new StringParser(spriteLoader, "sprites/ui/letters/", 5);
     }
