@@ -1,6 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player;
 
-import com.ldtsfeup2526.bobTheDestructor.controller.game.PlayerMiningListener;
+import com.ldtsfeup2526.bobTheDestructor.controller.game.PickaxeHitEventListener;
+import com.ldtsfeup2526.bobTheDestructor.controller.game.PlayerStateListener;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
@@ -23,7 +24,8 @@ public class PlayerModel extends ElementModel {
     private float jumpForce = 2.6f;
     private MineralModel mineralSelected = null;
     private float miningDistance = 10;
-    private List<PlayerMiningListener> playerMiningListeners = new ArrayList<>();
+    private List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
+    private List<PlayerStateListener> playerStateListeners = new ArrayList<>();
     private boolean grounded = false;
 
     public PlayerModel(Position position) {
@@ -45,8 +47,8 @@ public class PlayerModel extends ElementModel {
         Collider nextColX = collider.colPosCheck(new Position(nextPosI.getX(), getPosition().getY()));
         Collider nextColY = collider.colPosCheck(new Position(getPosition().getX(), nextPosI.getY()));
 
-        boolean canMoveX = !collisionChecker.check(nextColX);
-        boolean canMoveY = !collisionChecker.check(nextColY);
+        boolean canMoveX = Objects.isNull(collisionChecker.check(nextColX));
+        boolean canMoveY = Objects.isNull(collisionChecker.check(nextColY));
 
         float x = nextPosF.getX();
         float y = nextPosF.getY();
@@ -75,7 +77,7 @@ public class PlayerModel extends ElementModel {
         Collider blockUnder = getCollider().colPosCheck(
                 new Position(getPosition().getX(), getPosition().getY()+1));
 
-        grounded = collisionChecker.check(blockUnder);
+        grounded = !Objects.isNull(collisionChecker.check(blockUnder));
     }
 
     public RigidBody getRigidBody() {
@@ -107,7 +109,7 @@ public class PlayerModel extends ElementModel {
     }
 
     public void mine() {
-        state = new MiningState(this, mineralSelected);
+        setState(new MiningState(this, mineralSelected));
     }
 
     public void applyFriction() {
@@ -119,7 +121,18 @@ public class PlayerModel extends ElementModel {
     }
 
     public void updateState() {
-        state = state.getNextState();
+        setState(state.getNextState());
+    }
+
+    public void setState(PlayerState newState) {
+        if (newState != state) {
+            for(PlayerStateListener playerStateListener : playerStateListeners) {
+                playerStateListener.onPlayerStateExit(state);
+                playerStateListener.onPlayerStateEnter(newState);
+            }
+        }
+
+        state = newState;
     }
 
     public float getJumpForce() {
@@ -154,17 +167,25 @@ public class PlayerModel extends ElementModel {
     }
 
     public void notifyWhenPickaxeHit() {
-        for (PlayerMiningListener listeners: playerMiningListeners) {
-            listeners.onMiningFinished(this);
+        for (PickaxeHitEventListener listeners: pickaxeHitEventListeners) {
+            listeners.onPickaxeHit(this);
         }
     }
 
-    public void addMiningListener(PlayerMiningListener listener) {
-        playerMiningListeners.add(listener);
+    public void addPickaxeHitEventListener(PickaxeHitEventListener listener) {
+        pickaxeHitEventListeners.add(listener);
     }
 
-    public void removeMiningListener(PlayerMiningListener listener) {
-        playerMiningListeners.remove(listener);
+    public void removePickaxeHitEventListener(PickaxeHitEventListener listener) {
+        pickaxeHitEventListeners.remove(listener);
+    }
+
+    public void addPlayerStateListener(PlayerStateListener listener) {
+        playerStateListeners.add(listener);
+    }
+
+    public void removePlayerStateListener(PlayerStateListener listener) {
+        playerStateListeners.remove(listener);
     }
 
     public MineralModel getMineralSelected() {
