@@ -36,6 +36,12 @@ public class SliderViewer implements ElementViewer<Widget> {
             case MASTER_VOLUME:
                 value = Objects.toString(GameSettings.getInstance().getMasterVolume());
                 break;
+            case MUSIC_VOLUME:
+                value = Objects.toString(GameSettings.getInstance().getMusicVolume());
+                break;
+            case SFX_VOLUME:
+                value = Objects.toString(GameSettings.getInstance().getSfxVolume());
+                break;
             default:
                 value = "Value Not Found";
         }
