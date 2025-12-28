@@ -1,5 +1,6 @@
 package com.ldtsfeup2526.bobTheDestructor.view.screens;
 
+import com.googlecode.lanterna.TextColor;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.SettingsMenu;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
@@ -19,7 +20,8 @@ public class SettingsMenuViewer extends ScreenViewer<SettingsMenu> {
     }
 
     public void draw(GUI gui, double deltaTime) throws IOException {
-        gui.clear();
+        //gui.clear();
+        gui.drawBackground(new TextColor.RGB(57, 53, 74));
         wallpaperViewer.draw(gui);
         drawElements(gui, getModel().getButtons(), buttonViewer, deltaTime);
         gui.refresh();

@@ -24,7 +24,7 @@ public class MainMenuViewer extends ScreenViewer<MainMenu>{
     }
 
     public void draw(GUI gui, double deltaTime) throws IOException {
-        gui.clear();
+        //gui.clear();
 
         gui.drawBackground(new TextColor.RGB(57, 53, 74));
         wallpaperViewer.draw(gui);
