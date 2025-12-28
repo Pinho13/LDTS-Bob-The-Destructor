@@ -7,34 +7,34 @@ public abstract class Menu {
     private int currentButton = 0;
 
     public Menu() {
-        this.widgets = createButtons();
+        this.widgets = createWidgets();
     }
 
-    protected abstract List<Widget> createButtons();
+    protected abstract List<Widget> createWidgets();
 
-    public List<Widget> getButtons() {
+    public List<Widget> getWidgets() {
         return widgets;
     }
 
-    public int getNumberOfButtons() {
+    public int getNumberOfWidgets() {
         return widgets.size();
     }
 
     public void moveDown() {
-        getCurrentButton().setButtonState(WidgetState.UNSELECTED);
+        getCurrentWidget().setButtonState(WidgetState.UNSELECTED);
         currentButton++;
-        currentButton %= getNumberOfButtons();
-        getCurrentButton().setButtonState(WidgetState.SELECTED);
+        currentButton %= getNumberOfWidgets();
+        getCurrentWidget().setButtonState(WidgetState.SELECTED);
     }
 
     public void moveUp() {
-        getCurrentButton().setButtonState(WidgetState.UNSELECTED);
-        currentButton += getNumberOfButtons() - 1;
-        currentButton %= getNumberOfButtons();
-        getCurrentButton().setButtonState(WidgetState.SELECTED);
+        getCurrentWidget().setButtonState(WidgetState.UNSELECTED);
+        currentButton += getNumberOfWidgets() - 1;
+        currentButton %= getNumberOfWidgets();
+        getCurrentWidget().setButtonState(WidgetState.SELECTED);
     }
 
-    public Widget getCurrentButton() {
+    public Widget getCurrentWidget() {
         return widgets.get(currentButton);
     }
 }

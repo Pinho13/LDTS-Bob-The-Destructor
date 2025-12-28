@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MainMenu extends Menu{
     @Override
-    protected List<Widget> createButtons() {
+    protected List<Widget> createWidgets() {
         Widget start = new Widget(WidgetType.PLAY, WidgetState.SELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)-15));
         Widget settings = new Widget(WidgetType.CONFIG, WidgetState.UNSELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)-5));
         Widget credits = new Widget(WidgetType.CREDITS, WidgetState.UNSELECTED, new Position(Game.resolution.width()/2, (Game.resolution.height()/2)+5));

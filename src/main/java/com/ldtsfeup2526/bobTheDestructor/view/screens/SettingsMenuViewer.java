@@ -23,7 +23,7 @@ public class SettingsMenuViewer extends ScreenViewer<SettingsMenu> {
         //gui.clear();
         gui.drawBackground(new TextColor.RGB(57, 53, 74));
         wallpaperViewer.draw(gui);
-        drawElements(gui, getModel().getButtons(), buttonViewer, deltaTime);
+        drawElements(gui, getModel().getWidgets(), buttonViewer, deltaTime);
         gui.refresh();
     }
 }
