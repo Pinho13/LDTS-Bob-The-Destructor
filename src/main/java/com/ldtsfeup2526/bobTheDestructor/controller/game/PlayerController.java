@@ -67,7 +67,6 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
         int moveX = collider.getSize().getX() - Math.abs(vecX);
         int moveY = collider.getSize().getY() - Math.abs(vecY);
 
-        new Position(moveX, moveY).print();
 
         int newX = (int) (getModel().getPosition().getX() + moveX * Math.signum(vecX) + Math.signum(vecX));
         int newY = (int) (getModel().getPosition().getY() + moveY * Math.signum(vecY) + Math.signum(vecY));
