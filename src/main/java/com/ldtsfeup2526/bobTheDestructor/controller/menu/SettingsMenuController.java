@@ -44,7 +44,7 @@ public class SettingsMenuController extends MenuController<SettingsMenu> {
                     }
                     if (getModel().getCurrentWidget().getWidgetType() == WidgetType.VOLUME) {
                         currentVolumeIdx = (currentVolumeIdx + 1) % levels.length;
-                        GameSettings.getInstance().setMasterGain(levels[currentVolumeIdx]);
+                        GameSettings.getInstance().setMasterVolume(levels[currentVolumeIdx]);
                     }
                     break;
                 default:
