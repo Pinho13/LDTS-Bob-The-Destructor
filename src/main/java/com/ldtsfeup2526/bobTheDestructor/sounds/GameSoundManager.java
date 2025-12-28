@@ -78,6 +78,10 @@ public class GameSoundManager extends SoundManager{
         sfx.stop();
     }
 
+    @Override
+    public void updateVolumes() {
+        applyVolumeToClip(currentMusicClip, musicVolume);
+    }
 
     @Override
     public void setMasterVolume(float volume) {

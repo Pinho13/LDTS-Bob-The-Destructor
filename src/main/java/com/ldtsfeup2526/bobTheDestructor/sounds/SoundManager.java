@@ -37,6 +37,8 @@ public abstract class SoundManager implements VolumeControl{
     }
 
 
+    public abstract void updateVolumes();
+
     public abstract void playMusic(String soundFilePath);
     public abstract void stopMusic();
 
