@@ -4,6 +4,7 @@ import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.Menu;
+import com.ldtsfeup2526.bobTheDestructor.model.menu.Widget;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.List;
 public abstract class MenuController<T extends Menu> extends Controller<T> {
     private final WidgetController widgetController;
 
-    public MenuController(T model) {
+    public MenuController(T model, WidgetController widgetController) {
         super(model);
-        this.widgetController = new WidgetController(getModel());
+        this.widgetController = widgetController;
     }
 
     @Override

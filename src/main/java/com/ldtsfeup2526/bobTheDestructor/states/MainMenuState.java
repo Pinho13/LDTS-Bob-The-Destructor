@@ -3,6 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.states;
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.controller.menu.MainMenuController;
+import com.ldtsfeup2526.bobTheDestructor.controller.menu.WidgetController;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
@@ -22,7 +23,7 @@ public class MainMenuState extends State<MainMenu> {
     }
 
     public Controller<MainMenu> createController() {
-        return new MainMenuController(getModel());
+        return new MainMenuController(getModel(), new WidgetController(getModel(), soundManager));
     }
 
     @Override

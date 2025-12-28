@@ -13,8 +13,8 @@ import java.util.List;
 
 public class SettingsMenuController extends MenuController<SettingsMenu> {
 
-    public SettingsMenuController(SettingsMenu menu) {
-        super(menu);
+    public SettingsMenuController(SettingsMenu menu, WidgetController widgetController) {
+        super(menu, widgetController);
     }
 
     @Override

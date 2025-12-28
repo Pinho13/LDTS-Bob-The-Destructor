@@ -6,8 +6,8 @@ import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import java.io.IOException;
 
 public class MainMenuController extends MenuController<MainMenu> {
-    public MainMenuController(MainMenu menu) {
-        super(menu);
+    public MainMenuController(MainMenu menu, WidgetController widgetController) {
+        super(menu, widgetController);
     }
 
     @Override
