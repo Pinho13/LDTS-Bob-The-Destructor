@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class SettingsMenuController extends MenuController<SettingsMenu> {
-    private final float[] levels = new float[]{-20f, -10f, 0f, 10f, 20f};
-    private int currentVolumeIdx;
 
     public SettingsMenuController(SettingsMenu menu) {
         super(menu);
@@ -22,34 +20,5 @@ public class SettingsMenuController extends MenuController<SettingsMenu> {
     @Override
     protected void onQuit(Game game) throws IOException {
         game.setState(new MainMenuState(new MainMenu(), game.getSpriteLoader(), game.getSoundManager()));
-    }
-
-    @Override
-    public void update(Game game, List<Action> actions) throws IOException {
-        for (Action action : actions) {
-            switch (action) {
-                case UP:
-                case DOWN:
-                    break;
-                case QUIT:
-                    onQuit(game);
-                    break;
-                case SELECT:
-                    currentVolumeIdx = 0;
-                    for (float level : levels) {
-                        if (GameSettings.getInstance().getMasterGain() == level) {
-                            break;
-                        }
-                        currentVolumeIdx++;
-                    }
-                    if (getModel().getCurrentWidget().getWidgetType() == WidgetType.VOLUME) {
-                        currentVolumeIdx = (currentVolumeIdx + 1) % levels.length;
-                        GameSettings.getInstance().setMasterVolume(levels[currentVolumeIdx]);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }
