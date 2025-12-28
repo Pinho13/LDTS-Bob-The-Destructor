@@ -22,7 +22,6 @@ public class FontParser {
 
         for (int i = 0; i < characters.length(); i++) {
             char c = characters.charAt(i);
-
             spriteMap.put(c, spriteLoader.get(fontPath + c + ".png"));
         }
     }
@@ -30,7 +29,7 @@ public class FontParser {
     public List<SpriteInstance> get(String string) {
         List<SpriteInstance> sprites = new ArrayList<>();
         for(int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
+            char c = string.toLowerCase().charAt(i);
             Sprite sprite = spriteMap.get(c);
             sprites.add(new SpriteInstance(sprite, new Position(distanceBetweenChars * i, 0)));
         }
