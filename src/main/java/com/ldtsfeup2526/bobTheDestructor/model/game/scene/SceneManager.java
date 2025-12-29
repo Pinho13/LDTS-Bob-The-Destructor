@@ -76,4 +76,8 @@ public class SceneManager {
     public void updateTime(double deltaTime) {
         timePassed += deltaTime;
     }
+
+    public double getTimePassed() {
+        return timePassed;
+    }
 }
