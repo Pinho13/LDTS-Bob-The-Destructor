@@ -6,10 +6,14 @@ import com.ldtsfeup2526.bobTheDestructor.controller.input.Action;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.CollisionChecker;
+import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneBuilder;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
+import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
 import com.ldtsfeup2526.bobTheDestructor.model.stats.Stats;
 import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 import com.ldtsfeup2526.bobTheDestructor.states.EndState;
@@ -39,7 +43,7 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
         updateSceneState(game, actions);
 
         playerController.update(game, actions, deltaTime);
-        playerController.getModel().physicsUpdate(getModel().getScene());
+        playerController.physicsUpdate(getModel().getScene());
 
         playerController.positionCorrection(getModel().getScene());
         updateMining();

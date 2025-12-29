@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerModel extends ElementModel {
-    private Collider collider;
-    private RigidBody rigidBody;
+    private final Collider collider;
+    private final RigidBody rigidBody;
     private boolean lookRight = true;
     private PlayerState state;
-    private float jumpForce = 2.6f;
+    private final float jumpForce = 2.6f;
     private MineralModel mineralSelected = null;
-    private float miningDistance = 10;
-    private List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
-    private List<PlayerStateListener> playerStateListeners = new ArrayList<>();
+    private final float miningDistance = 10;
+    private final List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
+    private final List<PlayerStateListener> playerStateListeners = new ArrayList<>();
     private boolean grounded = false;
 
     public PlayerModel(Position position) {
@@ -37,47 +37,6 @@ public class PlayerModel extends ElementModel {
 
     public void update() {
         updateState();
-    }
-
-    public void physicsUpdate(CollisionChecker collisionChecker) {
-        //rigidBody.getVelocity().print();
-        rigidBody.update();
-        Vector nextPosF = rigidBody.getNextPos();
-        Position nextPosI = new Position(Math.round(nextPosF.getX()), nextPosF.getY());
-        Collider nextColX = collider.colPosCheck(new Position(nextPosI.getX(), getPosition().getY()));
-        Collider nextColY = collider.colPosCheck(new Position(getPosition().getX(), nextPosI.getY()));
-
-        boolean canMoveX = Objects.isNull(collisionChecker.check(nextColX));
-        boolean canMoveY = Objects.isNull(collisionChecker.check(nextColY));
-
-        float x = nextPosF.getX();
-        float y = nextPosF.getY();
-
-        if (!canMoveX) {
-            x = rigidBody.getPosition().getX();
-            rigidBody.setVelocity(new Vector(0, rigidBody.getVelocity().getY()));
-            rigidBody.setAcceleration(new Vector(0, rigidBody.getAcceleration().getY()));
-        }
-
-        if (!canMoveY) {
-            y = rigidBody.getPosition().getY();
-            rigidBody.setVelocity(new Vector(rigidBody.getVelocity().getX(), 0));
-            //rigidBody.setAcceleration(new Vector(rigidBody.getAcceleration().getX(), 0));
-        }
-
-        Position finalPos = new Position((int) Math.round(x), (int) y);
-        setPosition(finalPos);
-        collider.setPosition(finalPos);
-        rigidBody.setPosition(new Vector(finalPos));
-
-        groundedUpdate(collisionChecker);
-    }
-
-    private void groundedUpdate(CollisionChecker collisionChecker) {
-        Collider blockUnder = getCollider().colPosCheck(
-                new Position(getPosition().getX(), getPosition().getY()+1));
-
-        grounded = !Objects.isNull(collisionChecker.check(blockUnder));
     }
 
     public RigidBody getRigidBody() {
@@ -190,6 +149,10 @@ public class PlayerModel extends ElementModel {
 
     public MineralModel getMineralSelected() {
         return mineralSelected;
+    }
+
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
     }
 }
 
