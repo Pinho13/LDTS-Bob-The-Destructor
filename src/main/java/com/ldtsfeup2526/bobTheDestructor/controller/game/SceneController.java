@@ -44,7 +44,7 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
         playerController.positionCorrection(getModel().getScene());
         updateMining();
 
-
+        getModel().updateTime(deltaTime);
     }
 
     @Override

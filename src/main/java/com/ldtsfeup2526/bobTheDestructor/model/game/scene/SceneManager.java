@@ -20,6 +20,7 @@ public class SceneManager {
     private final List<String> cavesPathChosen;
     private int currentCavePathIndex;
     private int totalMineralsCollected = 0;
+    private double timePassed;
 
     public SceneManager () throws IOException {
         cavesPathChosen = chooseCaves();
@@ -70,5 +71,9 @@ public class SceneManager {
 
     public void updateTotalMineralsCollected() {
         totalMineralsCollected += scene.getCurrentMineralsCollected();
+    }
+
+    public void updateTime(double deltaTime) {
+        timePassed += deltaTime;
     }
 }
