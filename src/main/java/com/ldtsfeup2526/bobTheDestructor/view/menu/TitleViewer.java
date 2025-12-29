@@ -1,6 +1,5 @@
 package com.ldtsfeup2526.bobTheDestructor.view.menu;
 
-import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.view.SpriteInstance;
@@ -28,7 +27,7 @@ public class TitleViewer {
         }
     }
 
-    public void drawOffCenter(Position position, String string, GUI gui) {
+    public void drawAtTextStart(Position position, String string, GUI gui) {
         List<SpriteInstance> text = stringParser.get(string);
         int halfWidth = text.size() * 5/2;
 
