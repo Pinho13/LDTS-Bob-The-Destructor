@@ -59,19 +59,12 @@ public class PlayerController extends Controller<PlayerModel> implements PlayerS
         Collider collider = collisionChecker.check(getModel().getCollider());
 
         if (Objects.isNull(collider)) {
+            getModel().updateLastValidPos();
             return;
         }
+        System.out.println("Done");
+        getModel().setPosition(getModel().getLastValidPos());
 
-        int vecX = getModel().getPosition().getX() - collider.getPosition().getX();
-        int vecY = getModel().getPosition().getY() - collider.getPosition().getY();
-
-        int moveX = collider.getSize().getX() - Math.abs(vecX);
-        int moveY = collider.getSize().getY() - Math.abs(vecY);
-
-
-        int newX = (int) (getModel().getPosition().getX() + moveX * Math.signum(vecX) + Math.signum(vecX));
-        int newY = (int) (getModel().getPosition().getY() + moveY * Math.signum(vecY) + Math.signum(vecY));
-        getModel().setPosition(new Position(newX, newY));
     }
 
     public void physicsUpdate(CollisionChecker collisionChecker) {

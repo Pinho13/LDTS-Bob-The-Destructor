@@ -27,9 +27,11 @@ public class PlayerModel extends ElementModel {
     private final List<PickaxeHitEventListener> pickaxeHitEventListeners = new ArrayList<>();
     private final List<PlayerStateListener> playerStateListeners = new ArrayList<>();
     private boolean grounded = false;
+    private List<Position> lastValidPos = new ArrayList<>();
 
     public PlayerModel(Position position) {
         super(position);
+        this.lastValidPos.add(position);
         this.collider = new Collider(position, new Size(5, 5));
         this.rigidBody = new RigidBody(position);
         this.state = new IdleState(this);
@@ -153,6 +155,17 @@ public class PlayerModel extends ElementModel {
 
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
+    }
+
+    public Position getLastValidPos() {
+        return lastValidPos.getFirst();
+    }
+
+    public void updateLastValidPos() {
+        if (lastValidPos.size() == 10) {
+            lastValidPos.removeFirst();
+        }
+        this.lastValidPos.add(getPosition());
     }
 }
 

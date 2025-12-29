@@ -42,10 +42,10 @@ public class SceneController extends Controller<SceneManager> implements Pickaxe
     public void update(Game game, List<Action> actions, double deltaTime) throws IOException {
         updateSceneState(game, actions);
 
+        playerController.positionCorrection(getModel().getScene());
         playerController.update(game, actions, deltaTime);
         playerController.physicsUpdate(getModel().getScene());
 
-        playerController.positionCorrection(getModel().getScene());
         updateMining();
 
         getModel().updateTime(deltaTime);
