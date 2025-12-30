@@ -23,16 +23,17 @@ public class InputReaderTest {
     @Test
     void testAddInputFinished() {
         InputReader reader = new InputReader();
-        assertTrue(reader.addInputFinished(KeyEvent.VK_A));
+        reader.addInputFinished(KeyEvent.VK_A);
         assertTrue(reader.getInputFinished().contains(KeyEvent.VK_A));
-        assertFalse(reader.addInputFinished(KeyEvent.VK_A));
+        reader.addInputFinished(KeyEvent.VK_A); // Test uniqueness
+        assertEquals(1, reader.getInputFinished().size());
 
         Component source = new Component() {};
 
         reader.keyPressed(new KeyEvent(source, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_B, 'b'));
         assertTrue(reader.getInputPressed().contains(KeyEvent.VK_B));
         
-        assertTrue(reader.addInputFinished(KeyEvent.VK_B));
+        reader.addInputFinished(KeyEvent.VK_B);
         reader.updateInputPressed();
         assertFalse(reader.getInputPressed().contains(KeyEvent.VK_B));
     }
