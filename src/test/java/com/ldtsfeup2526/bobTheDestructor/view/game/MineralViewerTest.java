@@ -59,10 +59,8 @@ public class MineralViewerTest {
             Sprite selectedSprite = mock(Sprite.class);
             
             SpriteLoader localSpriteLoader = mock(SpriteLoader.class);
-            // Mock all possible gem and crack sprites to avoid NPE
             when(localSpriteLoader.get(anyString())).thenReturn(mock(Sprite.class));
             
-            // Specifically mock the ones we want to verify for this type
             String gemPath = switch(type) {
                 case PINK -> "sprites/gems/gem1.png";
                 case YELLOW -> "sprites/gems/gem7.png";
@@ -161,9 +159,6 @@ public class MineralViewerTest {
         when(model.getType()).thenReturn(MineralType.PINK);
         when(model.getState()).thenReturn(MineralState.UNSELECTED);
         when(model.getPosition()).thenReturn(new Position(0, 0));
-        // Force a non-existent direction if possible, but it's an enum.
-        // The switch covers all enum values. 
-        // Let's check if there are any other branches.
     }
 
     @Test
@@ -214,9 +209,7 @@ public class MineralViewerTest {
         when(model.getDirection()).thenReturn(PointingDirection.UP);
         
         viewer.draw(model, gui, 0.1);
-        viewer.draw(model, gui, 0.1); // Should use cached anim
-        // No easy way to verify caching without reflection or changing MineralViewer,
-        // but it exercises the branch.
+        viewer.draw(model, gui, 0.1);
     }
     @Test
     void testDrawAnimationFinished() {
@@ -227,7 +220,6 @@ public class MineralViewerTest {
         when(model.getPosition()).thenReturn(new Position(0, 0));
         when(model.getDirection()).thenReturn(PointingDirection.UP);
         
-        // delta large enough to finish animation (0.05 * 4 = 0.2)
         viewer.draw(model, gui, 1.0);
         verify(model).notifyWhenAnimFinished(anyString());
     }
@@ -240,8 +232,6 @@ public class MineralViewerTest {
         when(model.getPosition()).thenReturn(new Position(0, 0));
         when(model.getDirection()).thenReturn(PointingDirection.UP);
         
-        // Shine animation has cooldown and is looping.
-        // It won't call notifyWhenAnimFinished because it's a loop.
         viewer.draw(model, gui, 0.1);
         verify(model, never()).notifyWhenAnimFinished(anyString());
     }
@@ -321,13 +311,10 @@ public class MineralViewerTest {
         
         GUI gui = mock(GUI.class);
         
-        // First draw creates the animation and sets a random cooldown [1, 4]
         localViewer.draw(model, gui, 0.0);
         verify(s1).draw(eq(pos), eq(gui));
         
-        // Advance by 0.5s. It should still be in cooldown.
         localViewer.draw(model, gui, 0.5);
-        // It should still draw s1 (frame 0)
         verify(s1, times(2)).draw(eq(pos), eq(gui));
         verify(s2, never()).draw(any(), any());
     }
