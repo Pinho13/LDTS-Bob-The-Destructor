@@ -3,7 +3,6 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.elements.game;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.ElementModel;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 
-import java.util.Objects;
 
 public class MineralModel extends ElementModel {
 
@@ -19,12 +18,10 @@ public class MineralModel extends ElementModel {
     }
 
     private PointingDirection directionParser(String imageColor) {
-        return switch (imageColor) {
-            case "fffdfe89" -> PointingDirection.DOWN;
-            case "ffff5dcc" -> PointingDirection.LEFT;
-            case "ff5efdf7" -> PointingDirection.RIGHT;
-            default -> PointingDirection.UP;
-        };
+        if ("fffdfe89".equals(imageColor)) return PointingDirection.DOWN;
+        else if ("ffff5dcc".equals(imageColor)) return PointingDirection.LEFT;
+        else if ("ff5efdf7".equals(imageColor)) return PointingDirection.RIGHT;
+        return PointingDirection.UP;
     }
 
 
@@ -45,7 +42,7 @@ public class MineralModel extends ElementModel {
     }
 
     public void notifyWhenAnimFinished(String name) {
-        if (Objects.equals(name,"CrackAnim")) {
+        if ("CrackAnim".equals(name)) {
             setState(MineralState.CLEANUP);
         }
     }
