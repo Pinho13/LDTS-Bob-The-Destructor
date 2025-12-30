@@ -12,10 +12,9 @@ public class VectorTest {
     }
 
     @Test
-    void testCopyConstructor() {
-        Vector vec1 = new Vector(10.5, 20.7);
-        Vector vec2 = new Vector(vec1);
-        assertEquals(10.5, vec2.getX(), 0.0001);
-        assertEquals(20.7, vec2.getY(), 0.0001);
+    void testConstructorWithNumberTypes() {
+        Vector v1 = new Vector(10, 20);
+        assertEquals(10.0f, v1.getX(), 0.0001);
+        assertEquals(20.0f, v1.getY(), 0.0001);
     }
 }
