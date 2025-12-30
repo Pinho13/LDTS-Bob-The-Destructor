@@ -195,24 +195,27 @@ public class SpriteTest {
         image.setRGB(2, 1, 0xFFFFFF00); // Y
         
         Sprite sprite = new Sprite(image);
+        sprite.setOffset(new Position(100, 200));
         GUI gui = mock(GUI.class);
         sprite.drawRotLeft(new Position(10, 10), gui);
         
+        // posX = 10 + 100 = 110
+        // posY = 10 + 200 = 210
         // width = 3, height = 2, widthMinusOne = 2
-        // (x,y) -> (10 + y, 10 + 2 - x)
-        // (0,0) -> (10, 12) R
-        // (1,0) -> (10, 11) G
-        // (2,0) -> (10, 10) B
-        // (0,1) -> (11, 12) C
-        // (1,1) -> (11, 11) M
-        // (2,1) -> (11, 10) Y
+        // (x,y) -> (110 + y, 210 + 2 - x)
+        // (0,0) -> (110, 212) R
+        // (1,0) -> (110, 211) G
+        // (2,0) -> (110, 210) B
+        // (0,1) -> (111, 212) C
+        // (1,1) -> (111, 211) M
+        // (2,1) -> (111, 210) Y
         
-        verify(gui).drawPixel(argThat(p -> p.getX() == 10 && p.getY() == 12), argThat(c -> compareColors(c, 255, 0, 0)));
-        verify(gui).drawPixel(argThat(p -> p.getX() == 10 && p.getY() == 11), argThat(c -> compareColors(c, 0, 255, 0)));
-        verify(gui).drawPixel(argThat(p -> p.getX() == 10 && p.getY() == 10), argThat(c -> compareColors(c, 0, 0, 255)));
-        verify(gui).drawPixel(argThat(p -> p.getX() == 11 && p.getY() == 12), argThat(c -> compareColors(c, 0, 255, 255)));
-        verify(gui).drawPixel(argThat(p -> p.getX() == 11 && p.getY() == 11), argThat(c -> compareColors(c, 255, 0, 255)));
-        verify(gui).drawPixel(argThat(p -> p.getX() == 11 && p.getY() == 10), argThat(c -> compareColors(c, 255, 255, 0)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 110 && p.getY() == 212), argThat(c -> compareColors(c, 255, 0, 0)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 110 && p.getY() == 211), argThat(c -> compareColors(c, 0, 255, 0)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 110 && p.getY() == 210), argThat(c -> compareColors(c, 0, 0, 255)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 111 && p.getY() == 212), argThat(c -> compareColors(c, 0, 255, 255)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 111 && p.getY() == 211), argThat(c -> compareColors(c, 255, 0, 255)));
+        verify(gui).drawPixel(argThat(p -> p.getX() == 111 && p.getY() == 210), argThat(c -> compareColors(c, 255, 255, 0)));
     }
     @Test
     void testDrawWithTransparency() {
