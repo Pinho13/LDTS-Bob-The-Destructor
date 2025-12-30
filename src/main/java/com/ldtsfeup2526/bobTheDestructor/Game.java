@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class Game {
     public static final Resolution resolution = new Resolution(165, 90);
-    private final int PIXEL_SIZE = 7;
+    private final int PIXEL_SIZE = 9;
     private final GUILanterna gui;
     private final SpriteLoader spriteLoader = new GameSpriteLoader();
     private final SoundManager soundManager = new GameSoundManager(new GameSoundLoader());
