@@ -131,6 +131,7 @@ public class MineralViewer implements ElementViewer<MineralModel> {
 
 
         if (anim.isFinished()) {
+            // CODE SMELL: calling model methods
             model.notifyWhenAnimFinished(anim.getAnimName());
         }
 
