@@ -17,12 +17,10 @@ public class InputReader implements KeyListener {
         return inputFinished;
     }
 
-    public boolean addInputFinished(Integer integer) {
+    public void addInputFinished(Integer integer) {
         if (!inputFinished.contains(integer)) {
             inputFinished.add(integer);
-            return true;
         }
-        return false;
     }
 
     public void updateInputPressed() {
