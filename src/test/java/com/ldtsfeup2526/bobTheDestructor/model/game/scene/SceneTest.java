@@ -76,16 +76,19 @@ public class SceneTest {
     }
 
     @Test
-    void testCleanupMinerals() {
+    void testCleanupMineralsMultiple() {
         MineralModel m1 = new MineralModel(new Position(0,0), "other", 0);
         m1.setState(MineralState.CLEANUP);
         MineralModel m2 = new MineralModel(new Position(0,0), "other", 0);
-        m2.setState(MineralState.UNSELECTED);
+        m2.setState(MineralState.CLEANUP);
+        MineralModel m3 = new MineralModel(new Position(0,0), "other", 0);
+        m3.setState(MineralState.UNSELECTED);
         mineralModels.add(m1);
         mineralModels.add(m2);
+        mineralModels.add(m3);
 
         scene.cleanupMinerals();
         assertEquals(1, mineralModels.size());
-        assertTrue(mineralModels.contains(m2));
+        assertTrue(mineralModels.contains(m3));
     }
 }
