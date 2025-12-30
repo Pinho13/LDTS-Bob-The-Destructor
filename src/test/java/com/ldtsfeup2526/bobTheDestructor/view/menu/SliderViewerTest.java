@@ -10,6 +10,7 @@ import com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.sprite.SpriteLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import java.io.IOException;
 
@@ -47,9 +48,15 @@ public class SliderViewerTest {
         Widget wMaster = new Widget(WidgetType.MASTER_VOLUME, WidgetState.SELECTED, widgetPos);
         localViewer.draw(wMaster, gui, 0.1);
         
+        // To kill "removed call to setOffset", we must verify that it WAS called
+        // before the draw call.
+        InOrder inOrder = inOrder(letterSprite);
+        inOrder.verify(letterSprite, atLeastOnce()).setOffset(any(com.ldtsfeup2526.bobTheDestructor.model.spatials.Position.class));
+        inOrder.verify(letterSprite, atLeastOnce()).draw(any(), eq(gui));
+        
         verify(letterSprite, atLeastOnce()).draw(argThat(p -> p.getX() == 68 && p.getY() == 50), eq(gui));
         verify(letterSprite, atLeastOnce()).draw(argThat(p -> p.getX() == 95 && p.getY() == 57), eq(gui));
-        verify(letterSprite, atLeastOnce()).setOffset(any());
+        
         verify(arrowSprite).draw(argThat(p -> p.getX() == 61 && p.getY() == 52), eq(gui));
         verify(arrowSprite).drawFlipX(argThat(p -> p.getX() == 134 && p.getY() == 52), eq(gui));
     }
