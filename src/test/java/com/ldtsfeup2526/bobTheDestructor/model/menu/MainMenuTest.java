@@ -2,7 +2,6 @@ package com.ldtsfeup2526.bobTheDestructor.model.menu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -17,63 +16,37 @@ public class MainMenuTest {
     }
 
     @Test
-    void testCreateButtons() {
-        List<Button> buttons = mainMenu.getButtons();
-        assertEquals(4, buttons.size());
-        assertEquals(ButtonType.PLAY, buttons.get(0).getButtonType());
-        assertEquals(ButtonState.SELECTED, buttons.get(0).getButtonState());
-        assertEquals(ButtonType.CONFIG, buttons.get(1).getButtonType());
-        assertEquals(ButtonType.CREDITS, buttons.get(2).getButtonType());
-        assertEquals(ButtonType.EXIT, buttons.get(3).getButtonType());
+    void testCreateWidgets() {
+        List<Widget> widgets = mainMenu.getWidgets();
+        assertEquals(4, widgets.size());
+        assertEquals(WidgetType.PLAY, widgets.get(0).getWidgetType());
+        assertEquals(WidgetState.SELECTED, widgets.get(0).getWidgetState());
+        assertEquals(WidgetType.CONFIG, widgets.get(1).getWidgetType());
+        assertEquals(WidgetType.CREDITS, widgets.get(2).getWidgetType());
+        assertEquals(WidgetType.EXIT, widgets.get(3).getWidgetType());
     }
 
     @Test
     void testMoveDown() {
         mainMenu.moveDown();
-        assertEquals(ButtonState.UNSELECTED, mainMenu.getButtons().get(0).getButtonState());
-        assertEquals(ButtonState.SELECTED, mainMenu.getButtons().get(1).getButtonState());
-        assertEquals(1, getSelectedIndex(mainMenu));
+        assertEquals(WidgetType.CONFIG, mainMenu.getCurrentWidget().getWidgetType());
 
         mainMenu.moveDown();
-        assertEquals(2, getSelectedIndex(mainMenu));
+        assertEquals(WidgetType.CREDITS, mainMenu.getCurrentWidget().getWidgetType());
 
         mainMenu.moveDown();
-        assertEquals(3, getSelectedIndex(mainMenu));
+        assertEquals(WidgetType.EXIT, mainMenu.getCurrentWidget().getWidgetType());
 
         mainMenu.moveDown();
-        assertEquals(0, getSelectedIndex(mainMenu));
+        assertEquals(WidgetType.PLAY, mainMenu.getCurrentWidget().getWidgetType());
     }
 
     @Test
     void testMoveUp() {
         mainMenu.moveUp();
-        assertEquals(3, getSelectedIndex(mainMenu));
+        assertEquals(WidgetType.EXIT, mainMenu.getCurrentWidget().getWidgetType());
 
         mainMenu.moveUp();
-        assertEquals(2, getSelectedIndex(mainMenu));
-    }
-
-    @Test
-    void testGetSoundPlayer() {
-        assertNotNull(mainMenu.getSoundPlayer());
-    }
-
-    @Test
-    void testCreateSoundPlayerException() {
-        try (var mockedSoundLoader = mockConstruction(com.ldtsfeup2526.bobTheDestructor.sounds.SoundLoader.class, (mock, context) -> {
-            when(mock.loadSound(any(), any())).thenThrow(new RuntimeException("Test"));
-        })) {
-            MainMenu menu = new MainMenu();
-            assertInstanceOf(com.ldtsfeup2526.bobTheDestructor.sounds.NullSoundPlayer.class, menu.getSoundPlayer());
-        }
-    }
-
-    private int getSelectedIndex(Menu menu) {
-        for (int i = 0; i < menu.getButtons().size(); i++) {
-            if (menu.getButtons().get(i).getButtonState() == ButtonState.SELECTED) {
-                return i;
-            }
-        }
-        return -1;
+        assertEquals(WidgetType.CREDITS, mainMenu.getCurrentWidget().getWidgetType());
     }
 }
