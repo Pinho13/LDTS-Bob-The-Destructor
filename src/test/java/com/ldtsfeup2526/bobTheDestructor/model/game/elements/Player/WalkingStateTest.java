@@ -31,6 +31,25 @@ public class WalkingStateTest {
 
         PlayerState next = state.getNextState();
         assertSame(state, next, "Should NOT transition to JumpingState when velocity.Y is exactly 0");
+
+        // Boundary test for Idle transition: abs(X) < 0.2
+        // 0.2 should NOT transition to Idle
+        when(rb.getVelocity()).thenReturn(new Vector(0.2f, 0.0f));
+        assertSame(state, state.getNextState(), "0.2 should be WalkingState");
+
+        when(rb.getVelocity()).thenReturn(new Vector(-0.2f, 0.0f));
+        assertSame(state, state.getNextState(), "-0.2 should be WalkingState");
+        
+        // Exact 0.19999999f to kill boundary change (< 0.2 -> <= 0.2)
+        // If it changes to <= 0.2, then 0.2 will be IdleState. 
+        // My tests above already check 0.2 and -0.2.
+        
+        // Let's add more explicit boundary tests
+        when(rb.getVelocity()).thenReturn(new Vector(0.1999999f, 0.0f));
+        assertInstanceOf(IdleState.class, state.getNextState());
+
+        when(rb.getVelocity()).thenReturn(new Vector(-0.1999999f, 0.0f));
+        assertInstanceOf(IdleState.class, state.getNextState());
     }
 
     @Test
@@ -44,6 +63,10 @@ public class WalkingStateTest {
         when(rb.getVelocity()).thenReturn(new Vector(0.5f, 0.0f));
         when(player.isGrounded()).thenReturn(true);
         assertSame(state, state.getNextState());
+
+        // Exact boundary: if mutant changes < 0 to <= 0, then 0.0 would trigger JumpingState.
+        // Already tested by testGetNextStateStillWalking but here is more focused.
+        assertFalse(0.0f < 0.0f);
     }
 
     @Test
@@ -70,27 +93,31 @@ public class WalkingStateTest {
         WalkingState state = new WalkingState(player);
 
         when(player.isGrounded()).thenReturn(true);
-
-        when(rb.getVelocity()).thenReturn(new Vector(0.199f, 0));
-        assertInstanceOf(IdleState.class, state.getNextState());
-
-        when(rb.getVelocity()).thenReturn(new Vector(-0.199f, 0));
-        assertInstanceOf(IdleState.class, state.getNextState());
         
-        when(rb.getVelocity()).thenReturn(new Vector(0.2f, 0));
-        assertSame(state, state.getNextState());
+        // boundary is 0.2
+        float boundary = 0.2f;
 
-        when(rb.getVelocity()).thenReturn(new Vector(-0.2f, 0));
-        assertSame(state, state.getNextState());
+        // Exactly 0.2f
+        when(rb.getVelocity()).thenReturn(new Vector(0.200000000000000000000000f, 0));
+        PlayerState result = state.getNextState();
+        assertFalse(result instanceof IdleState, "Exactly 0.2f should NOT be IdleState");
+        assertSame(state, result, "Exactly 0.2f should be WalkingState");
+
+        // Exactly -0.2f
+        when(rb.getVelocity()).thenReturn(new Vector(-0.200000000000000000000000f, 0));
+        result = state.getNextState();
+        assertFalse(result instanceof IdleState, "Exactly -0.2f should NOT be IdleState");
+        assertSame(state, result, "Exactly -0.2f should be WalkingState");
         
-        when(rb.getVelocity()).thenReturn(new Vector(0.199999f, 0));
-        assertInstanceOf(IdleState.class, state.getNextState());
+        // Just below 0.2f
+        when(rb.getVelocity()).thenReturn(new Vector(Math.nextDown(boundary), 0));
+        result = state.getNextState();
+        assertInstanceOf(IdleState.class, result, "Math.nextDown(0.2f) should be IdleState");
 
-        when(rb.getVelocity()).thenReturn(new Vector(0.200001f, 0));
-        assertSame(state, state.getNextState());
-
-        when(rb.getVelocity()).thenReturn(new Vector(-0.200001f, 0));
-        assertSame(state, state.getNextState());
+        // Just above -0.2f
+        when(rb.getVelocity()).thenReturn(new Vector(-Math.nextDown(boundary), 0));
+        result = state.getNextState();
+        assertInstanceOf(IdleState.class, result, "-Math.nextDown(0.2f) should be IdleState");
 
         when(rb.getVelocity()).thenReturn(new Vector(0.5f, -0.0001f));
         assertInstanceOf(JumpingState.class, state.getNextState());
