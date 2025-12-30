@@ -94,8 +94,6 @@ public class PlayerViewerTest {
         when(model.getState()).thenReturn(miningState);
         GUI gui = mock(GUI.class);
         
-        // Advance to second frame (frameTime is 0.1)
-        // MiningState sprites: player_mine1, player_mine2, player_mine3
         Sprite m1 = mock(Sprite.class);
         Sprite m2 = mock(Sprite.class);
         Sprite m3 = mock(Sprite.class);
