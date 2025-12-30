@@ -37,6 +37,7 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
     - [Duplicate Code](#duplicate-code)
     - [Data Class](#data-class)
 - [Code Testing](#testing)
+- [Self Evaluation](#self-evaluation)
 
 ## Controls
 
@@ -653,11 +654,6 @@ Mutation testing using **Pitest**:
 - Test Strength: 99%
 
 ![Coverage Report](finalDelivery/pitestCoverage.png)
-
-#### Detailed Breakdown:
-*   **Core Logic (`model.game`, `states`, `view`)**: These packages achieved **100% line coverage**. This ensures that the core gameplay loop, state transitions, and rendering logic are robust and error-free.
-*   **Input Handling (`controller.input`)**: With **89.8% line coverage**, the input system is reliable, ensuring smooth player control.
-*   **Untested Areas**: The lower coverage in specific areas (like `model.menu` or parts of the main `Game` loop) is due to these classes being simple data containers or the main entry point, which are verified through manual integration testing.
 
 ### Self-Evaluation
 
