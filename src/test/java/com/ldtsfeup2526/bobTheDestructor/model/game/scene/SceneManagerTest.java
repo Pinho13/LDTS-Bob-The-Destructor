@@ -53,6 +53,11 @@ public class SceneManagerTest {
         when(scene.getCurrentMineralsCollected()).thenReturn(3);
         sceneManager.updateTotalMineralsCollected();
         assertEquals(8, sceneManager.getTotalMineralsCollected());
+        
+        // Mutate addition
+        when(scene.getCurrentMineralsCollected()).thenReturn(0);
+        sceneManager.updateTotalMineralsCollected();
+        assertEquals(8, sceneManager.getTotalMineralsCollected());
     }
 
     @Test
@@ -60,16 +65,41 @@ public class SceneManagerTest {
         for (int i = 0; i < 5; i++) {
             assertNotNull(sceneManager.getNextCavePath());
         }
+        // Test boundary i >= cavesPathChosen.size()
         assertNull(sceneManager.getNextCavePath());
         assertNull(sceneManager.getNextCavePath());
     }
 
     @Test
+    void testTime() {
+        assertEquals(0, sceneManager.getTimePassed());
+        sceneManager.updateTime(0.16);
+        assertEquals(0.16, sceneManager.getTimePassed(), 0.001);
+        
+        // Mutate timePassed increment
+        sceneManager.updateTime(0.01);
+        assertEquals(0.17, sceneManager.getTimePassed(), 0.001);
+    }
+    @Test
     void testGetCurrentCavePathIndex() {
+        // Initially index is 0, but getCurrentCavePathIndex returns currentCavePathIndex - 1
         assertEquals(-1, sceneManager.getCurrentCavePathIndex());
+        
         sceneManager.getNextCavePath();
         assertEquals(0, sceneManager.getCurrentCavePathIndex());
+        
         sceneManager.getNextCavePath();
         assertEquals(1, sceneManager.getCurrentCavePathIndex());
+    }
+
+    @Test
+    void testGetNextCavePathIndexAtEnd() {
+        for (int i = 0; i < 5; i++) {
+            sceneManager.getNextCavePath();
+        }
+        assertNull(sceneManager.getNextCavePath());
+        // currentCavePathIndex is 5 after 5 successful calls. 
+        // next call to getNextCavePath() returns null and DOES NOT increment currentCavePathIndex.
+        assertEquals(4, sceneManager.getCurrentCavePathIndex());
     }
 }
