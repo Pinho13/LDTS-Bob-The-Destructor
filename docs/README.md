@@ -12,14 +12,17 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 * **Input System** - A system that allows the user to use keyboard inputs, multiple inputs per frame are supported.
 * **Action System** - A system that implements the input system into the game by turning any user input into a game action.
 * **State System** - A system that allows the game to know in what state it is, and proceeds accordingly.
-* **Main Menu** - Menu screen when launching game.
+* **Main Menu** - Menu screen when launching game, this allows the user to choose between starting the game, accessing the settings, accessing the credits or exit the game.
 * **Collision System** - A system that allows objects to collide.
 * **Physics System** - A system that allows objects to have physics applied to them. (gravity, velocity, acceleration, ...)
 * **Player Movement** - A system that allows the player to move.
-* **Scene Generator** - A way to generate the terrain the player will dig.
-* **Ore System** - A system that allows the player to collect different ores with different value.
+* **Scene Builder** - A system to build the caves of the game from pngs, creating the collisions and ores (randomly selected).
+* **Scene Manager** - A system that selects which caves will appear and in what order, there are in total 10 caves but in each run only 5 will be randomly selected in a random order.
+* **Ore System** - A system that allows the player to collect different ores.
 * **Sound System** - A system that allows the game to play sounds.
 * **Animation System** - A system that allows the game to play animations.
+* **UI** - During the game there is also a nice overlay showing how many ores were collected at the current cave and the last caves, and shows you in which cave you are in.
+* **End Screen** - Once the player reaches the end, the stats of the run will be showcased.
 
 ## Planned features
 
