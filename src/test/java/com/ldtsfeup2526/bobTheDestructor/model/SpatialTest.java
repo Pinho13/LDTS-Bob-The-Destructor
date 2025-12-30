@@ -2,59 +2,42 @@ package com.ldtsfeup2526.bobTheDestructor.model;
 
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import org.junit.jupiter.api.Test;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SpatialTest {
-    private static class TestSpatial extends Spatial<Double> {
-        public TestSpatial(Number x, Number y) {
-            super(x, y, Number::doubleValue);
-        }
-        public TestSpatial(Spatial<? extends Number> spatial) {
-            super(spatial, Number::doubleValue);
-        }
-    }
-
     @Test
-    void testGetters() {
-        TestSpatial spatial = new TestSpatial(10.5, 20.7);
-        assertEquals(10.5, spatial.getX());
-        assertEquals(20.7, spatial.getY());
-    }
-
-    @Test
-    void testCopyConstructor() {
-        TestSpatial spatial1 = new TestSpatial(10.5, 20.7);
-        TestSpatial spatial2 = new TestSpatial(spatial1);
-        assertEquals(10.5, spatial2.getX());
-        assertEquals(20.7, spatial2.getY());
-    }
-
-    @Test
-    void testMagnitude() {
-        TestSpatial spatial = new TestSpatial(3, 4);
-        assertEquals(5.0, spatial.magnitude(), 0.0001);
-    }
-
-    @Test
-    void testDistance() {
-        TestSpatial spatial = new TestSpatial(0, 0);
-        Position pos = new Position(3, 4);
-        assertEquals(5.0, spatial.distance(pos), 0.0001);
-    }
-
-    @Test
-    void testPrint() {
-        PrintStream originalOut = System.out;
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    void testSpatial() {
+        Spatial<Float> s = new Spatial<>(10, 20, Number::floatValue) {};
+        assertEquals(10f, s.getX());
+        assertEquals(20f, s.getY());
         
-        TestSpatial spatial = new TestSpatial(10, 20);
-        spatial.print();
+        Spatial<Integer> s2 = new Spatial<>(s, Number::intValue) {};
+        assertEquals(10, s2.getX());
+        assertEquals(20, s2.getY());
         
-        System.setOut(originalOut);
+        assertEquals(Math.sqrt(500), s.magnitude(), 0.0001);
+        assertEquals(0.0, s.distance(new Position(10, 20)), 0.0001);
+        assertEquals(5.0, s.distance(new Position(13, 24)), 0.0001);
+        
+        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
+        System.setOut(new java.io.PrintStream(outContent));
+        s.print();
         assertEquals("10.0, 20.0" + System.lineSeparator(), outContent.toString());
+        System.setOut(System.out);
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Spatial<Integer> s1 = new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(10, 20);
+        Spatial<Integer> s2 = new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(10, 20);
+        Spatial<Integer> s3 = new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(10, 21);
+        
+        // Since Spatial doesn't override equals, we check coordinates
+        assertEquals(s1.getX(), s2.getX());
+        assertEquals(s1.getY(), s2.getY());
+        assertNotEquals(s1, s2);
+        
+        assertNotEquals(s1, s3);
+        assertNotEquals(s1, null);
     }
 }
