@@ -11,66 +11,57 @@ import static org.mockito.Mockito.*;
 public class GameTest {
 
     @Test
-    void testSetStateAndGetSpriteLoader() {
-        GUILanterna gui = mock(GUILanterna.class);
-        ActionParser actionParser = mock(ActionParser.class);
-        Game game = new Game(gui, actionParser);
+    void testSetStateAndGetSpriteLoader() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                     .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
 
-        assertNotNull(game.getSpriteLoader());
+             Game game = new Game();
+             assertNotNull(game.getSpriteLoader());
+             assertNotNull(game.getSoundManager());
 
-        State<?> state = mock(State.class);
-        game.setState(state);
-        verify(actionParser).notifyStateChange(state);
+             State<?> state1 = mock(State.class);
+             game.setState(state1);
+             verify(state1).onEnter(game);
+
+             State<?> state2 = mock(State.class);
+             game.setState(state2);
+             verify(state1).onExit(game);
+             verify(state2).onEnter(game);
+
+             game.setState(null);
+             verify(state2).onExit(game);
+        }
     }
 
     @Test
-    void testRunLoop() throws IOException, InterruptedException {
-        GUILanterna gui = mock(GUILanterna.class);
-        ActionParser actionParser = mock(ActionParser.class);
-        Game game = new Game(gui, actionParser);
+    void testRun() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
 
-        State<?> state = mock(State.class);
-        game.setState(state);
+            Game game = new Game();
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+            
+            // Use a counter to stop the loop after one iteration
+            final int[] count = {0};
+            doAnswer(invocation -> {
+                if (count[0]++ > 0) game.setState(null);
+                return null;
+            }).when(mockState).update(any(), any(), any(), anyDouble());
 
-        doAnswer(invocation -> {
-            game.setState(null);
-            return null;
-        }).when(state).update(eq(game), eq(gui), eq(actionParser), anyDouble());
-
-        game.run();
-
-        verify(state, times(1)).update(eq(game), eq(gui), eq(actionParser), anyDouble());
-        verify(gui).close();
+            game.run();
+            
+            verify(mockState, atLeastOnce()).update(eq(game), any(), any(), anyDouble());
+            verify(mockedGui.constructed().get(0)).close();
+        }
     }
 
-    @Test
-    void testRunLoopWithSleep() throws IOException, InterruptedException {
-        GUILanterna gui = mock(GUILanterna.class);
-        ActionParser actionParser = mock(ActionParser.class);
-        Game game = spy(new Game(gui, actionParser));
-
-        State<?> state = mock(State.class);
-        game.setState(state);
-
-        doAnswer(invocation -> {
-            game.setState(null);
-            return null;
-        }).when(state).update(any(), any(), any(), anyDouble());
-
-        game.run();
-        
-        verify(game).sleep(anyLong());
-    }
-
-    @Test
-    void testSleepBoundary() throws InterruptedException {
-        GUILanterna gui = mock(GUILanterna.class);
-        ActionParser actionParser = mock(ActionParser.class);
-        Game game = new Game(gui, actionParser);
-        
-        game.sleep(-1);
-        game.sleep(0);
-    }
     @Test
     void testMain() throws IOException, InterruptedException {
         try (var mockedGame = mockConstruction(Game.class, (mock, context) -> {
@@ -81,30 +72,74 @@ public class GameTest {
             verify(mockedGame.constructed().get(0)).run();
         }
     }
-
     @Test
-    void testConstructors() {
+    void testRunSlow() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
 
-        try (var mockedGui = mockConstruction(GUILanterna.class)) {
-            try {
-                Game game = new Game();
-                assertNotNull(game.getSpriteLoader());
-                
-                ActionParser parser = mock(ActionParser.class);
-                Game game2 = new Game(parser);
-                assertNotNull(game2.getSpriteLoader());
-            } catch (Exception e) {
-            }
+            Game game = new Game();
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+            
+            doAnswer(invocation -> {
+                game.setState(null);
+                return null;
+            }).when(mockState).update(any(), any(), any(), anyDouble());
+
+            game.run();
+            verify(mockState).update(eq(game), any(), any(), anyDouble());
+        }
+    }
+    @Test
+    void testMainException() throws IOException, InterruptedException {
+        try (var mockedGame = mockConstruction(Game.class, (mock, context) -> {
+            doAnswer(inv -> {
+                throw new RuntimeException("Test Exception");
+            }).when(mock).run();
+        })) {
+            Game.main(new String[]{});
+            assertEquals(1, mockedGame.constructed().size());
         }
     }
 
     @Test
-    void testMainException() {
-        try (var mockedGame = mockConstruction(Game.class, (mock, context) -> {
-            doThrow(new RuntimeException("Test Exception")).when(mock).run();
-        })) {
-            // main catches exceptions, so this shouldn't throw
-            Game.main(new String[]{});
+    void testRunStateNull() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+
+            Game game = new Game();
+            game.setState(null);
+            game.run();
+            verify(mockedGui.constructed().get(0)).close();
+        }
+    }
+
+    @Test
+    void testRunNoSleep() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+
+            Game game = new Game();
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+
+            doAnswer(invocation -> {
+                Thread.sleep(20); // Force elapsedTime to be large
+                game.setState(null);
+                return null;
+            }).when(mockState).update(any(), any(), any(), anyDouble());
+
+            game.run();
+            verify(mockState).update(eq(game), any(), any(), anyDouble());
         }
     }
 }
