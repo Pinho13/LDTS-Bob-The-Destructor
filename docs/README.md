@@ -463,7 +463,7 @@ Coupling the sound logic directly inside the `PlayerModel` or `PlayerState` clas
 
 #### The Pattern
 
-We, one more time, used the **Observer** pattern. The `PlayerController` implements `PlayerStateListener` and observes changes in the player's state. When the state changes, the controller triggers the appropriate sound effects via the `SoundManager`.
+Once again, we applied the **Observer** pattern. The `PlayerController` implements `PlayerStateListener` and observes changes in the player's state. When the state changes, the controller triggers the appropriate sound effects via the `SoundManager`.
 
 #### Implementation
 
