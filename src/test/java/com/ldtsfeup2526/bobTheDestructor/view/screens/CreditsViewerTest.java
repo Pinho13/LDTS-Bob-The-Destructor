@@ -44,12 +44,9 @@ public class CreditsViewerTest {
         
         verify(gui).drawBackground(argThat(color -> color.getRed() == 57 && color.getGreen() == 53 && color.getBlue() == 74));
         verify(wallpaperViewer).draw(gui);
-        
-        // Verify "credits" title
-        // resolution.width() = 165. 165/2 + 1 = 82 + 1 = 83
+
         verify(titleViewer).draw(argThat(p -> p.getX() == 83 && p.getY() == 10), eq("credits"), eq(gui));
         
-        // Verify credits lines with positions
         verify(titleViewer).drawAtTextStart(argThat(p -> p.getX() == 10 && p.getY() == 45 - 25), eq(content[0]), eq(gui));
         verify(titleViewer).drawAtTextStart(argThat(p -> p.getX() == 35 && p.getY() == 45 - 15), eq(content[1]), eq(gui));
         verify(titleViewer).drawAtTextStart(argThat(p -> p.getX() == 35 && p.getY() == 45 - 5), eq(content[2]), eq(gui));
@@ -62,18 +59,11 @@ public class CreditsViewerTest {
     @Test
     void testDrawBoundaryLines() throws IOException {
         GUI gui = mock(GUI.class);
-        // Only 5 lines in credits
         when(credits.getCredits()).thenReturn(new String[]{"Line 1", "Line 2", "Line 3", "Line 4", "Line 5"});
-        
-        // This might cause ArrayIndexOutOfBoundsException if draw() always expects 6 lines.
-        // Let's check if we should add a test for this.
-        // Credits class constructor initializes it with 6 lines.
-        // But if someone passes a mock with fewer...
-        
+
         try {
             viewer.draw(gui, 0.1);
         } catch (ArrayIndexOutOfBoundsException e) {
-            // Expected if it's hardcoded to 6
         }
     }
 }
