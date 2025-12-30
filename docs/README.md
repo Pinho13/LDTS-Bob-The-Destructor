@@ -1,10 +1,56 @@
 # LDTS_T04_G04 - BOB, THE DESTRUCTOR
 
 
-In this project, our main focus is to develop a 2D mining game inspired by games like Minecraft and Terraria. The main persona is a miner named Bob, as the game’s name suggests. This persona starts his adventure in the upperground area, where the core progression system (upgrades and shop) are located.
-The main objective of this game is to go lower and lower in the underground to discover the terrain blocks with the most valuable resources, collect them and return to the upperground area to invest them in rewards. The game’s dynamics is strictly on exploration, resource collection and tool upgrades. As the distance from the upperground area increases, the stiffness of the subterranean layers also increases.
+In this project, our main objective is to develop a 2D mining game inspired by titles such as Minecraft and Terraria. The main character is a miner named Bob, as suggested by the game’s title.
+Bob starts in the first cave, and his goal is to descend through five caves while collecting as many ores as possible in the shortest amount of time.
 
 This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2025/26.
+
+## Table of Contents
+
+- [Controls](#controls)
+- [Implemented Features](#implemented-features)
+- [Notes About Features](#notes-about-features)
+- [General Structure](#general-structure)
+- [Code Design](#design)
+    - [Model-View-Controller](#code-structure)
+    - [Game Loop](#game-loop)
+    - [(Game) State Pattern](#multiple-game-states)
+    - [Strategy Pattern](#rendering-multiple-elements)
+    - [Adapter Pattern](#simplification-of-lanternas-interface)
+    - [(Input Handling) Observer Pattern](#input-handling)
+    - [Builder Pattern](#scene-generation)
+    - [(Sound Management) Facade and Template Method Patter](#sound-management)
+    - [Physics Engine](#physics-engine)
+    - [Animation System](#animation-system)
+    - [Flyweight Pattern](#sprite-loading)
+    - [Menu Navigation](#menu-navigation)
+    - [(Input State) Observer Pattern](#input-state-observer)
+    - [(Player) State Pattern](#player-state-machine)
+    - [(Pickaxe) Observer Pattern](#event-listener-for-pickaxe-hits)
+    - [(Player State) Observer Pattern](#player-state-listener)
+    - [(Scene Management) Facade Pattern](#scene-management)
+    - [(Mineral) Observer Pattern](#event-listener-for-mineral-break)
+- [Code Smells](#known-code-smells) 
+    - [View-Model Coupling](#view-model-coupling)
+    - [Switch Statements](#switch-statements)
+    - [Duplicate Code](#duplicate-code)
+    - [Data Class](#data-class)
+- [Code Testing](#testing)
+
+## Controls
+
+`W` / `space` / `arrow up` - Jump
+
+`A` / `arrow left` - Move Left
+
+`D` / `arrow right` - Move Right
+
+`Shift` - Mine
+
+`Esc` - Returns to Main Menu or quits the game
+
+`Enter` - Presses the selected menu button
 
 ## Implemented features
 
@@ -12,26 +58,27 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 * **Input System** - A system that allows the user to use keyboard inputs, multiple inputs per frame are supported.
 * **Action System** - A system that implements the input system into the game by turning any user input into a game action.
 * **State System** - A system that allows the game to know in what state it is, and proceeds accordingly.
-
-## Planned features
-
-* **Main Menu** - Menu screen when launching game.
+* **Main Menu** - Menu screen when launching game, this allows the user to choose between starting the game, accessing the settings, accessing the credits or exit the game.
 * **Collision System** - A system that allows objects to collide.
 * **Physics System** - A system that allows objects to have physics applied to them. (gravity, velocity, acceleration, ...)
 * **Player Movement** - A system that allows the player to move.
-* **Scene Generator** - A way to generate the terrain the player will dig.
-* **Destruction System** - A system that allows the player to break things.
-* **Ore System** - A system that allows the player to collect different ores with different value.
-* **Collectible System** - A system that allows the player to collect and spend in-game currency.
-* **Upgrade System** - A system that allows the player to upgrade the pickaxe.
+* **Scene Builder** - A system to build the caves of the game from pngs, creating the collisions and ores (randomly selected).
+* **Scene Manager** - A system that selects which caves will appear and in what order, there are in total 10 caves but in each run only 5 will be randomly selected in a random order.
+* **Ore System** - A system that allows the player to collect different ores.
+* **Sound System** - A system that allows the game to play sounds.
+* **Animation System** - A system that allows the game to play animations.
+* **UI** - During the game there is also a nice overlay showing how many ores were collected at the current cave and the last caves, and shows you in which cave you are in.
+* **End Screen** - Once the player reaches the end, the stats of the run will be showcased.
 
 ## Notes About Features
 
-We still have no gameplay, as for this delivery we focused solely on making the structure organized and scalable. With the current implementation we can easily start working on the playable features while not worrying so much about code integrity as until now since the game's structure is very solid.
+Initially, we aimed for an upgrade system for the core progression of the game and a more open and more traditional mining game.
+However, as we progressed through the development of the game, we ended up abandoning those ideas in favour of others. We ended up settling for a more linear gameplay style so we could polish the game even more and make it a better experience to the user.
+As a result, some planned features were not implemented, while others were introduced instead.
 
 ## General Structure
 
-<img src="intermediateDelivery/uml.png">
+<img src="finalDelivery/uml.png">
 
 ## Design
 
@@ -214,9 +261,371 @@ Benefits:
 Liabilities:
 - Requires careful usage of `inputFinished` to avoid starving inputs; controllers must mark single-shot actions appropriately.
 
+### Scene Generation
+
+#### Problem in Context
+
+Creating levels manually is tedious and error-prone. We needed a way to generate levels automatically or semi-automatically, ensuring that the game is replayable and scalable.
+Hardcoding positions of blocks and minerals would be a nightmare to maintain.
+
+#### The Pattern
+
+We used the **Builder** pattern to construct the game scene. The `SceneBuilder` reads image files (representing the cave structure and mineral locations) and constructs the `Scene` object with all its components (player, colliders, minerals).
+
+#### Implementation
+
+- Builder Interface: [`model/game/scene/ISceneBuilder.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/scene/ISceneBuilder.java) defines the contract for creating a scene.
+- Concrete Builder: [`model/game/scene/SceneBuilder.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/scene/SceneBuilder.java) implements the logic to parse images and create the scene.
+- Usage: The `SceneManager` or `GameState` uses the builder to create the scene when the game starts or when transitioning between levels.
+
+Here is a visualization of how it is implemented:
+<img src="images/sceneBuilder.png">
+
+#### Consequences
+
+Benefits:
+- Decouples the scene construction logic from the scene representation.
+- Allows for easy creation of different levels by simply providing different image files.
+- Makes the code more readable and maintainable.
+
+Liabilities:
+- Requires creating image files for each level, which might be time-consuming if not automated, while also increasing complexity.
+
+### Sound Management
+
+#### Problem in Context
+
+Our game needed to play sound effects and music to be immersive. Managing these sounds, especially playing them, stopping them, and controlling their volume, can become complex if scattered throughout the code.
+We needed a centralized way to handle audio resources and playback while also hiding Java's sound API details.
+
+#### The Pattern
+
+We implemented a **Sound Manager** component that follows the **Facade** design pattern. The `SoundManager` provides a simplified interface for audio operations, abstracting the underlying Java Sound API and centralizing sound playback and volume control.
+
+Additionally, the abstract `SoundManager` class defines shared behavior that is extended by `GameSoundManager`, following the **Template Method** pattern.
+
+#### Implementation
+
+- Sound Loader: [`sounds/SoundLoader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/SoundLoader.java) and [`sounds/GameSoundLoader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/GameSoundLoader.java) handle loading audio clips from resources.
+- Sound Manager: [`sounds/SoundManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/SoundManager.java) defines the interface for playing music and SFX, and controlling volume. [`sounds/GameSoundManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/GameSoundManager.java) implements this logic.
+- Usage: The `Game` class initializes the `SoundManager`, which is then passed to states and controllers. For example, `PlayerController` uses it to play jump or walk sounds.
+
+Here is a visualization of how it is implemented:
+<img src="images/soundManager.png">
+
+#### Consequences
+
+Benefits:
+- Centralizes audio logic, making it easier to manage and update.
+- Abstracts the complexity of the Java Sound API.
+- Allows for easy volume control and sound toggling.
+
+Liabilities:
+- Introduces an additional abstraction layer, which slightly increases system complexity.
+
+### Physics Engine
+
+#### Problem in Context
+
+Implementing realistic movement and collision detection requires a robust physics system. Handling velocity, acceleration, gravity, and friction manually in every moving object would lead to code duplication and inconsistencies.
+
+#### The Pattern
+
+We encapsulated physics logic within a `RigidBody` class. This class handles all physics-related calculations, such as updating position based on velocity and acceleration, applying gravity, and handling friction.
+
+#### Implementation
+
+- RigidBody: [`model/game/physics/RigidBody.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/physics/RigidBody.java) manages the physics state of an object (position, velocity, acceleration). It provides methods to apply forces (like jumping or moving) and updates the state every frame.
+- Collision Detection: [`model/game/physics/CollisionChecker.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/physics/CollisionChecker.java) defines an interface for checking collisions, which is used by the game loop to resolve interactions between objects.
+
+#### Consequences
+
+Benefits:
+- Encapsulates complex physics math, keeping other classes clean.
+- Ensures consistent physics behavior across all game entities.
+- Makes it easier to tweak physics parameters (gravity, friction, etc.) globally or per object.
+
+Liabilities:
+- Adds computational overhead, though necessary for a physics-based game.
+
+### Animation System
+
+#### Problem in Context
+
+Static sprites are boring. We wanted to bring the game to life with animations for the player and other elements.
+Managing frame updates, looping, and switching between animations manually in the viewer classes would be messy.
+
+#### The Pattern
+
+We created an `Animation` class to handle the logic of cycling through sprite frames. This encapsulates the state of an animation (current frame, elapsed time) and provides a simple interface to update and retrieve the current sprite.
+
+#### Implementation
+
+- Animation Class: [`view/Animation.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/Animation.java) stores an array of sprites and handles the timing for switching frames. It supports looping and one-shot animations.
+- Usage: Viewers (like `PlayerViewer`) hold instances of `Animation` and update them every frame. They then ask the animation for the current sprite to draw.
+
+#### Consequences
+
+Benefits:
+- Simplifies the viewer logic by abstracting animation details.
+- Allows for easy creation of complex animations with different frame rates and looping behaviors.
+- Makes the game visually more appealing.
+
+Liabilities:
+- Requires creating and managing multiple sprite images for each animation.
+
+### Sprite Loading
+
+#### Problem in Context
+
+Loading images from disk is a slow operation. If we loaded the same image multiple times (e.g., for every tile of the same type), it would waste memory and performance.
+We needed a way to load images once and reuse them.
+
+#### The Pattern
+
+We used the **Flyweight** pattern (or a caching mechanism) in the `SpriteLoader`. The `GameSpriteLoader` maintains a map of loaded sprites. When a sprite is requested, it checks the map first; if it exists, it returns the cached instance; otherwise, it loads it from disk and caches it.
+
+#### Implementation
+
+- Sprite Loader Interface: [`view/sprite/SpriteLoader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/sprite/SpriteLoader.java) defines the contract for loading sprites.
+- Concrete Loader: [`view/sprite/GameSpriteLoader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/sprite/GameSpriteLoader.java) implements the caching logic using a `HashMap`.
+- Usage: The `ViewerProvider` and other classes use the `SpriteLoader` to get sprites without worrying about performance overhead.
+
+Here is a visualization of how it is implemented:
+<img src="images/spriteLoading.png">
+
+#### Consequences
+
+Benefits:
+- Reduces memory usage by sharing sprite instances.
+- Improves performance by avoiding redundant disk I/O.
+- Centralizes image loading logic.
+
+Liabilities:
+- Requires managing the cache (though in this case, we keep sprites for the lifetime of the game).
+
+### Menu Navigation
+
+#### Problem in Context
+
+Menus often have multiple selectable items (widgets). We needed a way to navigate through these items and keep track of the currently selected one.
+Implementing navigation logic in every menu class would lead to code duplication.
+
+#### The Pattern
+
+We created a base `Menu` class that handles the navigation logic. It maintains a list of widgets and an index for the currently selected widget. It provides methods to move the selection up and down.
+
+#### Implementation
+
+- Base Menu Class: [`model/menu/Menu.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/menu/Menu.java) implements the navigation logic (`moveUp`, `moveDown`) and stores the list of widgets.
+- Concrete Menus: `MainMenu`, `SettingsMenu`, etc., extend `Menu` and define their specific widgets.
+- Usage: The `MenuController` uses the navigation methods of the `Menu` model to update the selection based on user input.
+
+Here is a visualization of how it is implemented:
+<img src="images/menuNavigation.png">
+
+#### Consequences
+
+Benefits:
+- Centralizes navigation logic, reducing code duplication.
+- Makes it easy to add new menus with standard navigation behavior.
+- Simplifies the controller logic.
+
+Liabilities:
+- Assumes a linear list of widgets for navigation.
+
+### Input State Observer
+
+#### Problem in Context
+
+Different game states require different input handling behaviors. For example, in the menu, holding a key should not trigger rapid movement, while in the game, holding a key is necessary for continuous movement.
+We needed a way to inform the input parser about the current game state.
+
+#### The Pattern
+
+We used the **Observer** pattern. The `ActionParser` implements `GameStateListener` and observes changes in the game state. When the state changes, the `ActionParser` updates its behavior (e.g., enabling or disabling key hold).
+
+#### Implementation
+
+- Listener Interface: [`states/GameStateListener.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/states/GameStateListener.java) defines the `notifyStateChange` method.
+- Observer: [`controller/input/ActionParser.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/input/ActionParser.java) implements the listener interface and adjusts `allowKeyHold` based on the new state.
+- Subject: The `Game` class (or `State` manager) notifies listeners when the state changes.
+
+Here is a visualization of how it is implemented:
+<img src="images/inputObserver.png">
+
+#### Consequences
+
+Benefits:
+- Decouples the input handling logic from the specific state implementations.
+- Allows for dynamic adjustment of input behavior based on context.
+
+Liabilities:
+- Adds complexity to the input system.
+
+### Player State Machine
+
+#### Problem in Context
+
+The player character has complex behavior: walking, jumping, falling, mining, idling. Managing all these states and transitions with simple boolean flags or if-else statements would quickly become unmanageable and bug-prone while also possibly blocking certain actions like moving while jumping.
+
+#### The Pattern
+
+We implemented the **State** pattern for the player logic. The `PlayerModel` delegates behavior to a `PlayerState` object. Each state (e.g., `WalkingState`, `JumpingState`) implements the specific logic for movement and transitions.
+
+#### Implementation
+
+- State Interface/Abstract Class: [`model/game/elements/Player/PlayerState.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/elements/Player/PlayerState.java) defines the common interface for player actions.
+- Concrete States: `IdleState`, `WalkingState`, `JumpingState`, `FallingState`, `MiningState` implement specific behaviors.
+- Context: `PlayerModel` holds the current state and forwards requests to it.
+
+Here is a visualization of how it is implemented:
+<img src="images/playerState.png">
+
+#### Consequences
+
+Benefits:
+- Cleanly separates the logic for each player state.
+- Makes state transitions explicit and easier to manage.
+- Simplifies the `PlayerModel` class.
+
+Liabilities:
+- Increases the number of classes.
+
+### Event Listener for Pickaxe Hits
+
+#### Problem in Context
+
+When the player hits a mineral with the pickaxe, other parts of the game (like the `SceneController`) need to know about it to handle the destruction of the mineral and the collection of resources.
+Directly calling methods on the controller from the player model would create a circular dependency and tight coupling.
+
+#### The Pattern
+
+We used the **Observer** (or Listener) pattern again to help us with it. The `PlayerModel` maintains a list of `PickaxeHitEventListener`s. When a hit occurs, it notifies all registered listeners.
+
+#### Implementation
+
+- Listener Interface: [`controller/game/PickaxeHitEventListener.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/game/PickaxeHitEventListener.java) defines the `onPickaxeHit` method.
+- Subject: `PlayerModel` allows listeners to register and notifies them when a hit happens.
+- Observer: `SceneController` implements the listener interface and handles the game logic for mineral destruction.
+
+Here is a visualization of how it is implemented:
+<img src="images/pickaxeListener.png">
+
+#### Consequences
+
+Benefits:
+- Decouples the player model from the scene controller.
+- Allows multiple components to react to pickaxe hits if needed.
+
+Liabilities:
+- Adds complexity with listener registration and notification.
+
+### Player State Listener
+
+#### Problem in Context
+
+The game needs to play sound effects when the player changes state (e.g., walking sound when entering `WalkingState`, jump sound when entering `JumpingState`).
+Coupling the sound logic directly inside the `PlayerModel` or `PlayerState` classes would violate the Single Responsibility Principle and make the model dependent on the sound system.
+
+#### The Pattern
+
+Once again, we applied the **Observer** pattern. The `PlayerController` implements `PlayerStateListener` and observes changes in the player's state. When the state changes, the controller triggers the appropriate sound effects via the `SoundManager`.
+
+#### Implementation
+
+- Listener Interface: [`controller/game/PlayerStateListener.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/game/PlayerStateListener.java) defines `onPlayerStateEnter` and `onPlayerStateExit`.
+- Subject: `PlayerModel` allows listeners to register and notifies them when the state changes.
+- Observer: `PlayerController` implements the listener interface and plays sounds based on the state transitions.
+
+Here is a visualization of how it is implemented:
+<img src="images/playerStateListener.png">
+
+#### Consequences
+
+Benefits:
+- Decouples the player model from the sound system.
+- Keeps the sound logic centralized in the controller (or a dedicated audio controller).
+
+Liabilities:
+- Adds another listener interface and registration mechanism.
+
+### Scene Management
+
+#### Problem in Context
+
+The game consists of multiple levels (caves) that need to be loaded sequentially or randomly. Managing the transition between these levels, keeping track of the current level, and handling the overall game progression, for example, the total minerals collected, requires a dedicated component.
+Putting this logic in the `GameState` or `Game` class would make them too complex and there are simpler and better solutions.
+
+#### The Pattern
+
+We lightly used a **Facade** pattern (specifically in `SceneManager`). This class acts as the model for the `GameState` and manages the lifecycle of scenes (levels).
+
+#### Implementation
+
+- Manager Class: [`model/game/scene/SceneManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/scene/SceneManager.java) handles the list of cave paths, the current scene, and global stats like total minerals collected.
+- Usage: `GameState` holds a reference to `SceneManager` and delegates scene-related operations to it. `SceneController` updates the `SceneManager` based on game events, such as, player reaching the bottom of the cave.
+
+Here is a visualization of how it is implemented:
+<img src="images/sceneManager.png">
+
+#### Consequences
+
+Benefits:
+- Encapsulates level management logic.
+- Separates the concern of "managing the game session" from "managing a single level".
+- Facilitates the implementation of features like level progression and randomization.
+
+Liabilities:
+- Adds another layer of abstraction.
+
+### Event Listener for Mineral Break
+
+#### Problem in Context
+
+When a mineral should no longer be in the game, the `Scene Controller` needs to be aware of it so it can delete it from the scene.
+
+#### The Pattern
+
+We used the **Observer** pattern again to help us with it. The `MineralModel` maintains a list of `MineralBreakEventListener`s. When it should be broken, it notifies all registered listeners.
+
+#### Implementation
+
+- Listener Interface: [`controller/game/MineralBreakEventListener.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/game/MineralBreakEventListener.java) defines the `onMineralBreak` method.
+- Subject: `MineralModel` allows listeners to register and notifies them when a hit happens.
+- Observer: `SceneController` implements the listener interface and handles the game logic for mineral destruction.
+
+#### Consequences
+
+Benefits:
+- Decouples the mineral model from the scene controller.
+- Allows multiple components to react to minerals breaking if needed.
+
+Liabilities:
+- Adds complexity with listener registration and notification.
+
 ## Known code smells
 
-So far we haven't found any code smells. Although we would like that this continues, the number of code smells over time may change, as we keep implementing more features.
+### View-Model Coupling
+
+This is a significant code smell because it violates the **MVC** principle: some models contain logic that triggers actions based on specific animation frames (the player mining when the animation reaches the “hit pickaxe” frame). Ideally, controllers should handle these interactions, possibly by being passed down from the state to the viewers, so that models remain purely passive. However, refactoring the hierarchy at this stage of development would be extremely complex.
+In this case, the smell is acceptable: the implementation is clear, manageable, and uses an observer-like approach where the model notifies its listeners (the controllers) for that specific action.
+
+This code smell has only two occurrences, one in [`PlayerViewer`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/game/PlayerViewer.java) and the other in [`MineralViewer`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/game/MineralViewer.java)
+
+### Switch Statements
+
+In [`WidgetController`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/menu/WidgetController.java) we are using a somewhat long switch statement to determine each widget type behaviour. We tried to solve this problem with a **Command** Pattern, however because the widget types are stored in the Model, this would violate the **MVC** principle.
+
+Additionally, we used switch statements to for handling inputs in the [`ActionParser`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/input/ActionParser.java), but each case only did basic calls.
+
+### Duplicate Code
+
+In the player's states, the logic for state transitions inside the `getNextState()` method is largely similar across most states. We structured the code to prioritize readability, avoiding decoupling it into separate functions, which could have made it less intuitive. Creating additional base state classes to share some of this behavior could be an option, but it would not fully resolve the issue, since each state still has unique transition logic.
+
+### Data Class
+
+We introduced the [`ViewerProvider`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java) class to simplify mocking the Viewer classes during unit testing and to reduce long parameter lists in the constructors. However, [`ViewerProvider`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java) itself does not use its fields; it merely passes them along to other classes.
 
 ## Testing
 
@@ -229,13 +638,21 @@ We focused on unit testing to ensure the reliability of the game's architectural
 *   **States**: We validated that states correctly initialize their respective controllers and viewers.
 
 #### Coverage Summary:
-The project achieved a high degree of code coverage, as shown in the report below:
 
-![Coverage Report](intermediateDelivery/Overall_Coverage_Report.png)
+Both **Unit Testing** and **Mocks** have been used to make the tests.
 
-*   **Class Coverage**: 89.7%
-*   **Method Coverage**: 91.7%
-*   **Line Coverage**: 85.6%
+Coverage testing using **JaCoCo**:
+- Instruction Coverage: 100%
+- Branch Coverage: 100%
+
+![Coverage Report](finalDelivery/jacocoCoverage.png)
+
+Mutation testing using **Pitest**:
+- Line Coverage: 100%
+- Mutation Coverage: 99%
+- Test Strength: 99%
+
+![Coverage Report](finalDelivery/pitestCoverage.png)
 
 #### Detailed Breakdown:
 *   **Core Logic (`model.game`, `states`, `view`)**: These packages achieved **100% line coverage**. This ensures that the core gameplay loop, state transitions, and rendering logic are robust and error-free.
