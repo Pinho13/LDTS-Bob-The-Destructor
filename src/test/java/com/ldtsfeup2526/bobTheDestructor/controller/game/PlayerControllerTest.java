@@ -145,10 +145,10 @@ public class PlayerControllerTest {
         
         when(player.getRigidBody()).thenReturn(rb);
         when(player.getCollider()).thenReturn(collider);
-        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(0, 0));
+        when(player.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Position(10, 20));
         
-        when(rb.getNextPos()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(1, 1));
-        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0, 0));
+        when(rb.getNextPos()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(11, 21));
+        when(rb.getPosition()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(10, 20));
         when(rb.getVelocity()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(1, 1));
         when(rb.getAcceleration()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector(0, 0));
         
@@ -164,11 +164,13 @@ public class PlayerControllerTest {
         verify(rb).setVelocity(argThat(v -> v.getY() == 0));
         verify(rb).setAcceleration(any());
         
-        // Position when both collide should be (0, 0) because we reset to rb.getPosition()
-        verify(player).setPosition(argThat(p -> p.getX() == 0 && p.getY() == 0));
+        // Position when both collide should be (10, 20) because we reset to rb.getPosition()
+        verify(player).setPosition(argThat(p -> p.getX() == 10 && p.getY() == 20));
         verify(collider).setPosition(any());
         verify(rb).setPosition(any());
-        
+
+        // Verify grounded update uses y+1
+        verify(collider, atLeastOnce()).colPosCheck(argThat(p -> p != null && p.getX() == 10 && p.getY() == 21));
         verify(player).setGrounded(true);
     }
     @Test
