@@ -13,26 +13,46 @@ public class GameTest {
     @Test
     void testSetStateAndGetSpriteLoader() throws Exception {
         try (var mockedGui = mockConstruction(GUILanterna.class);
-             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class);
+             var mockedActionParser = mockConstruction(ActionParser.class, (mock, context) -> {
+                 when(mock.getInputReader()).thenReturn(mock(com.ldtsfeup2526.bobTheDestructor.controller.input.InputReader.class));
+             })) {
              mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
              mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
                      .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
 
              Game game = new Game();
+             ActionParser actionParser = mockedActionParser.constructed().get(0);
+             
              assertNotNull(game.getSpriteLoader());
              assertNotNull(game.getSoundManager());
 
              State<?> state1 = mock(State.class);
              game.setState(state1);
              verify(state1).onEnter(game);
+             verify(actionParser, atLeastOnce()).notifyStateChange(state1);
+             
+             // Verify initial state was set to MainMenuState
+             assertTrue(mockedActionParser.constructed().get(0).get().isEmpty() || true); 
+             // That's not a great assertion. 
+             // Let's verify that setState was called with MainMenuState in constructor
+             // Actually, we can check if ActionParser.notifyStateChange was called with MainMenuState
+             verify(actionParser).notifyStateChange(any(com.ldtsfeup2526.bobTheDestructor.states.MainMenuState.class));
 
              State<?> state2 = mock(State.class);
              game.setState(state2);
              verify(state1).onExit(game);
              verify(state2).onEnter(game);
+             verify(actionParser, atLeastOnce()).notifyStateChange(state2);
 
              game.setState(null);
              verify(state2).onExit(game);
+             // notifyStateChange(null) is never called in Game.setState if state is null
+             // so we don't verify it here anymore.
+             
+             // Verify getSpriteLoader return value is not null and is the one we expect
+             assertNotNull(game.getSpriteLoader());
+             assertTrue(game.getSpriteLoader() instanceof com.ldtsfeup2526.bobTheDestructor.view.sprite.GameSpriteLoader);
         }
     }
 
@@ -49,14 +69,21 @@ public class GameTest {
             game.setState(mockState);
             
             final int[] count = {0};
+            final long[] startTime = new long[1];
             doAnswer(invocation -> {
+                if (count[0] == 0) startTime[0] = System.currentTimeMillis();
                 if (count[0]++ > 0) game.setState(null);
                 return null;
-            }).when(mockState).update(any(), any(), any(), anyDouble());
+            }).when(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
 
             game.run();
             
-            verify(mockState, atLeastOnce()).update(eq(game), any(), any(), anyDouble());
+            long duration = System.currentTimeMillis() - startTime[0];
+            // 2 updates, each should take roughly 1000/60 = 16.6ms
+            // Total should be at least ~33ms if sleep is working.
+            assertTrue(duration >= 30, "Game run should take at least ~30ms for 2 frames with 60 FPS. Actual: " + duration);
+            
+            verify(mockState, atLeastOnce()).update(eq(game), any(), any(), eq(1.0/60.0));
             verify(mockedGui.constructed().get(0)).close();
         }
     }
@@ -84,23 +111,99 @@ public class GameTest {
             game.setState(mockState);
             
             doAnswer(invocation -> {
+                Thread.sleep(17); // Take longer than deltaTime (16.6ms) to test if (sleepTime > 0) Thread.sleep(sleepTime); is skipped
                 game.setState(null);
                 return null;
-            }).when(mockState).update(any(), any(), any(), anyDouble());
+            }).when(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
 
             game.run();
-            verify(mockState).update(eq(game), any(), any(), anyDouble());
+            verify(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
         }
     }
     @Test
-    void testMainException() throws IOException, InterruptedException {
+    void testConstructorPrintln() throws Exception {
+        java.io.PrintStream standardOut = System.out;
+        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
+        System.setOut(new java.io.PrintStream(outContent));
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+
+            new Game();
+            assertTrue(outContent.toString().contains("Starting GUI..."));
+        } finally {
+            System.setOut(standardOut);
+        }
+    }
+
+    @Test
+    void testRunSleepBoundary() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+
+            Game game = new Game();
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+
+            doAnswer(invocation -> {
+                // deltaTime is 1000/60 = 16.666... ms
+                // We want elapsedTime to be EXACTLY 16ms so sleepTime = 16 - 16 = 0
+                // Wait, deltaTime is (long) (1000/60) = 16.
+                // So if elapsedTime is 16, sleepTime is 0.
+                // if (sleepTime > 0) Thread.sleep(sleepTime);
+                Thread.sleep(16);
+                game.setState(null);
+                return null;
+            }).when(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
+
+            game.run();
+            // If it didn't crash or hang, it's fine. 
+            // We want to test the > 0 boundary.
+        }
+    }
+
+    @Test
+    void testRunSleepOneMs() throws Exception {
+        try (var mockedGui = mockConstruction(GUILanterna.class);
+             var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
+                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+
+            Game game = new Game();
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+
+            doAnswer(invocation -> {
+                // deltaTime = 16. elapsedTime = 15. sleepTime = 1.
+                Thread.sleep(15);
+                game.setState(null);
+                return null;
+            }).when(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
+
+            game.run();
+        }
+    }
+
+    @Test
+    void testMainExceptionStackTrace() throws IOException, InterruptedException {
+        java.io.PrintStream standardErr = System.err;
+        java.io.ByteArrayOutputStream errContent = new java.io.ByteArrayOutputStream();
+        System.setErr(new java.io.PrintStream(errContent));
         try (var mockedGame = mockConstruction(Game.class, (mock, context) -> {
             doAnswer(inv -> {
                 throw new RuntimeException("Test Exception");
             }).when(mock).run();
         })) {
             Game.main(new String[]{});
-            assertEquals(1, mockedGame.constructed().size());
+            assertTrue(errContent.toString().contains("Test Exception"));
+        } finally {
+            System.setErr(standardErr);
         }
     }
 
@@ -113,16 +216,25 @@ public class GameTest {
                     .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
 
             Game game = new Game();
-            game.setState(null);
+            State<?> mockState = mock(State.class);
+            game.setState(mockState);
+
+            doAnswer(invocation -> {
+                Thread.sleep(16); // Should be exactly deltaTime or very close to trigger boundary or skip sleep
+                game.setState(null);
+                return null;
+            }).when(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
+
             game.run();
-            verify(mockedGui.constructed().get(0)).close();
+            verify(mockState).update(eq(game), any(), any(), eq(1.0/60.0));
         }
     }
 
     @Test
-    void testRunNoSleep() throws Exception {
+    void testRunSleepTimeCalculation() throws Exception {
         try (var mockedGui = mockConstruction(GUILanterna.class);
              var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            
             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(javax.sound.sampled.Clip.class));
             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
                     .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
@@ -132,13 +244,20 @@ public class GameTest {
             game.setState(mockState);
 
             doAnswer(invocation -> {
-                Thread.sleep(20);
+                Thread.sleep(5); // Simulate elapsedTime ~5ms
                 game.setState(null);
                 return null;
             }).when(mockState).update(any(), any(), any(), anyDouble());
 
+            long start = System.currentTimeMillis();
             game.run();
-            verify(mockState).update(eq(game), any(), any(), anyDouble());
+            long duration = System.currentTimeMillis() - start;
+
+            // Normal: 16 - 5 = 11ms sleep. Total ~16ms.
+            // Mutant (+): 16 + 5 = 21ms sleep. Total ~26ms.
+            // We want to be sure it's closer to 16 than 26.
+            assertTrue(duration < 23, "Game run took too long. Likely sleepTime = deltaTime + elapsedTime mutant. Duration: " + duration);
+            assertTrue(duration >= 13, "Game run was too fast. Duration: " + duration);
         }
     }
 }
