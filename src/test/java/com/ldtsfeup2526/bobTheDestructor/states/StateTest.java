@@ -3,6 +3,7 @@ package com.ldtsfeup2526.bobTheDestructor.states;
 import com.ldtsfeup2526.bobTheDestructor.Game;
 import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
 import com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite;
 import com.ldtsfeup2526.bobTheDestructor.view.sprite.SpriteLoader;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
@@ -20,10 +21,13 @@ public class StateTest {
     private Controller<Object> controller;
     private ScreenViewer<Object> screenViewer;
 
+    private SoundManager soundManager;
+
     @BeforeEach
     void setUp() throws IOException {
         model = new Object();
         spriteLoader = mock(SpriteLoader.class);
+        soundManager = mock(SoundManager.class);
         Sprite sprite = mock(Sprite.class);
         when(spriteLoader.get(anyString())).thenReturn(sprite);
         when(sprite.getSize()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Size(1, 1));
@@ -31,7 +35,7 @@ public class StateTest {
         controller = mock(Controller.class);
         screenViewer = mock(ScreenViewer.class);
 
-        state = new State<Object>(model, spriteLoader) {
+        state = new State<Object>(model, spriteLoader, soundManager) {
             @Override
             public ScreenViewer<Object> createScreenViewer(ViewerProvider viewerProvider) {
                 return screenViewer;
@@ -58,7 +62,14 @@ public class StateTest {
         
         state.update(game, gui, actionParser, 0.1);
         
-        verify(controller).update(eq(game), anyList());
+        verify(controller).update(eq(game), anyList(), anyDouble());
         verify(screenViewer).draw(gui, 0.1);
+    }
+    @Test
+    void testOnEnterExit() {
+        Game game = mock(Game.class);
+        state.onEnter(game);
+        state.onExit(game);
+        // Default implementation does nothing, so just check it doesn't crash
     }
 }
