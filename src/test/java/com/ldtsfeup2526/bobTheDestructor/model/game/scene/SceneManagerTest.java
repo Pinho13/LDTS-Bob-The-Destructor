@@ -98,8 +98,6 @@ public class SceneManagerTest {
             sceneManager.getNextCavePath();
         }
         assertNull(sceneManager.getNextCavePath());
-        // currentCavePathIndex is 5 after 5 successful calls. 
-        // next call to getNextCavePath() returns null and DOES NOT increment currentCavePathIndex.
         assertEquals(4, sceneManager.getCurrentCavePathIndex());
     }
 }
