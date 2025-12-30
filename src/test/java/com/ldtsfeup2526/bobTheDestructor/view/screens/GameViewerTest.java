@@ -61,4 +61,33 @@ public class GameViewerTest {
     void testConstructorCallsRetrieveCaves() throws IOException {
         verify(viewerProvider.getSceneViewer()).retrieveCaves(anyList());
     }
+    @Test
+    void testDrawWithMineralsCleanup() throws IOException {
+        GUI gui = mock(GUI.class);
+        Scene scene = sceneManager.getScene();
+        List<com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel> minerals = new ArrayList<>();
+        com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel m1 = mock(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel.class);
+        when(m1.getState()).thenReturn(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralState.CLEANUP);
+        minerals.add(m1);
+        when(scene.getMineralModels()).thenReturn(minerals);
+
+        viewer.draw(gui, 0.1);
+        
+        // MineralViewer.draw IS called in GameViewer, but it's okay because we want to test GameViewer's logic.
+        // If we want to verify m1 is not drawn, we should check what MineralViewer does, but MineralViewer is a mock here.
+        // Wait, viewerProvider.getMineralViewer() returns a MOCK.
+        // So MineralViewer.draw(m1, gui, 0.1) SHOULD be called unless GameViewer filters it.
+        // GameViewer DOES NOT filter it in drawElements.
+        verify(viewerProvider.getMineralViewer()).draw(eq(m1), eq(gui), anyDouble());
+    }
+
+    @Test
+    void testDrawWithMineralsEmpty() throws IOException {
+        GUI gui = mock(GUI.class);
+        Scene scene = sceneManager.getScene();
+        when(scene.getMineralModels()).thenReturn(new ArrayList<>());
+        
+        viewer.draw(gui, 0.1);
+        verify(viewerProvider.getMineralViewer(), never()).draw(any(), any(), anyDouble());
+    }
 }
