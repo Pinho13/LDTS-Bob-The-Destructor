@@ -278,6 +278,9 @@ We used the **Builder** pattern to construct the game scene. The `SceneBuilder` 
 - Concrete Builder: [`model/game/scene/SceneBuilder.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/scene/SceneBuilder.java) implements the logic to parse images and create the scene.
 - Usage: The `SceneManager` or `GameState` uses the builder to create the scene when the game starts or when transitioning between levels.
 
+Here is a visualization of how it is implemented:
+<img src="images/sceneBuilder.png">
+
 #### Consequences
 
 Benefits:
@@ -307,6 +310,7 @@ Additionally, the abstract `SoundManager` class defines shared behavior that is 
 - Sound Manager: [`sounds/SoundManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/SoundManager.java) defines the interface for playing music and SFX, and controlling volume. [`sounds/GameSoundManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/sounds/GameSoundManager.java) implements this logic.
 - Usage: The `Game` class initializes the `SoundManager`, which is then passed to states and controllers. For example, `PlayerController` uses it to play jump or walk sounds.
 
+Here is a visualization of how it is implemented:
 <img src="images/soundManager.png">
 
 #### Consequences
@@ -387,6 +391,9 @@ We used the **Flyweight** pattern (or a caching mechanism) in the `SpriteLoader`
 - Concrete Loader: [`view/sprite/GameSpriteLoader.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/sprite/GameSpriteLoader.java) implements the caching logic using a `HashMap`.
 - Usage: The `ViewerProvider` and other classes use the `SpriteLoader` to get sprites without worrying about performance overhead.
 
+Here is a visualization of how it is implemented:
+<img src="images/spriteLoading.png">
+
 #### Consequences
 
 Benefits:
@@ -413,6 +420,9 @@ We created a base `Menu` class that handles the navigation logic. It maintains a
 - Base Menu Class: [`model/menu/Menu.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/menu/Menu.java) implements the navigation logic (`moveUp`, `moveDown`) and stores the list of widgets.
 - Concrete Menus: `MainMenu`, `SettingsMenu`, etc., extend `Menu` and define their specific widgets.
 - Usage: The `MenuController` uses the navigation methods of the `Menu` model to update the selection based on user input.
+
+Here is a visualization of how it is implemented:
+<img src="images/menuNavigation.png">
 
 #### Consequences
 
@@ -441,6 +451,9 @@ We used the **Observer** pattern. The `ActionParser` implements `GameStateListen
 - Observer: [`controller/input/ActionParser.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/input/ActionParser.java) implements the listener interface and adjusts `allowKeyHold` based on the new state.
 - Subject: The `Game` class (or `State` manager) notifies listeners when the state changes.
 
+Here is a visualization of how it is implemented:
+<img src="images/inputObserver.png">
+
 #### Consequences
 
 Benefits:
@@ -466,6 +479,7 @@ We implemented the **State** pattern for the player logic. The `PlayerModel` del
 - Concrete States: `IdleState`, `WalkingState`, `JumpingState`, `FallingState`, `MiningState` implement specific behaviors.
 - Context: `PlayerModel` holds the current state and forwards requests to it.
 
+Here is a visualization of how it is implemented:
 <img src="images/playerState.png">
 
 #### Consequences
@@ -495,6 +509,9 @@ We used the **Observer** (or Listener) pattern again to help us with it. The `Pl
 - Subject: `PlayerModel` allows listeners to register and notifies them when a hit happens.
 - Observer: `SceneController` implements the listener interface and handles the game logic for mineral destruction.
 
+Here is a visualization of how it is implemented:
+<img src="images/pickaxeListener.png">
+
 #### Consequences
 
 Benefits:
@@ -521,6 +538,9 @@ Once again, we applied the **Observer** pattern. The `PlayerController` implemen
 - Subject: `PlayerModel` allows listeners to register and notifies them when the state changes.
 - Observer: `PlayerController` implements the listener interface and plays sounds based on the state transitions.
 
+Here is a visualization of how it is implemented:
+<img src="images/playerStateListener.png">
+
 #### Consequences
 
 Benefits:
@@ -546,6 +566,7 @@ We lightly used a **Facade** pattern (specifically in `SceneManager`). This clas
 - Manager Class: [`model/game/scene/SceneManager.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/model/game/scene/SceneManager.java) handles the list of cave paths, the current scene, and global stats like total minerals collected.
 - Usage: `GameState` holds a reference to `SceneManager` and delegates scene-related operations to it. `SceneController` updates the `SceneManager` based on game events, such as, player reaching the bottom of the cave.
 
+Here is a visualization of how it is implemented:
 <img src="images/sceneManager.png">
 
 #### Consequences
