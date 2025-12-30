@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.gui;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ResolutionTest {
     @Test
@@ -12,22 +13,15 @@ public class ResolutionTest {
     }
 
     @Test
-    void testEquals() {
+    void testEqualsAndHashCode() {
         Resolution res1 = new Resolution(100, 200);
         Resolution res2 = new Resolution(100, 200);
         Resolution res3 = new Resolution(200, 100);
 
         assertEquals(res1, res2);
-        assert(res1.equals(res2));
-        assert(!res1.equals(res3));
-        assert(!res1.equals(null));
-        assert(!res1.equals("string"));
-    }
-
-    @Test
-    void testHashCode() {
-        Resolution res1 = new Resolution(100, 200);
-        Resolution res2 = new Resolution(100, 200);
+        assertNotEquals(res1, res3);
+        assertNotEquals(res1, null);
+        assertNotEquals(res1, "string");
         assertEquals(res1.hashCode(), res2.hashCode());
     }
 
