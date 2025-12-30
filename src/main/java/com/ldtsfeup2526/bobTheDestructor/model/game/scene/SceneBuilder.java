@@ -16,11 +16,16 @@ import java.util.Random;
 
 public class SceneBuilder implements ISceneBuilder{
     private final SpriteLoader spriteLoader;
-    private final Random random = new Random();
+    private final Random random;
     private final float probabilityOfMineralSpawn = 0.25f;
 
     public SceneBuilder(SpriteLoader spriteLoader) {
+        this(spriteLoader, new Random());
+    }
+
+    public SceneBuilder(SpriteLoader spriteLoader, Random random) {
         this.spriteLoader = spriteLoader;
+        this.random = random;
     }
 
     public Scene createScene(String caveFilePath, PlayerModel playerModel) throws IOException {
