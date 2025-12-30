@@ -171,14 +171,15 @@ public class MineralModelTest {
     }
 
     @Test
-    void testAllMineralTypes() {
-        MineralModel pink = new MineralModel(new Position(0,0), "fffdfe89", 0);
-        assertEquals(MineralType.PINK, pink.getType());
-
-        MineralModel blue = new MineralModel(new Position(0,0), "fffdfe89", 1);
-        assertEquals(MineralType.BLUE, blue.getType());
-
-        MineralModel yellow = new MineralModel(new Position(0,0), "fffdfe89", 2);
-        assertEquals(MineralType.YELLOW, yellow.getType());
+    void testGetMineralBreakEventListeners() {
+        MineralModel mineral = new MineralModel(new Position(0,0), "fffdfe89", 0);
+        assertNotNull(mineral.getMineralBreakEventListeners());
+        assertTrue(mineral.getMineralBreakEventListeners().isEmpty());
+        
+        com.ldtsfeup2526.bobTheDestructor.controller.game.MineralBreakEventListener listener = m -> {};
+        mineral.addMineralBreakEventListener(listener);
+        
+        assertEquals(1, mineral.getMineralBreakEventListeners().size());
+        assertEquals(listener, mineral.getMineralBreakEventListeners().get(0));
     }
 }
