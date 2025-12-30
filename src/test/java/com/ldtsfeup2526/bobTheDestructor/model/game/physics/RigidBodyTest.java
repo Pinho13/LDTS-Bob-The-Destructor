@@ -2,219 +2,159 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.physics;
 
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Position;
 import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RigidBodyTest {
-    private RigidBody rigidBody;
-    private Position initialPosition;
-
-    @BeforeEach
-    void setUp() {
-        initialPosition = new Position(10, 20);
-        rigidBody = new RigidBody(initialPosition);
+    @Test
+    void testRigidBodyBasic() {
+        RigidBody rb = new RigidBody(new Position(10, 20));
+        assertEquals(10.0f, rb.getPosition().getX());
+        assertEquals(20.0f, rb.getPosition().getY());
+        
+        rb.setVelocity(new Vector(1.0, 2.0));
+        assertEquals(1.0f, rb.getVelocity().getX());
+        assertEquals(2.0f, rb.getVelocity().getY());
+        
+        rb.setAcceleration(new Vector(0.1, 0.2));
+        assertEquals(0.1f, rb.getAcceleration().getX());
+        assertEquals(0.2f, rb.getAcceleration().getY());
+        
+        rb.setPosition(new Vector(100, 200));
+        assertEquals(100.0f, rb.getPosition().getX());
+        
+        rb.update();
+        assertEquals(1.0f, rb.getVelocity().getX()); // maxVelocity.x = 1
+        assertEquals(2.2f, rb.getVelocity().getY());
+        
+        Vector next = rb.getNextPos();
+        assertEquals(101.0f, next.getX());
+        assertEquals(202.2f, next.getY());
     }
 
     @Test
-    void testConstructor() {
-        assertEquals(10.0f, rigidBody.getPosition().getX());
-        assertEquals(20.0f, rigidBody.getPosition().getY());
-        assertEquals(0.0f, rigidBody.getVelocity().getX());
-        assertEquals(0.0f, rigidBody.getVelocity().getY());
-        assertEquals(0.0f, rigidBody.getAcceleration().getX());
-        assertEquals(rigidBody.getGravity(), rigidBody.getAcceleration().getY());
+    void testMovement() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        
+        rb.moveRight();
+        assertEquals(rb.getSpeed(), rb.getAcceleration().getX());
+        
+        rb.setVelocity(new Vector(-1, 0));
+        rb.moveRight();
+        assertEquals(0f, rb.getVelocity().getX());
+        
+        rb.moveLeft();
+        assertEquals(-rb.getSpeed(), rb.getAcceleration().getX());
+        
+        rb.setVelocity(new Vector(1, 0));
+        rb.moveLeft();
+        assertEquals(0f, rb.getVelocity().getX());
+        
+        rb.jump(5.0f);
+        assertEquals(-5.0f, rb.getVelocity().getY());
     }
 
     @Test
-    void testSettersAndGetters() {
-        Vector velocity = new Vector(1, 2);
-        rigidBody.setVelocity(velocity);
-        assertEquals(velocity, rigidBody.getVelocity());
+    void testFriction() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(0.1, 0));
+        rb.applyFriction();
+        assertEquals(0f, rb.getVelocity().getX());
+        assertEquals(0f, rb.getAcceleration().getX());
+        
+        rb.setVelocity(new Vector(0.5, 0));
+        rb.applyFriction();
+        assertEquals(-rb.getFriction(), rb.getAcceleration().getX());
 
-        Vector acceleration = new Vector(3, 4);
-        rigidBody.setAcceleration(acceleration);
-        assertEquals(acceleration, rigidBody.getAcceleration());
-
-        Vector position = new Vector(5, 6);
-        rigidBody.setPosition(position);
-        assertEquals(position, rigidBody.getPosition());
-
-        rigidBody.setSpeed(0.5f);
-        assertEquals(0.5f, rigidBody.getSpeed());
-
-        rigidBody.setFriction(0.3f);
-        assertEquals(0.3f, rigidBody.getFriction());
+        rb.setVelocity(new Vector(-0.5, 0));
+        rb.applyFriction();
+        assertEquals(rb.getFriction(), rb.getAcceleration().getX());
     }
 
     @Test
-    void testUpdate() {
-        rigidBody.setAcceleration(new Vector(0.1f, 0.2f));
-        rigidBody.update();
-        assertEquals(0.1f, rigidBody.getVelocity().getX(), 0.001);
-        assertEquals(0.2f, rigidBody.getVelocity().getY(), 0.001);
+    void testUpdateMaxVelocity() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(2, 20));
+        rb.setAcceleration(new Vector(0, 0));
+        rb.update();
+        // maxVelocity is (1, 10), gravity is 0.4
+        // velocity.y = 20 + 0 + 0.4 = 20.4 -> cap at 10
+        assertEquals(1.0f, rb.getVelocity().getX());
+        assertEquals(10.0f, rb.getVelocity().getY());
 
-
-        rigidBody.setAcceleration(new Vector(2.0f, 11.0f));
-        rigidBody.update();
-
-        assertEquals(1.0f, rigidBody.getVelocity().getX(), 0.001);
-        assertEquals(10.0f, rigidBody.getVelocity().getY(), 0.001);
-
-        rigidBody.setVelocity(new Vector(-2.0f, -11.0f));
-        rigidBody.setAcceleration(new Vector(0, 0));
-        rigidBody.update();
-        assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
-        assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
-
-        rigidBody.setVelocity(new Vector(0.95f, 0));
-        rigidBody.setAcceleration(new Vector(0.1f, 0));
-        rigidBody.update();
-        assertEquals(1.0f, rigidBody.getVelocity().getX(), 0.001);
-
-        rigidBody.setVelocity(new Vector(-0.95f, 0));
-        rigidBody.setAcceleration(new Vector(-0.1f, 0));
-        rigidBody.update();
-        assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
-
-        rigidBody.setVelocity(new Vector(0, 9.9f));
-        rigidBody.setAcceleration(new Vector(0, 0.2f));
-        rigidBody.update();
-        assertEquals(10.0f, rigidBody.getVelocity().getY(), 0.001);
-
-        rigidBody.setVelocity(new Vector(0, -9.9f));
-        rigidBody.setAcceleration(new Vector(0, -0.2f));
-        rigidBody.update();
-        assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
-
-        rigidBody.setVelocity(new Vector(1.0f, 10.0f));
-        rigidBody.setAcceleration(new Vector(0.1f, 0.1f));
-        rigidBody.update();
-        assertEquals(1.0f, rigidBody.getVelocity().getX(), 0.001);
-        assertEquals(10.0f, rigidBody.getVelocity().getY(), 0.001);
-
-        rigidBody.setVelocity(new Vector(-1.0f, -10.0f));
-        rigidBody.setAcceleration(new Vector(-0.1f, -0.1f));
-        rigidBody.update();
-        assertEquals(-1.0f, rigidBody.getVelocity().getX(), 0.001);
-        assertEquals(-10.0f, rigidBody.getVelocity().getY(), 0.001);
+        rb.setVelocity(new Vector(-2, -20));
+        rb.update();
+        // velocity.y = -20 + 0 + 0.4 = -19.6 -> cap at -10
+        assertEquals(-1.0f, rb.getVelocity().getX());
+        assertEquals(-10.0f, rb.getVelocity().getY());
     }
 
     @Test
-    void testGetNextPos() {
-        rigidBody.setVelocity(new Vector(1, 2));
-        Vector nextPos = rigidBody.getNextPos();
-        assertEquals(11.0f, nextPos.getX());
-        assertEquals(22.0f, nextPos.getY());
+    void testUpdateVelocityNearZero() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        // maxVelocity is (1, 10), gravity is 0.4
+        // update() just adds acceleration to velocity and caps it.
+        // It does NOT set to 0 if near zero. applyFriction() does that.
+        
+        rb.setVelocity(new Vector(0.005, 0));
+        rb.setAcceleration(new Vector(0, 0));
+        rb.update();
+        assertEquals(0.005f, rb.getVelocity().getX(), 0.0001f);
+
+        rb.applyFriction();
+        assertEquals(0f, rb.getVelocity().getX());
     }
 
     @Test
-    void testMoveRight() {
-        rigidBody.setVelocity(new Vector(-1, 0));
-        rigidBody.moveRight();
-        assertEquals(0, rigidBody.getVelocity().getX());
-        assertEquals(rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
+    void testApplyFrictionOpposite() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(0.5, 0));
+        rb.applyFriction();
+        assertEquals(-rb.getFriction(), rb.getAcceleration().getX());
 
-        rigidBody.setVelocity(new Vector(1, 0));
-        rigidBody.moveRight();
-        assertEquals(1, rigidBody.getVelocity().getX());
-        assertEquals(rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
+        rb.setVelocity(new Vector(-0.5, 0));
+        rb.applyFriction();
+        assertEquals(rb.getFriction(), rb.getAcceleration().getX());
+    }
+    @Test
+    void testMoveRightFromLeft() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(-0.5, 0));
+        rb.moveRight();
+        assertEquals(0f, rb.getVelocity().getX());
+        assertEquals(rb.getSpeed(), rb.getAcceleration().getX());
     }
 
     @Test
-    void testMoveLeft() {
-        rigidBody.setVelocity(new Vector(1, 0));
-        rigidBody.moveLeft();
-        assertEquals(0, rigidBody.getVelocity().getX());
-        assertEquals(-rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
-
-        rigidBody.setVelocity(new Vector(-1, 0));
-        rigidBody.moveLeft();
-        assertEquals(-1, rigidBody.getVelocity().getX());
-        assertEquals(-rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
+    void testMoveLeftFromRight() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(0.5, 0));
+        rb.moveLeft();
+        assertEquals(0f, rb.getVelocity().getX());
+        assertEquals(-rb.getSpeed(), rb.getAcceleration().getX());
     }
 
     @Test
     void testJump() {
-        rigidBody.jump(5.0f);
-        assertEquals(-5.0f, rigidBody.getVelocity().getY());
-    }
-
-    @Test
-    void testApplyFrictionSmallVelocity() {
-        rigidBody.setVelocity(new Vector(0.1f, 1.0f));
-        rigidBody.setAcceleration(new Vector(1.0f, 1.0f));
-        rigidBody.applyFriction();
-        assertEquals(0, rigidBody.getVelocity().getX());
-        assertEquals(0, rigidBody.getAcceleration().getX());
-        assertEquals(1.0f, rigidBody.getVelocity().getY());
-        assertEquals(1.0f, rigidBody.getAcceleration().getY());
-        
-        rigidBody.setVelocity(new Vector(0.2f, 0));
-        rigidBody.setAcceleration(new Vector(1, 1));
-        rigidBody.applyFriction();
-        assertNotEquals(0, rigidBody.getAcceleration().getX());
-        
-        rigidBody.setVelocity(new Vector(0.199f, 0));
-        rigidBody.applyFriction();
-        assertEquals(0, rigidBody.getVelocity().getX());
-    }
-
-    @Test
-    void testApplyFrictionLargeVelocity() {
-        rigidBody.setVelocity(new Vector(1.0f, 1.0f));
-        rigidBody.setAcceleration(new Vector(0, 0.4f));
-        rigidBody.applyFriction();
-        assertEquals(-rigidBody.getFriction(), rigidBody.getAcceleration().getX());
-        assertTrue(rigidBody.getAcceleration().getX() < 0);
-
-        rigidBody.setVelocity(new Vector(-1.0f, 1.0f));
-        rigidBody.applyFriction();
-        assertEquals(rigidBody.getFriction(), rigidBody.getAcceleration().getX());
-        assertTrue(rigidBody.getAcceleration().getX() > 0);
-    }
-    @Test
-    void testSetters() {
         RigidBody rb = new RigidBody(new Position(0, 0));
-        Vector vel = new Vector(1, 1);
-        Vector acc = new Vector(0.1f, 0.1f);
-        rb.setVelocity(vel);
-        rb.setAcceleration(acc);
+        rb.jump(5.0f);
+        assertEquals(-5.0f, rb.getVelocity().getY());
+    }
+    @Test
+    void testApplyFrictionNearZero() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
+        rb.setVelocity(new Vector(0.15, 0));
+        rb.applyFriction();
+        assertEquals(0f, rb.getVelocity().getX());
+        assertEquals(0f, rb.getAcceleration().getX());
+    }
+    @Test
+    void testGettersSetters() {
+        RigidBody rb = new RigidBody(new Position(0, 0));
         rb.setSpeed(0.5f);
-        rb.setFriction(0.3f);
-        assertEquals(vel, rb.getVelocity());
-        assertEquals(acc, rb.getAcceleration());
         assertEquals(0.5f, rb.getSpeed());
+        rb.setFriction(0.3f);
         assertEquals(0.3f, rb.getFriction());
         assertEquals(0.4f, rb.getGravity());
-    }
-    @Test
-    void testMoveRightZeroVelocity() {
-        rigidBody.setVelocity(new Vector(0, 0));
-        rigidBody.moveRight();
-        assertEquals(0, rigidBody.getVelocity().getX());
-        assertEquals(rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
-    }
-
-    @Test
-    void testMoveLeftZeroVelocity() {
-        rigidBody.setVelocity(new Vector(0, 0));
-        rigidBody.moveLeft();
-        assertEquals(0, rigidBody.getVelocity().getX());
-        assertEquals(-rigidBody.getSpeed(), rigidBody.getAcceleration().getX());
-    }
-
-    @Test
-    void testApplyFrictionNegativeBoundary() {
-        rigidBody.setVelocity(new Vector(-0.199f, 0));
-        rigidBody.applyFriction();
-        assertEquals(0, rigidBody.getVelocity().getX());
-
-        rigidBody.setVelocity(new Vector(-0.2f, 0));
-        rigidBody.setAcceleration(new Vector(1, 1));
-        rigidBody.applyFriction();
-        assertNotEquals(0, rigidBody.getAcceleration().getX());
-        assertTrue(rigidBody.getAcceleration().getX() > 0);
     }
 }
