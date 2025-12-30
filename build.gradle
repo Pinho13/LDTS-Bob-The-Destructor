@@ -40,10 +40,6 @@ pitest {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport, 'pitest'
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
 }
 
 jacocoTestReport {

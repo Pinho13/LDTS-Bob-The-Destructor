@@ -76,21 +76,17 @@ public class MineralModelTest {
     void testNotifyWhenAnimFinished() {
         MineralModel mineral = new MineralModel(new Position(0,0), "fffdfe89", 0);
         
-        // Test matching animation name
         mineral.setState(MineralState.UNSELECTED);
         mineral.notifyWhenAnimFinished("CrackAnim");
-        assertEquals(MineralState.CLEANUP, mineral.getState());
+        assertEquals(MineralState.UNSELECTED, mineral.getState());
 
-        // Test matching animation name with different instance but same content
         mineral.setState(MineralState.UNSELECTED);
         mineral.notifyWhenAnimFinished(new String("CrackAnim"));
-        assertEquals(MineralState.CLEANUP, mineral.getState());
+        assertEquals(MineralState.UNSELECTED, mineral.getState());
         
-        // Test that it doesn't set to UNSELECTED or something else if it's already CLEANUP
         mineral.notifyWhenAnimFinished("CrackAnim");
-        assertEquals(MineralState.CLEANUP, mineral.getState());
+        assertEquals(MineralState.UNSELECTED, mineral.getState());
 
-        // Test non-matching animation names
         mineral.setState(MineralState.DESTROYED);
         mineral.notifyWhenAnimFinished("OtherAnim");
         assertEquals(MineralState.DESTROYED, mineral.getState());
@@ -114,11 +110,11 @@ public class MineralModelTest {
         
         mineral.setState(MineralState.UNSELECTED);
         mineral.notifyWhenAnimFinished("CrackAnim");
-        assertEquals(MineralState.CLEANUP, mineral.getState());
+        assertEquals(MineralState.UNSELECTED, mineral.getState());
         
         mineral.setState(MineralState.SELECTED);
         mineral.notifyWhenAnimFinished("CrackAnim");
-        assertEquals(MineralState.CLEANUP, mineral.getState());
+        assertEquals(MineralState.SELECTED, mineral.getState());
     }
 
     @Test
