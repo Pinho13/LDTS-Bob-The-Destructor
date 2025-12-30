@@ -14,9 +14,16 @@ public class GameSettingsTest {
     }
 
     @Test
-    void testMasterGain() {
+    void testVolumes() {
         GameSettings settings = GameSettings.getInstance();
-        settings.setMasterGain(10.0f);
-        assertEquals(10.0f, settings.getMasterGain());
+        
+        settings.setMasterVolume(0.8f);
+        assertEquals(0.8f, settings.getMasterVolume());
+        
+        settings.setMusicVolume(0.7f);
+        assertEquals(0.7f, settings.getMusicVolume());
+        
+        settings.setSfxVolume(0.6f);
+        assertEquals(0.6f, settings.getSfxVolume());
     }
 }
