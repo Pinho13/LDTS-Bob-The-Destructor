@@ -77,12 +77,9 @@ public class ActionParser implements GameStateListener {
 
     @Override
     public void notifyStateChange(State<?> state) {
-        if (state instanceof MainMenuState) {
-            setAllowKeyHold(false);
-        } else if (state instanceof GameState) {
+        if (state instanceof GameState) {
             setAllowKeyHold(true);
         } else {
-            // Default to no hold for other states (like Settings)
             setAllowKeyHold(false);
         }
     }
