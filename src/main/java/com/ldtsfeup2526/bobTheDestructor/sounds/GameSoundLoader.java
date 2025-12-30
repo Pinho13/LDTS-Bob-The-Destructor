@@ -19,8 +19,9 @@ public class GameSoundLoader implements SoundLoader{
 
         try {
             URL resource = getClass().getClassLoader().getResource(soundFilePath);
+            if (resource == null) return null;
 
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(Objects.requireNonNull(resource));
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(resource);
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
 
