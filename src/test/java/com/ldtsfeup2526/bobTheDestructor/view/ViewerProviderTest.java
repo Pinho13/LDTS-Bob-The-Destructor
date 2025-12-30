@@ -1,5 +1,7 @@
 package com.ldtsfeup2526.bobTheDestructor.view;
 
+import com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite;
+import com.ldtsfeup2526.bobTheDestructor.view.sprite.SpriteLoader;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +15,9 @@ public class ViewerProviderTest {
     @Test
     void testGetViewers() throws IOException {
         SpriteLoader spriteLoader = mock(SpriteLoader.class);
-        when(spriteLoader.get(anyString())).thenReturn(mock(Sprite.class));
+        Sprite mockSprite = mock(Sprite.class);
+        when(spriteLoader.get(anyString())).thenReturn(mockSprite);
+        when(mockSprite.getSize()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Size(1, 1));
         
         ViewerProvider provider = new ViewerProvider(spriteLoader);
         
@@ -23,5 +27,7 @@ public class ViewerProviderTest {
         assertNotNull(provider.getSceneViewer());
         assertNotNull(provider.getMineralViewer());
         assertNotNull(provider.getOverlayViewer());
+        assertNotNull(provider.getTitleViewer());
+        assertNotNull(provider.getSliderViewer());
     }
 }
