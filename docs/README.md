@@ -506,6 +506,31 @@ Benefits:
 Liabilities:
 - Adds another layer of abstraction.
 
+### Event Listener for Mineral Break
+
+#### Problem in Context
+
+When a mineral should no longer be in the game, the `Scene Controller` needs to be aware of it so it can delete it from the scene.
+
+#### The Pattern
+
+We used the **Observer** pattern again to help us with it. The `MineralModel` maintains a list of `MineralBreakEventListener`s. When it should be broken, it notifies all registered listeners.
+
+#### Implementation
+
+- Listener Interface: [`controller/game/MineralBreakEventListener.java`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/controller/game/MineralBreakEventListener.java) defines the `onMineralBreak` method.
+- Subject: `MineralModel` allows listeners to register and notifies them when a hit happens.
+- Observer: `SceneController` implements the listener interface and handles the game logic for mineral destruction.
+
+#### Consequences
+
+Benefits:
+- Decouples the mineral model from the scene controller.
+- Allows multiple components to react to minerals breaking if needed.
+
+Liabilities:
+- Adds complexity with listener registration and notification.
+
 ## Known code smells
 
 ### View-Model Coupling
