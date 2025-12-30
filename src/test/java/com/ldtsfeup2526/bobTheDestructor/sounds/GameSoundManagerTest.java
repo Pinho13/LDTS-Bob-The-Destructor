@@ -100,8 +100,6 @@ public class GameSoundManagerTest {
 
     @Test
     void testLinearToDbEdgeCase() {
-        // We can't call protected linearToDb directly from outside unless we're in same package
-        // But we can trigger it via applyVolumeToClip which is protected but called by updateVolumes
         soundManager.setMasterVolume(0);
         String path = "music.wav";
         when(soundLoader.get(path)).thenReturn(mockClip);
@@ -132,7 +130,6 @@ public class GameSoundManagerTest {
         soundManager.setMasterVolume(0.5f);
         soundManager.setMusicVolume(0.6f);
         soundManager.setSFXVolume(0.7f);
-        // Should not throw and is covered
     }
     @Test
     void testPlaySameMusic() {
@@ -140,7 +137,6 @@ public class GameSoundManagerTest {
         when(soundLoader.get(path)).thenReturn(mockClip);
         soundManager.playMusic(path);
         
-        // Call again with same path
         soundManager.playMusic(path);
         verify(mockClip, times(2)).start();
     }
@@ -149,7 +145,6 @@ public class GameSoundManagerTest {
     void testPlayMusicNullClip() {
         when(soundLoader.get(anyString())).thenReturn(null);
         soundManager.playMusic("music.wav");
-        // Should return early
     }
 
     @Test
@@ -163,17 +158,15 @@ public class GameSoundManagerTest {
         soundManager.playSFX("any");
         soundManager.playSFXLoop("any");
         soundManager.stopSFX("any");
-        // Should not crash
     }
 
     @Test
     void testPlayMusicSamePathNullClip() {
         String path = "music.wav";
-        soundManager.playMusic(path); // Set currentMusicPath
+        soundManager.playMusic(path);
         
         when(soundLoader.get(path)).thenReturn(null);
         soundManager.playMusic(path);
-        // Should return after checking currentMusicPath because get returns null
     }
 
     @Test
@@ -181,7 +174,6 @@ public class GameSoundManagerTest {
         String path = "new_music.wav";
         when(soundLoader.get(path)).thenReturn(null);
         soundManager.playMusic(path);
-        // Should return after stopMusic() because get returns null
     }
 
     @Test
@@ -190,14 +182,11 @@ public class GameSoundManagerTest {
         soundManager.playSFX("path");
         soundManager.playSFXLoop("path");
         soundManager.stopSFX("path");
-        // Should all return early
     }
 
     @Test
     void testUpdateVolumesNullClip() {
-        // currentMusicClip is null initially or after stopMusic
         soundManager.stopMusic();
         soundManager.updateVolumes();
-        // Should not crash and not call applyVolumeToClip
     }
 }
