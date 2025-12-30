@@ -71,32 +71,18 @@ public class ButtonViewerTest {
                 when(widget.getWidgetState()).thenReturn(state);
                 when(widget.getPosition()).thenReturn(new Position(100, 100));
                 
-                // Ensure all sprites that might be used for this type/state are mocked
-                // ButtonViewer uses:
-                // 1. spriteMap.get(type).get(state)
-                // 2. iconMap.get(type)
-                // 3. pickaxeIcon
-                
                 localViewer.draw(widget, gui, 0.1);
                 
-                // Verify button draw
                 verify(buttonSprite, atLeastOnce()).draw(argThat(p -> p.getX() == 100 && p.getY() == 100), eq(gui));
                 
-                // Verify icon draw
-                // Position is sprite.getSize().getX()/2 + widget.getPosition().getX() + 5
-                // 20/2 + 100 + 5 = 115
                 verify(iconSprite, atLeastOnce()).draw(argThat(p -> p.getX() == 115 && p.getY() == 100), eq(gui));
                 
                 if (state != WidgetState.UNSELECTED) {
-                    // Verify pickaxeIcon draw
-                    // Position is widget.getPosition().getX() - sprite.getSize().getX() / 2 - 4
-                    // 100 - 20/2 - 4 = 86
                     verify(pickaxeSprite, atLeastOnce()).draw(argThat(p -> p.getX() == 86 && p.getY() == 100), eq(gui));
                 } else {
                     verify(pickaxeSprite, never()).draw(any(), any());
                 }
                 
-                // Re-stub necessary methods after reset
                 reset(buttonSprite, iconSprite, pickaxeSprite);
                 when(buttonSprite.getSize()).thenReturn(new Size(20, 10));
                 when(iconSprite.getSize()).thenReturn(new Size(5, 5));
@@ -117,7 +103,6 @@ public class ButtonViewerTest {
         
         new ButtonViewer(localSpriteLoader);
         
-        // 4 types * 3 states + 4 types * 1 icon + 1 pickaxeIcon = 12 + 4 + 1 = 17 sprites
         verify(sprite, times(17)).center();
     }
 }
