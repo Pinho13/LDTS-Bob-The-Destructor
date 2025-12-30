@@ -91,11 +91,6 @@ public class OverlayViewerTest {
         GUI gui = mock(GUI.class);
         localViewer.draw(model, gui, 0.1);
 
-        // Verify that setOffset is called with the expected values from NumberParser
-        // Since we don't know the exact offsets without checking NumberParser, 
-        // we just ensure it's called. But to kill the mutant, we should ideally
-        // verify it's called with something specific if possible, or at least 
-        // that it's called for each digit.
         verify(num, atLeast(2)).setOffset(any(Position.class));
     }
 
