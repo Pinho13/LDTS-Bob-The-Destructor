@@ -525,6 +525,10 @@ Additionally, we used switch statements to for handling inputs in the [`ActionPa
 
 In the player's states, the logic for state transitions inside the `getNextState()` method is largely similar across most states. We structured the code to prioritize readability, avoiding decoupling it into separate functions, which could have made it less intuitive. Creating additional base state classes to share some of this behavior could be an option, but it would not fully resolve the issue, since each state still has unique transition logic.
 
+### Data Class
+
+We introduced the `ViewerProvider` class to simplify mocking the Viewer classes during unit testing and to reduce long parameter lists in the constructors. However, `ViewerProvider` itself does not use its fields; it merely passes them along to other classes.
+
 ## Testing
 
 We focused on unit testing to ensure the reliability of the game's architectural components, specifically the **Model**, **View**, and **State** systems. By isolating these components, we could verify behavior without relying on the complex graphical backend.
