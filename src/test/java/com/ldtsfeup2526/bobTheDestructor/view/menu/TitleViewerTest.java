@@ -65,4 +65,11 @@ public class TitleViewerTest {
         verify(charSprite, times(3)).draw(argThat(p -> p.getX() == 100 && p.getY() == 100), eq(gui));
         verify(charSprite, atLeastOnce()).setOffset(any());
     }
+
+    @Test
+    void testDrawCallsSetOffset() {
+        GUI gui = mock(GUI.class);
+        viewer.draw(new Position(100, 100), "A", gui);
+        verify(charSprite).setOffset(any());
+    }
 }
