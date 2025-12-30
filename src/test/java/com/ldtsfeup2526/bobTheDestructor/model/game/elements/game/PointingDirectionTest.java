@@ -6,9 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PointingDirectionTest {
     @Test
     void testEnumValues() {
-        assertNotNull(PointingDirection.UP);
-        assertNotNull(PointingDirection.DOWN);
-        assertNotNull(PointingDirection.LEFT);
-        assertNotNull(PointingDirection.RIGHT);
+        assertEquals(4, PointingDirection.values().length);
+        assertEquals(PointingDirection.UP, PointingDirection.valueOf("UP"));
+        assertEquals(PointingDirection.DOWN, PointingDirection.valueOf("DOWN"));
+        assertEquals(PointingDirection.LEFT, PointingDirection.valueOf("LEFT"));
+        assertEquals(PointingDirection.RIGHT, PointingDirection.valueOf("RIGHT"));
     }
 }
