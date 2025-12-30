@@ -6,6 +6,38 @@ Bob starts in the first cave, and his goal is to descend through five caves whil
 
 This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho e Silva for LDTS 2025/26.
 
+## Table of Contents
+
+- [Controls](#controls)
+- [Implemented Features](#implemented-features)
+- [Notes About Features](#notes-about-features)
+- [General Structure](#general-structure)
+- [Code Design](#design)
+    - [Model-View-Controller](#code-structure)
+    - [Game Loop](#game-loop)
+    - [(Game) State Pattern](#multiple-game-states)
+    - [Strategy Pattern](#rendering-multiple-elements)
+    - [Adapter Pattern](#simplification-of-lanternas-interface)
+    - [(Input Handling) Observer Pattern](#input-handling)
+    - [Builder Pattern](#scene-generation)
+    - [(Sound Management) Facade and Template Method Patter](#sound-management)
+    - [Physics Engine](#physics-engine)
+    - [Animation System](#animation-system)
+    - [Flyweight Pattern](#sprite-loading)
+    - [Menu Navigation](#menu-navigation)
+    - [(Input State) Observer Pattern](#input-state-observer)
+    - [(Player) State Pattern](#player-state-machine)
+    - [(Pickaxe) Observer Pattern](#event-listener-for-pickaxe-hits)
+    - [(Player State) Observer Pattern](#player-state-listener)
+    - [(Scene Management) Facade Pattern](#scene-management)
+    - [(Mineral) Observer Pattern](#event-listener-for-mineral-break)
+- [Code Smells](#known-code-smells) 
+    - [View-Model Coupling](#view-model-coupling)
+    - [Switch Statements](#switch-statements)
+    - [Duplicate Code](#duplicate-code)
+    - [Data Class](#data-class)
+- [Code Testing](#testing)
+
 ## Controls
 
 `W` / `space` / `arrow up` - Jump
@@ -267,7 +299,7 @@ We needed a centralized way to handle audio resources and playback while also hi
 
 We implemented a **Sound Manager** component that follows the **Facade** design pattern. The `SoundManager` provides a simplified interface for audio operations, abstracting the underlying Java Sound API and centralizing sound playback and volume control.
 
-Additionally, the abstract `SoundManager` class defines shared behavior that is extended by `GameSoundManager`, following the *Template Method* pattern.
+Additionally, the abstract `SoundManager` class defines shared behavior that is extended by `GameSoundManager`, following the **Template Method** pattern.
 
 #### Implementation
 
