@@ -103,33 +103,26 @@ public class MineralViewer implements ElementViewer<MineralModel> {
         Sprite selectedSprite = selectedSpriteMap.get(model.getType());
 
         if (model.getDirection() == null) return;
-        switch (model.getDirection()) {
-            case PointingDirection.UP:
-                sprite.draw(model.getPosition(), gui);
-                if (model.getState() == MineralState.SELECTED) {
-                    selectedSprite.draw(model.getPosition(), gui);
-                }
-                break;
-            case PointingDirection.DOWN:
-                sprite.drawFlipY(model.getPosition(), gui);
-                if (model.getState() == MineralState.SELECTED) {
-                    selectedSprite.drawFlipY(model.getPosition(), gui);
-                }
-                break;
-            case PointingDirection.LEFT:
-                sprite.drawRotLeft(model.getPosition(), gui);
-                if (model.getState() == MineralState.SELECTED) {
-                    selectedSprite.drawRotLeft(model.getPosition(), gui);
-                }
-                break;
-            case PointingDirection.RIGHT:
-                sprite.drawRotRight(model.getPosition(), gui);
-                if (model.getState() == MineralState.SELECTED) {
-                    selectedSprite.drawRotRight(model.getPosition(), gui);
-                }
-                break;
-            default:
-                break;
+        if (model.getDirection() == PointingDirection.UP) {
+            sprite.draw(model.getPosition(), gui);
+            if (model.getState() == MineralState.SELECTED) {
+                selectedSprite.draw(model.getPosition(), gui);
+            }
+        } else if (model.getDirection() == PointingDirection.DOWN) {
+            sprite.drawFlipY(model.getPosition(), gui);
+            if (model.getState() == MineralState.SELECTED) {
+                selectedSprite.drawFlipY(model.getPosition(), gui);
+            }
+        } else if (model.getDirection() == PointingDirection.LEFT) {
+            sprite.drawRotLeft(model.getPosition(), gui);
+            if (model.getState() == MineralState.SELECTED) {
+                selectedSprite.drawRotLeft(model.getPosition(), gui);
+            }
+        } else {
+            sprite.drawRotRight(model.getPosition(), gui);
+            if (model.getState() == MineralState.SELECTED) {
+                selectedSprite.drawRotRight(model.getPosition(), gui);
+            }
         }
 
 

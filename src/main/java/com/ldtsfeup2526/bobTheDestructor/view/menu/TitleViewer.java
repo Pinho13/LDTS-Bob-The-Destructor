@@ -29,7 +29,6 @@ public class TitleViewer {
 
     public void drawAtTextStart(Position position, String string, GUI gui) {
         List<SpriteInstance> text = stringParser.get(string);
-        int halfWidth = text.size() * 5/2;
 
         Position startTextPos = new Position(position.getX(), position.getY());
         for (SpriteInstance spriteInstance : text) {
