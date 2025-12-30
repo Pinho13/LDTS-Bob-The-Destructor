@@ -24,16 +24,21 @@ public class GameSoundLoaderTest {
         try (var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
             Clip mockClip = mock(Clip.class);
             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mockClip);
+            javax.sound.sampled.AudioInputStream mockAIS = mock(javax.sound.sampled.AudioInputStream.class);
             mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class)))
-                    .thenReturn(mock(javax.sound.sampled.AudioInputStream.class));
+                    .thenReturn(mockAIS);
 
             GameSoundLoader loader = new GameSoundLoader();
             String path = "sounds/soundEffects/mining.wav";
             Clip clip1 = loader.get(path);
             assertNotNull(clip1);
+            verify(mockClip).open(mockAIS);
+            verify(mockClip).setFramePosition(0);
             
             Clip clip2 = loader.get(path);
             assertSame(clip1, clip2);
+            // Verify open was NOT called again for cached clip
+            verify(mockClip, times(1)).open(any(javax.sound.sampled.AudioInputStream.class));
         }
     }
 
