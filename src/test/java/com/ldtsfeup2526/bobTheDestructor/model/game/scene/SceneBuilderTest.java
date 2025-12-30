@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.model.game.scene;
 
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.MineralModel;
+import com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.PointingDirection;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider;
 import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.view.sprite.SpriteLoader;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -131,28 +133,84 @@ public class SceneBuilderTest {
         assertEquals(1, scene.getBlockColliders().size());
     }
     @Test
-    void testCreateMineralsProbability() throws IOException {
+    void testCreateMineralsProbabilityBoundary() throws IOException {
         String path = "caves/cave0/";
         BufferedImage ores = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
-        ores.setRGB(0, 0, 0xFFFFFFFF);
+        ores.setRGB(0, 0, 0xFFFFFFFF); // Solid at (0,0)
         
+        when(spriteLoader.getBufferedImage(anyString())).thenReturn(new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB));
         when(spriteLoader.getBufferedImage(path + "ores.png")).thenReturn(ores);
-        when(spriteLoader.getBufferedImage(path + "structure.png")).thenReturn(new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB));
-        when(spriteLoader.getBufferedImage(path + "enter.png")).thenReturn(new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB));
 
-        // We want to test both branches of "if (random.nextFloat() > probabilityOfMineralSpawn)"
-        // probabilityOfMineralSpawn is 0.25
+        Random mockRandom = mock(Random.class);
+        // probabilityOfMineralSpawn = 0.25f;
+        // if (random.nextFloat() > probabilityOfMineralSpawn) { continue; }
         
+        // Boundary test: nextFloat() returns exactly 0.25f. 
+        // 0.25f > 0.25f is false, so it should NOT skip.
+        when(mockRandom.nextFloat()).thenReturn(0.25f);
+        when(mockRandom.nextInt(anyInt(), anyInt())).thenReturn(0);
+        
+        SceneBuilder localBuilder = new SceneBuilder(spriteLoader, mockRandom);
+        Scene scene = localBuilder.createScene(path, playerModel);
+        assertFalse(scene.getMineralModels().isEmpty(), "Should spawn mineral when nextFloat is exactly 0.25");
+
+        // Test skip boundary: nextFloat() returns 0.250001f
+        // 0.250001f > 0.25f is true, so it should skip.
+        reset(mockRandom);
+        when(mockRandom.nextFloat()).thenReturn(0.250001f);
+        scene = localBuilder.createScene(path, playerModel);
+        assertTrue(scene.getMineralModels().isEmpty(), "Should skip mineral when nextFloat is > 0.25");
+    }
+
+    @Test
+    void testCreateMineralsShiftAndProbability() throws IOException {
+        String path = "caves/cave0/";
+        BufferedImage ores = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        // Alpha must be non-zero for (image.getRGB(x, y) >> 24) != 0
+        // We use a color that has a negative value when interpreted as int,
+        // to test the signed vs unsigned shift if PIT mutates it.
+        // 0xFFFDFE89 is -131447 (negative)
+        int colorSolid = 0xFFFDFE89; 
+        ores.setRGB(0, 0, colorSolid);
+        
+        when(spriteLoader.getBufferedImage(anyString())).thenReturn(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB));
+        when(spriteLoader.getBufferedImage(path + "ores.png")).thenReturn(ores);
+
         boolean sawSpawn = false;
         boolean sawNoSpawn = false;
         
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             Scene scene = builder.createScene(path, playerModel);
-            if (scene.getMineralModels().size() == 1) sawSpawn = true;
-            else sawNoSpawn = true;
+            if (!scene.getMineralModels().isEmpty()) {
+                MineralModel m = scene.getMineralModels().get(0);
+                assertEquals(com.ldtsfeup2526.bobTheDestructor.model.game.elements.game.PointingDirection.DOWN, m.getDirection());
+                sawSpawn = true;
+            } else {
+                sawNoSpawn = true;
+            }
             if (sawSpawn && sawNoSpawn) break;
         }
-        assertTrue(sawSpawn);
-        assertTrue(sawNoSpawn);
+        assertTrue(sawSpawn, "Should have spawned at least once in 500 tries (p=0.25)");
+        assertTrue(sawNoSpawn, "Should have skipped spawning at least once in 500 tries (p=0.75)");
+
+        // To kill "Replaced Shift Right with Shift Left" for (image.getRGB(x, y) >> 24) != 0
+        // If it was << 24, 0xFFFDFE89 << 24 would be 0x89000000, which is still != 0.
+        // We need a color where (C >> 24) != 0 but (C << 24) == 0.
+        // This happens if the lowest byte is 0.
+        // Example: 0xFFFDFE00. (0xFFFDFE00 >> 24) is 0xFF (non-zero).
+        // (0xFFFDFE00 << 24) is 0x00000000 (zero).
+        BufferedImage ores2 = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
+        ores2.setRGB(0, 0, 0xFFFDFE00);
+        when(spriteLoader.getBufferedImage(path + "ores.png")).thenReturn(ores2);
+        
+        sawSpawn = false;
+        for (int i = 0; i < 500; i++) {
+            Scene scene = builder.createScene(path, playerModel);
+            if (!scene.getMineralModels().isEmpty()) {
+                sawSpawn = true;
+                break;
+            }
+        }
+        assertTrue(sawSpawn, "Should spawn when alpha is non-zero even if lowest bits are zero");
     }
 }
