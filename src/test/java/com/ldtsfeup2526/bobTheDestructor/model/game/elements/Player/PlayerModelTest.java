@@ -74,14 +74,28 @@ public class PlayerModelTest {
     @Test
     void testUpdateSelectedMineral() {
         MineralModel m1 = mock(MineralModel.class);
-        when(m1.getPosition()).thenReturn(new Position(12, 20));
+        when(m1.getPosition()).thenReturn(new Position(12, 20)); // distance is 2
         when(m1.getState()).thenReturn(MineralState.UNSELECTED);
         
         MineralModel m2 = mock(MineralModel.class);
-        when(m2.getPosition()).thenReturn(new Position(100, 100));
+        when(m2.getPosition()).thenReturn(new Position(10, 30));
         when(m2.getState()).thenReturn(MineralState.UNSELECTED);
+
+        MineralModel m3 = mock(MineralModel.class);
+        when(m3.getPosition()).thenReturn(new Position(10, 31));
+        when(m3.getState()).thenReturn(MineralState.UNSELECTED);
         
-        player.updateSelectedMineral(List.of(m1, m2));
+        player.updateSelectedMineral(List.of(m1, m2, m3));
+        assertEquals(m1, player.getMineralSelected());
+
+        player.updateSelectedMineral(List.of(m2, m3));
+        assertEquals(m2, player.getMineralSelected());
+
+        player.updateSelectedMineral(List.of(m3));
+        assertNull(player.getMineralSelected());
+        
+        player.updateSelectedMineral(List.of(m1));
+        assertNotNull(player.getMineralSelected());
         assertEquals(m1, player.getMineralSelected());
     }
 
