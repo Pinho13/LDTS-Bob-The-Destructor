@@ -1,25 +1,14 @@
 package com.ldtsfeup2526.bobTheDestructor.states;
 
-import com.ldtsfeup2526.bobTheDestructor.controller.Controller;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.IdleState;
 import com.ldtsfeup2526.bobTheDestructor.model.game.elements.Player.PlayerModel;
-import com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.Scene;
 import com.ldtsfeup2526.bobTheDestructor.model.game.scene.SceneManager;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Size;
-import com.ldtsfeup2526.bobTheDestructor.model.spatials.Vector;
-import com.ldtsfeup2526.bobTheDestructor.sounds.SoundPlayer;
-import com.ldtsfeup2526.bobTheDestructor.view.Sprite;
-import com.ldtsfeup2526.bobTheDestructor.view.SpriteLoader;
-import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
-import com.ldtsfeup2526.bobTheDestructor.view.screens.ScreenViewer;
+import com.ldtsfeup2526.bobTheDestructor.sounds.SoundManager;
+import com.ldtsfeup2526.bobTheDestructor.view.sprite.SpriteLoader;
 import org.junit.jupiter.api.Test;
 
-import javax.sound.sampled.Clip;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -29,51 +18,85 @@ public class GameStateTest {
     @Test
     void testConstructor_doesNotExplode() throws IOException {
         SceneManager model = mock(SceneManager.class);
-        Scene scene = mock(Scene.class);
-        PlayerModel playerModel = mock(PlayerModel.class);
-        RigidBody rb = mock(RigidBody.class);
-
-        when(model.getScene()).thenReturn(scene);
-        when(model.getCavesPathChosen()).thenReturn(List.of("caves/cave0/"));
-        when(model.getCurrentCavePathIndex()).thenReturn(0);
-        when(model.getNextCavePath()).thenReturn("caves/cave0/");
-        when(scene.getPlayerModel()).thenReturn(playerModel);
-        when(playerModel.getRigidBody()).thenReturn(rb);
-        when(playerModel.getState()).thenReturn(new IdleState(playerModel));
-        when(rb.getPosition()).thenReturn(new Vector(0f, 0f));
-        when(scene.getMineralModels()).thenReturn(Collections.emptyList());
-        when(scene.getCaveFilePath()).thenReturn("caves/cave0/");
-
-        SoundPlayer soundPlayer = mock(SoundPlayer.class);
-        Clip clip = mock(Clip.class);
-        when(scene.getSoundPlayer()).thenReturn(soundPlayer);
-        when(soundPlayer.getSound()).thenReturn(clip);
-        doNothing().when(clip).start();
-        doNothing().when(clip).loop(anyInt());
-
-
         SpriteLoader spriteLoader = mock(SpriteLoader.class);
-        Sprite sprite = mock(Sprite.class);
+        SoundManager soundManager = mock(SoundManager.class);
+        
+        // Mocking behavior for State constructor and internal creations
+        com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite sprite = mock(com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite.class);
         when(spriteLoader.get(anyString())).thenReturn(sprite);
-        when(sprite.getSize()).thenReturn(new Size(1, 1));
-        when(spriteLoader.getBufferedImage(anyString()))
-                .thenReturn(new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB));
+        when(sprite.getSize()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Size(1, 1));
+        
+        // SceneBuilder needs buffered images
+        java.awt.image.BufferedImage mockImage = new java.awt.image.BufferedImage(8, 8, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        when(spriteLoader.getBufferedImage(anyString())).thenReturn(mockImage);
+        
+        // SceneManager needs to return a valid next cave path
+        when(model.getNextCavePath()).thenReturn("caves/cave0/");
+        
+        // Mock deep dependencies
+        Scene mockScene = mock(Scene.class);
+        PlayerModel mockPlayer = mock(PlayerModel.class);
+        when(model.getScene()).thenReturn(mockScene);
+        when(mockScene.getPlayerModel()).thenReturn(mockPlayer);
+        when(mockPlayer.getCollider()).thenReturn(mock(com.ldtsfeup2526.bobTheDestructor.model.game.physics.Collider.class));
+        when(mockPlayer.getRigidBody()).thenReturn(mock(com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody.class));
+        when(mockPlayer.getState()).thenReturn(new IdleState(mockPlayer));
 
-        // Create a subclass to avoid real object instantiation that causes OOM
-        GameState state = new GameState(model, spriteLoader) {
-            @Override
-            public ScreenViewer<SceneManager> createScreenViewer(ViewerProvider viewerProvider) {
-                return mock(ScreenViewer.class);
-            }
+        try (var mockedSceneController = mockConstruction(com.ldtsfeup2526.bobTheDestructor.controller.game.SceneController.class)) {
+            GameState state = new GameState(model, spriteLoader, soundManager);
+            assertNotNull(state.getModel());
+        }
+    }
+    @Test
+    void testCreateControllerAndViewer() throws IOException {
+        SceneManager model = mock(SceneManager.class);
+        SpriteLoader spriteLoader = mock(SpriteLoader.class);
+        SoundManager soundManager = mock(SoundManager.class);
+        
+        com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite sprite = mock(com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite.class);
+        when(spriteLoader.get(anyString())).thenReturn(sprite);
+        when(sprite.getSize()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Size(1, 1));
+        java.awt.image.BufferedImage mockImage = new java.awt.image.BufferedImage(8, 8, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        when(spriteLoader.getBufferedImage(anyString())).thenReturn(mockImage);
+        when(model.getNextCavePath()).thenReturn("caves/cave0/");
+        PlayerModel playerModel = mock(PlayerModel.class);
+        Scene scene = mock(Scene.class);
+        when(model.getScene()).thenReturn(scene);
+        when(scene.getPlayerModel()).thenReturn(playerModel);
+        when(playerModel.getRigidBody()).thenReturn(mock(com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody.class));
 
-            @Override
-            public Controller<SceneManager> createController() {
-                return mock(Controller.class);
-            }
-        };
-
-        assertNotNull(state.getModel());
+        GameState state = new GameState(model, spriteLoader, soundManager);
         assertNotNull(state.createController());
+        assertNotNull(state.createScreenViewer(new com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider(spriteLoader)));
     }
 
+    @Test
+    void testEnterExit() throws IOException {
+        SceneManager model = mock(SceneManager.class);
+        SpriteLoader spriteLoader = mock(SpriteLoader.class);
+        SoundManager soundManager = mock(SoundManager.class);
+        com.ldtsfeup2526.bobTheDestructor.Game game = mock(com.ldtsfeup2526.bobTheDestructor.Game.class);
+        when(game.getSoundManager()).thenReturn(soundManager);
+        
+        com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite sprite = mock(com.ldtsfeup2526.bobTheDestructor.view.sprite.Sprite.class);
+        when(spriteLoader.get(anyString())).thenReturn(sprite);
+        when(sprite.getSize()).thenReturn(new com.ldtsfeup2526.bobTheDestructor.model.spatials.Size(1, 1));
+
+        java.awt.image.BufferedImage mockImage = new java.awt.image.BufferedImage(8, 8, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        when(spriteLoader.getBufferedImage(anyString())).thenReturn(mockImage);
+        
+        when(model.getNextCavePath()).thenReturn("caves/cave0/");
+        PlayerModel playerModel = mock(PlayerModel.class);
+        Scene scene = mock(Scene.class);
+        when(model.getScene()).thenReturn(scene);
+        when(scene.getPlayerModel()).thenReturn(playerModel);
+        when(playerModel.getRigidBody()).thenReturn(mock(com.ldtsfeup2526.bobTheDestructor.model.game.physics.RigidBody.class));
+
+        GameState state = new GameState(model, spriteLoader, soundManager);
+        state.onEnter(game);
+        verify(soundManager).playMusic("sounds/gameSoundtrack.wav");
+        
+        state.onExit(game);
+        verify(soundManager).stopMusic();
+    }
 }
