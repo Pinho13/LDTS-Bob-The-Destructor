@@ -598,7 +598,7 @@ In the player's states, the logic for state transitions inside the `getNextState
 
 ### Data Class
 
-We introduced the `ViewerProvider` class to simplify mocking the Viewer classes during unit testing and to reduce long parameter lists in the constructors. However, `ViewerProvider` itself does not use its fields; it merely passes them along to other classes.
+We introduced the [`ViewerProvider`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java) class to simplify mocking the Viewer classes during unit testing and to reduce long parameter lists in the constructors. However, [`ViewerProvider`](../src/main/java/com/ldtsfeup2526/bobTheDestructor/view/ViewerProvider.java) itself does not use its fields; it merely passes them along to other classes.
 
 ## Testing
 
