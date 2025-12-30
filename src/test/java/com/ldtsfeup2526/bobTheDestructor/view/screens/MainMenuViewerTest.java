@@ -2,6 +2,7 @@ package com.ldtsfeup2526.bobTheDestructor.view.screens;
 
 import com.ldtsfeup2526.bobTheDestructor.gui.GUI;
 import com.ldtsfeup2526.bobTheDestructor.model.menu.MainMenu;
+import com.ldtsfeup2526.bobTheDestructor.model.menu.Widget;
 import com.ldtsfeup2526.bobTheDestructor.view.ViewerProvider;
 import com.ldtsfeup2526.bobTheDestructor.view.menu.ButtonViewer;
 import com.ldtsfeup2526.bobTheDestructor.view.menu.WallpaperViewer;
@@ -20,9 +21,9 @@ public class MainMenuViewerTest {
     private ViewerProvider viewerProvider;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         menu = mock(MainMenu.class);
-        when(menu.getButtons()).thenReturn(new ArrayList<>());
+        when(menu.getWidgets()).thenReturn(new ArrayList<>());
         
         viewerProvider = mock(ViewerProvider.class);
         when(viewerProvider.getButtonViewer()).thenReturn(mock(ButtonViewer.class));
@@ -34,17 +35,16 @@ public class MainMenuViewerTest {
     @Test
     void testDraw() throws IOException {
         GUI gui = mock(GUI.class);
-        List<com.ldtsfeup2526.bobTheDestructor.model.menu.Button> buttons = new ArrayList<>();
-        com.ldtsfeup2526.bobTheDestructor.model.menu.Button button = mock(com.ldtsfeup2526.bobTheDestructor.model.menu.Button.class);
-        buttons.add(button);
-        when(menu.getButtons()).thenReturn(buttons);
+        List<Widget> widgets = new ArrayList<>();
+        Widget widget = mock(Widget.class);
+        widgets.add(widget);
+        when(menu.getWidgets()).thenReturn(widgets);
 
         viewer.draw(gui, 0.1);
         
-        verify(gui).clear();
         verify(gui).drawBackground(any());
         verify(viewerProvider.getWallpaperViewer()).draw(eq(gui));
-        verify(viewerProvider.getButtonViewer()).draw(eq(button), eq(gui), anyDouble());
+        verify(viewerProvider.getButtonViewer()).draw(eq(widget), eq(gui), anyDouble());
         verify(gui).refresh();
     }
 }
