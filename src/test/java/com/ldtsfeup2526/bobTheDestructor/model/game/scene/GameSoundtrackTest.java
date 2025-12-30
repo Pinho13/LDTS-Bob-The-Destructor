@@ -11,20 +11,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameSoundtrackTest {
     @Test
     void testConstructor() {
-        GameSoundtrack soundtrack = new GameSoundtrack();
-        try {
-            AudioInputStream input = soundtrack.getAudioInput();
-            Clip clip = soundtrack.getSoundtrackClip();
-        } catch (Exception e) {
-            fail("Getters should not throw exception");
+        try (var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getClip()).thenReturn(mock(Clip.class));
+            mockedAudioSystem.when(() -> javax.sound.sampled.AudioSystem.getAudioInputStream(any(java.net.URL.class))).thenReturn(mock(AudioInputStream.class));
+            
+            GameSoundtrack soundtrack = new GameSoundtrack();
+            assertNotNull(soundtrack.getAudioInput());
+            assertNotNull(soundtrack.getSoundtrackClip());
         }
     }
 
     @Test
     void testConstructorResourceNotFound() {
-        GameSoundtrack soundtrack = new GameSoundtrack("non-existent.wav");
-        assertNull(soundtrack.getAudioInput());
-        assertNull(soundtrack.getSoundtrackClip());
+        try (var mockedAudioSystem = mockStatic(javax.sound.sampled.AudioSystem.class)) {
+            GameSoundtrack soundtrack = new GameSoundtrack("non-existent.wav");
+            assertNull(soundtrack.getAudioInput());
+            assertNull(soundtrack.getSoundtrackClip());
+        }
     }
 
     @Test
