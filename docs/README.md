@@ -78,7 +78,7 @@ As a result, some planned features were not implemented, while others were intro
 
 ## General Structure
 
-<img src="intermediateDelivery/uml.png">
+<img src="uml.png">
 
 ## Design
 
