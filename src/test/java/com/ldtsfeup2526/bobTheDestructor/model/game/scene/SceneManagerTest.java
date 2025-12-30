@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,10 +39,40 @@ public class SceneManagerTest {
     }
 
     @Test
-    void testChooseCavesUniqueness() {
-        List<String> paths = sceneManager.getCavesPathChosen();
-        assertEquals(5, paths.size());
-        assertEquals(5, paths.stream().distinct().count());
+    void testChooseCavesUniquenessAndShuffle() throws IOException {
+        List<String> paths1 = sceneManager.getCavesPathChosen();
+        assertEquals(5, paths1.size());
+        assertEquals(5, paths1.stream().distinct().count());
+        
+        // To test shuffle, we create another SceneManager and check if it's different.
+        // There are 10 caves, choose 5. 10C5 = 252. Probability of getting same list (in same order) is very low.
+        SceneManager sceneManager2 = new SceneManager();
+        List<String> paths2 = sceneManager2.getCavesPathChosen();
+        
+        assertNotEquals(paths1, paths2, "Shuffling should likely produce different cave lists");
+    }
+
+    @Test
+    void testChooseCavesBoundary() throws IOException {
+        // numberOfCaves is 10, loop for (int i = 0; i < numberOfCaves; i++)
+        // We can't easily change numberOfCaves as it's private and hardcoded,
+        // but we can verify all 10 possible caves are reachable.
+        
+        List<String> allPossible = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            SceneManager sm = new SceneManager();
+            allPossible.addAll(sm.getCavesPathChosen());
+        }
+        long distinctCount = allPossible.stream().distinct().count();
+        assertEquals(10, distinctCount, "All 10 caves should be reachable over multiple shuffles");
+    }
+
+    @Test
+    void testGetNextCavePathReturnValue() {
+        String path = sceneManager.getNextCavePath();
+        assertNotNull(path);
+        assertFalse(path.isEmpty(), "getNextCavePath should not return an empty string");
+        assertTrue(path.startsWith("caves/cave"));
     }
 
     @Test
