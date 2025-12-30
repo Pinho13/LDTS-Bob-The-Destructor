@@ -489,7 +489,7 @@ Putting this logic in the `GameState` or `Game` class would make them too comple
 
 #### The Pattern
 
-We used a **Manager** pattern (specifically in `SceneManager`). This class acts as the model for the `GameState` and manages the lifecycle of scenes (levels).
+We lightly used a **Facade** pattern (specifically in `SceneManager`). This class acts as the model for the `GameState` and manages the lifecycle of scenes (levels).
 
 #### Implementation
 
