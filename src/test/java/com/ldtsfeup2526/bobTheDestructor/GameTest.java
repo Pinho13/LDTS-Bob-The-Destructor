@@ -48,7 +48,6 @@ public class GameTest {
             State<?> mockState = mock(State.class);
             game.setState(mockState);
             
-            // Use a counter to stop the loop after one iteration
             final int[] count = {0};
             doAnswer(invocation -> {
                 if (count[0]++ > 0) game.setState(null);
@@ -133,7 +132,7 @@ public class GameTest {
             game.setState(mockState);
 
             doAnswer(invocation -> {
-                Thread.sleep(20); // Force elapsedTime to be large
+                Thread.sleep(20);
                 game.setState(null);
                 return null;
             }).when(mockState).update(any(), any(), any(), anyDouble());
