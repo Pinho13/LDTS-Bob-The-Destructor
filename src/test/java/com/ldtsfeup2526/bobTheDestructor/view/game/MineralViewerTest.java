@@ -310,31 +310,78 @@ public class MineralViewerTest {
         when(model.getDirection()).thenReturn(PointingDirection.UP);
         
         GUI gui = mock(GUI.class);
-        
-        // Use a fixed random seed if possible, but here we just test that cooldown IS set.
-        // Animation.setCooldownTime sets currentCooldownTime = cooldownTime.
-        // So initially it should NOT update until cooldown passes.
-        
+
         localViewer.draw(model, gui, 0.0);
-        // Frame 0 drawn
+
         verify(s1).draw(eq(pos), eq(gui));
         
-        // Cooldown is between 1 and 4.
-        localViewer.draw(model, gui, 0.5); 
-        // Should still be in cooldown, so elapsedTime not updated, frame still 0.
-        verify(s1, times(2)).draw(eq(pos), eq(gui));
+        localViewer.draw(model, gui, 0.5);
+
+        verify(s2, never()).draw(any(), any());
+
+        localViewer.draw(model, gui, 15.0); 
+        for (int i = 0; i < 100; i++) {
+            localViewer.draw(model, gui, 0.1);
+        }
+        verify(s2, atLeastOnce()).draw(any(), eq(gui));
         
-        localViewer.draw(model, gui, 4.0); 
-        // Cooldown definitely passed. Now it should update.
-        // frameTime is 0.1. 4.0 / 0.1 = 40 -> capped/looped.
+        SpriteLoader localSpriteLoader2 = mock(SpriteLoader.class);
+        Sprite s1_2 = mock(Sprite.class);
+        Sprite s2_2 = mock(Sprite.class);
+        when(localSpriteLoader2.get(anyString())).thenReturn(mock(Sprite.class));
+        when(localSpriteLoader2.get("sprites/gems/gem1.png")).thenReturn(s1_2);
+        when(localSpriteLoader2.get("sprites/gems/gem2.png")).thenReturn(s2_2);
+
+        MineralViewer localViewer2 = new MineralViewer(localSpriteLoader2);
+        MineralModel model2 = mock(MineralModel.class);
+        when(model2.getType()).thenReturn(MineralType.PINK);
+        when(model2.getState()).thenReturn(MineralState.UNSELECTED);
+        when(model2.getPosition()).thenReturn(pos);
+        when(model2.getDirection()).thenReturn(PointingDirection.UP);
         
-        // To kill "removed call to setCooldownTime", we can verify that the cooldown 
-        // was actually applied. If it wasn't, the frame would have updated after 0.5s.
-        // Since we already did that above, we just need to be sure it's distinct enough.
+        localViewer2.draw(model2, gui, 0.0);
+
+        localViewer2.draw(model2, gui, 0.5);
+
+        verify(s2_2, never()).draw(any(), any());
+        verify(s1_2, atLeastOnce()).draw(any(), any());
+    }
+
+    @Test
+    void testCreateAnimSetsCooldownEffectSpecifically() throws IOException {
+        SpriteLoader localSpriteLoader = mock(SpriteLoader.class);
+        Sprite s1 = mock(Sprite.class);
+        Sprite s2 = mock(Sprite.class);
+        when(localSpriteLoader.get(anyString())).thenReturn(mock(Sprite.class));
+        when(localSpriteLoader.get("sprites/gems/gem1.png")).thenReturn(s1);
+        when(localSpriteLoader.get("sprites/gems/gem2.png")).thenReturn(s2);
+
+        MineralViewer localViewer = new MineralViewer(localSpriteLoader);
         
-        reset(s1);
-        localViewer.draw(model, gui, 0.0);
-        verify(s1).draw(any(), any());
+        GUI gui = mock(GUI.class);
+        
+        for (int m = 0; m < 5; m++) {
+            MineralModel model = new MineralModel(new Position(10, 10), "other", MineralType.PINK.ordinal());
+            
+            localViewer.draw(model, gui, 0.0);
+            
+            localViewer.draw(model, gui, 0.9);
+            
+            verify(s2, never()).draw(any(), any());
+            
+            for (int i = 0; i < 100; i++) {
+                localViewer.draw(model, gui, 0.1);
+            }
+            
+            try {
+                verify(s2, atLeastOnce()).draw(any(), any());
+            } catch (org.mockito.exceptions.verification.WantedButNotInvoked e) {
+                System.out.println("[DEBUG_LOG] m=" + m + " failed to draw s2");
+                throw e;
+            }
+            
+            reset(s2);
+        }
     }
 
     @Test
