@@ -104,16 +104,42 @@ public class ColliderTest {
 
     @Test
     void testIsColliderOverBoundaries() {
+        // Left overlap
         assertTrue(collider.isColliderOver(new Collider(new Position(5, 10), new Size(5, 5))));
         assertFalse(collider.isColliderOver(new Collider(new Position(4, 10), new Size(5, 5))));
         
+        // Top overlap
         assertTrue(collider.isColliderOver(new Collider(new Position(10, 5), new Size(5, 5))));
         assertFalse(collider.isColliderOver(new Collider(new Position(10, 4), new Size(5, 5))));
 
+        // Right overlap
         assertTrue(collider.isColliderOver(new Collider(new Position(15, 10), new Size(5, 5))));
         assertFalse(collider.isColliderOver(new Collider(new Position(16, 10), new Size(5, 5))));
 
+        // Bottom overlap
         assertTrue(collider.isColliderOver(new Collider(new Position(10, 15), new Size(5, 5))));
         assertFalse(collider.isColliderOver(new Collider(new Position(10, 16), new Size(5, 5))));
+
+        // Internal
+        assertTrue(collider.isColliderOver(new Collider(new Position(11, 11), new Size(1, 1))));
+        
+        // External
+        assertFalse(collider.isColliderOver(new Collider(new Position(0, 0), new Size(1, 1))));
+    }
+    @Test
+    void testIsColliderOverCombinations() {
+        // C1 is (10, 10) to (15, 15)
+        
+        // 1. C1.x > C2.oppositeX
+        assertFalse(collider.isColliderOver(new Collider(new Position(4, 10), new Size(5, 5)))); // oppositeX = 9
+        
+        // 2. C1.oppositeX < C2.x
+        assertFalse(collider.isColliderOver(new Collider(new Position(16, 10), new Size(5, 5)))); // C2.x = 16
+        
+        // 3. C1.y > C2.oppositeY
+        assertFalse(collider.isColliderOver(new Collider(new Position(10, 4), new Size(5, 5)))); // oppositeY = 9
+        
+        // 4. C1.oppositeY < C2.y
+        assertFalse(collider.isColliderOver(new Collider(new Position(10, 16), new Size(5, 5)))); // C2.y = 16
     }
 }
