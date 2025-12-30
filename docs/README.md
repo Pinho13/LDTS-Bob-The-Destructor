@@ -24,11 +24,11 @@ This project was developed by Aléxis Ramos, Pedro Tomás Teixeira, Rafael Pinho
 * **UI** - During the game there is also a nice overlay showing how many ores were collected at the current cave and the last caves, and shows you in which cave you are in.
 * **End Screen** - Once the player reaches the end, the stats of the run will be showcased.
 
-## Planned features
+## Notes About Features
 
-* **Destruction System** - A system that allows the player to break things.
-* **Collectible System** - A system that allows the player to collect and spend in-game currency.
-* **Upgrade System** - A system that allows the player to upgrade the pickaxe.
+Initially, we aimed for an upgrade system for the core progression of the game and a more open and more traditional mining game.
+However, as we progressed through the development of the game, we ended up abandoning those ideas in favour of others. We ended up settling for a more linear gameplay style so we could polish the game even more and make it a better experience to the user.
+As a result, some planned features were not implemented, while others were introduced instead.
 
 ## General Structure
 
