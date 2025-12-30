@@ -84,7 +84,7 @@ public class AnimationTest {
         assertEquals(1, anim.getFrame());
         assertTrue(anim.isFinished());
 
-        anim.update(0.1); // Should not change anything
+        anim.update(0.1);
         assertEquals(1, anim.getFrame());
         assertTrue(anim.isFinished());
     }
@@ -95,13 +95,10 @@ public class AnimationTest {
         Sprite s2 = mock(Sprite.class);
         Animation anim = new Animation("test", new Sprite[]{s1, s2}, 0.1, true);
         
-        anim.update(0.25); // Should skip to second frame and almost finish third (back to 0 if only 2 sprites)
-        // time = 0.25
-        // currentFrame = floor(0.25 / 0.1) % 2 = 2 % 2 = 0
+        anim.update(0.25);
         assertEquals(0, anim.getFrame());
         
-        anim.update(0.1); // time = 0.35
-        // currentFrame = floor(0.35 / 0.1) % 2 = 3 % 2 = 1
+        anim.update(0.1);
         assertEquals(1, anim.getFrame());
     }
     @Test
