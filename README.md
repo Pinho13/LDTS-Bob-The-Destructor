@@ -1,5 +1,8 @@
 # LDTS_T04_G04 - BOB, THE DESTRUCTOR  
 
+<p align="center">
+    <img src="docs/mockups/logo.png">
+</p>
 
 <p align="justify">
     In this project, our main objective is to develop a 2D mining game inspired by titles such as Minecraft and Terraria. The main character is a miner named Bob, as suggested by the game’s title.
