@@ -71,3 +71,9 @@ For a more detailed version of this description, click [here](./docs/README.md).
 ## General Structure
 
 <img src="docs/finalDelivery/uml.png">
+
+<p align = "center" >
+  <h2 align = "center" >
+    Grade: 19.1/20
+  </h2>
+</p>
